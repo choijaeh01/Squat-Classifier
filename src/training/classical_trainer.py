@@ -19,6 +19,7 @@ def run_classical_fold(
     y: np.ndarray,
     subject_id: np.ndarray,
     split: LOSOSmokeSplit,
+    return_estimator: bool = False,
 ) -> dict[str, Any]:
     features = extract_window_features(X)
     estimator = build_classical_estimator(model_name, seed)
@@ -26,7 +27,7 @@ def run_classical_fold(
     train_eval = _evaluate_estimator(estimator, features, y, subject_id, split.train_idx)
     val_eval = _evaluate_estimator(estimator, features, y, subject_id, split.val_idx)
     test_eval = _evaluate_estimator(estimator, features, y, subject_id, split.test_idx)
-    return {
+    result = {
         "fold_metric": _fold_metric_row(model_name, seed, fold_id, split, val_eval, test_eval),
         "classwise": _classwise_rows(model_name, seed, fold_id, split.test_subject, test_eval),
         "history": [
@@ -47,6 +48,9 @@ def run_classical_fold(
         "confusion": _confusion_rows(model_name, seed, fold_id, split.test_subject, test_eval),
         "predictions": _prediction_rows(model_name, seed, fold_id, split.test_subject, test_eval),
     }
+    if return_estimator:
+        result["estimator"] = estimator
+    return result
 
 
 def _evaluate_estimator(

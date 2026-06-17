@@ -9,6 +9,7 @@ from models.literature_temporal import (
     CNNGRULiteratureV1,
     CNNLSTMLiteratureV1,
     GRUOnlyLiteratureV1,
+    LeeStyleCNNLSTM2DV1,
     LSTMOnlyLiteratureV1,
     ResCNNBiGRUAttentionLiteV1,
     TCNLiteratureV1,
@@ -49,6 +50,7 @@ MODEL_REGISTRY: dict[str, ModelFactory] = {
     "lstm_only_literature_v1": LSTMOnlyLiteratureV1,
     "gru_only_literature_v1": GRUOnlyLiteratureV1,
     "transformer_encoder_lite_v1": TransformerEncoderLiteV1,
+    "lee_style_cnn_lstm_2d_v1": LeeStyleCNNLSTM2DV1,
     "feature_random_forest_v1": ClassicalFeatureBaseline,
     "feature_linear_svm_v1": ClassicalFeatureBaseline,
 }

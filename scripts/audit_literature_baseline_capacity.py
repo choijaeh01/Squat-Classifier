@@ -31,7 +31,7 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / "model_capacity_table.csv"
     _write_csv(output_path, rows)
-    report_path = PROJECT_ROOT / "docs" / "literature_baseline_capacity_v1_report.md"
+    report_path = PROJECT_ROOT / "docs" / f"{config['experiment_name']}_report.md"
     report_path.write_text(_capacity_report(rows, config), encoding="utf-8")
     for row in rows:
         print(f"{row['model_name']}: total={row['total_params']} output={row['output_shape']} notes={row['notes']}")
@@ -104,12 +104,13 @@ def audit_literature_capacity(config: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _capacity_report(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
+    experiment_name = str(config.get("experiment_name", "literature_baseline_capacity"))
     lines = [
-        "# Literature Baseline Capacity v1 Report",
+        f"# {experiment_name} Report",
         "",
         "## 범위",
         "",
-        "이 보고서는 literature temporal baseline extension v1의 parameter count audit이다. 학습은 수행하지 않았다.",
+        "이 보고서는 literature temporal baseline extension의 parameter count audit이다. 학습은 수행하지 않았다.",
         "",
         "## Parameter Count",
         "",
@@ -127,9 +128,11 @@ def _capacity_report(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
             "## 주의점",
             "",
             "- CNN-LSTM/GRU 계열은 IMU 문헌에서 널리 쓰이는 family representative baseline이며 특정 외부 논문의 exact reproduction이 아니다.",
+            "- lee_style_cnn_lstm_2d_v1은 512-step 입력을 모델 내부에서 deterministic 40-step representation으로 downsample한 뒤 2D CNN과 LSTM을 적용하는 adapted clean-room baseline이다.",
+            "- Lee-style 모델은 Lee et al.의 exact reproduction이 아니며, 현재 센서 수, channel 수, label, LOSO protocol에 맞춘 reviewer-facing baseline이다.",
             "- rescnn_bigru_attention_lite_v1은 이전 졸업논문 결과 재사용이 아니라 동일 protocol에서 새로 평가할 clean-room reference baseline이다.",
-            "- classical baseline은 scikit-learn 설치 여부에 따라 screening에서 실행 또는 skipped 처리된다.",
-            "- full extension 포함 여부는 1 seed screening 이후 사용자가 승인해야 한다.",
+            "- classical baseline은 scikit-learn 설치 여부에 따라 실행 또는 skipped 처리된다.",
+            "- 이 audit은 capacity 확인용이며 성능 해석을 포함하지 않는다.",
         ]
     )
     return "\n".join(lines) + "\n"

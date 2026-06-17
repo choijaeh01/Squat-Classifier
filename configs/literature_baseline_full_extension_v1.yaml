@@ -1,0 +1,99 @@
+experiment_name: literature_baseline_full_extension_v1
+dataset_dir: data/target/processed/v1_manual_windows_resample512
+output_root: results/literature_baseline_full_extension
+seeds: [42, 123, 2025]
+
+split:
+  type: loso_with_within_train_subject_stratified_validation
+  subjects: [1, 2, 3, 4, 5, 6]
+  val_windows_per_subject_class: 4
+  train_windows_per_subject_class: 16
+  strict_subject_isolation_for_test: true
+  strict_index_disjoint_train_val: true
+
+models:
+  - feature_random_forest_v1
+  - feature_linear_svm_v1
+  - rescnn_bigru_attention_lite_v1
+  - tcn_literature_v1
+  - transformer_encoder_lite_v1
+  - cnn_lstm_literature_v1
+  - cnn_gru_literature_v1
+  - lee_style_cnn_lstm_2d_v1
+
+training:
+  extension_mode: true
+  allow_full_training: true
+  max_epochs: 120
+  batch_size: 16
+  loss: cross_entropy
+  optimizer: adam
+  learning_rate: 0.001
+  weight_decay: 0.0
+  early_stopping:
+    enabled: true
+    monitor: val_macro_f1
+    mode: max
+    patience: 25
+    min_delta: 0.0001
+    restore_best: true
+  gradient_clip_norm: null
+  mixed_precision: false
+
+normalization:
+  global_standard_scaler: true
+  fit_scaler_on: train_indices_only
+  per_window_zscore: false
+  save_scaler_stats: true
+
+augmentation:
+  enabled: false
+
+checkpointing:
+  save_best_checkpoint: true
+  save_last_checkpoint: false
+  save_model_state_dict: true
+  checkpoint_policy: best_only
+  save_optimizer_state: false
+
+metrics:
+  accuracy: true
+  macro_f1: true
+  weighted_f1: true
+  class_wise_precision_recall_f1: true
+  confusion_matrix: true
+  subject_wise_metrics: true
+
+statistics:
+  compute_mean_std_across_folds: true
+  compute_mean_std_across_seeds: true
+  compute_bootstrap_ci: true
+  bootstrap_n: 10000
+  compute_paired_model_differences: true
+  primary_metric: macro_f1
+  paired_reference_models:
+    - channel_shared_posres_attention_v3
+    - all_channel_conv1d_v1
+    - all_channel_conv1d_small
+    - feature_random_forest_v1
+    - rescnn_bigru_attention_lite_v1
+    - lee_style_cnn_lstm_2d_v1
+
+reproducibility:
+  deterministic: true
+  save_config_snapshot: true
+  save_git_status: true
+  save_git_commit: true
+  save_manifest_checksum: true
+  save_model_parameter_count: true
+  save_environment_info: true
+
+safety:
+  forbid_ssl: true
+  forbid_augmentation: true
+  forbid_focal_loss: true
+  forbid_balanced_sampling: true
+  forbid_external_dataset: true
+  require_confirm_full_extension: true
+  require_clean_git_before_run: true
+  forbid_modifying_locked_matrix: true

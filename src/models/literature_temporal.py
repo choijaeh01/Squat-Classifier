@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 
 import torch
+import torch.nn.functional as F
 from torch import nn
 
 from models.common import ensure_btc
@@ -159,6 +160,56 @@ class TransformerEncoderLiteV1(nn.Module):
         return self.classifier(encoded.mean(dim=1))
 
 
+class LeeStyleCNNLSTM2DV1(nn.Module):
+    """Lee-style adapted 2D CNN-LSTM baseline for the current 18-channel IMU input.
+
+    This is a clean-room adaptation, not an exact reproduction. The model keeps
+    the dataset unchanged, deterministically downsamples the 512-step input to
+    40 steps inside the network, applies 3x3 Conv2D blocks over the time-channel
+    matrix, then summarizes the channel axis before a one-layer LSTM.
+    """
+
+    def __init__(
+        self,
+        input_length: int = 512,
+        input_channels: int = 18,
+        num_classes: int = 5,
+        downsampled_length: int = 40,
+        lstm_hidden_size: int = 64,
+        dropout: float = 0.1,
+    ) -> None:
+        super().__init__()
+        self.input_length = input_length
+        self.input_channels = input_channels
+        self.downsampled_length = downsampled_length
+        self.encoder = nn.Sequential(
+            _Conv2DBlock(1, 16, dropout=dropout),
+            _Conv2DBlock(16, 24, dropout=dropout),
+            _Conv2DBlock(24, 32, dropout=dropout),
+        )
+        self.channel_pool = nn.AdaptiveAvgPool2d((downsampled_length, 4))
+        self.recurrent = nn.LSTM(input_size=32 * 4, hidden_size=lstm_hidden_size, num_layers=1, batch_first=True)
+        self.classifier = nn.Sequential(
+            nn.Linear(lstm_hidden_size, 32),
+            nn.ReLU(),
+            nn.Linear(32, num_classes),
+        )
+
+    def downsample_to_40(self, x: torch.Tensor) -> torch.Tensor:
+        x = ensure_btc(x, self.input_length, self.input_channels)
+        pooled = F.adaptive_avg_pool1d(x.transpose(1, 2), self.downsampled_length)
+        return pooled.transpose(1, 2)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x40 = self.downsample_to_40(x)
+        image = x40.unsqueeze(1)
+        encoded = self.encoder(image)
+        pooled = self.channel_pool(encoded)
+        sequence = pooled.permute(0, 2, 1, 3).flatten(start_dim=2)
+        _, (hidden, _) = self.recurrent(sequence)
+        return self.classifier(hidden[-1])
+
+
 class ResidualConvBlock(nn.Module):
     def __init__(self, in_channels: int, out_channels: int, kernel_size: int) -> None:
         super().__init__()
@@ -238,3 +289,17 @@ class _SmallConvFrontEnd(nn.Module):
 
 def _btc_to_bct(x: torch.Tensor, input_length: int, input_channels: int) -> torch.Tensor:
     return ensure_btc(x, input_length, input_channels).transpose(1, 2)
+
+
+class _Conv2DBlock(nn.Module):
+    def __init__(self, in_channels: int, out_channels: int, dropout: float) -> None:
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=(3, 3), padding=(1, 1)),
+            nn.BatchNorm2d(out_channels),
+            nn.ReLU(),
+            nn.Dropout2d(p=float(dropout)),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.net(x)
