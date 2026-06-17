@@ -44,6 +44,12 @@ The dataset contains six subjects and 600 windows, so uncertainty remains high. 
 
 Future ablations should isolate the contribution of channel identity embeddings, sensor/modality/axis embeddings, attention pooling, and the residual branch.
 
+## 7. Preliminary Literature Temporal Baseline Screening
+
+`literature_baseline_screening_v1`은 기존 locked full matrix 이후 별도 extension으로 수행한다. 이 screening은 CNN-LSTM, CNN-GRU, lite Residual CNN-BiGRU-Attention, TCN, LSTM-only, GRU-only, lite Transformer encoder, 그리고 scikit-learn 사용 가능 시 handcrafted feature RandomForest/LinearSVM을 포함한다.
+
+This section is preliminary. The main paper result table should continue to use the locked 3-seed full supervised matrix until a separate 3-seed full literature extension is explicitly approved and completed. The one-seed screening results must not be used to claim final superiority over literature temporal baselines.
+
 ## Locked Result Note
 
 본 문서는 `paper_result_lock_v1` 이후의 locked full supervised matrix 결과를 기준으로 한다. Locked run은 `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/`이며, integrity check는 126 runs 성공, 0 실패, leakage/scaler check 전체 통과로 기록됐다.

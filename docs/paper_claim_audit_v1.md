@@ -21,6 +21,7 @@
 - SSL이 효과적이라는 주장
 - external IMU dataset transfer가 가능하다는 주장
 - augmentation, focal loss, balanced sampling이 성능을 높인다는 주장
+- 1 seed literature temporal baseline screening 결과만으로 CNN-LSTM, CNN-GRU, TCN, Transformer, classical feature baseline 대비 우월성을 주장하는 내용
 - v3가 모든 IMU posture dataset에서 일반적으로 우수하다는 주장
 - hyperparameter tuning을 통해 최적 성능을 얻었다는 주장
 
@@ -68,3 +69,15 @@ Class 3은 여러 모델에서 어려운 class다. v3의 class 3 F1은 0.7184로
 ## 10. transfer learning을 후속 연구로 남기는 이유
 
 External IMU dataset은 sensor count, channel layout, task label, sampling rate가 target dataset과 다를 가능성이 높다. Transfer learning은 adapter와 pretraining protocol 자체가 별도 연구 질문이므로, 본 논문에서는 supervised clean-room target protocol을 먼저 확정한다.
+
+## 11. literature temporal baseline screening 관련 claim 제한
+
+`literature_baseline_screening_v1`은 문헌 기반 temporal baseline을 clean-room codebase에 추가하고 1 seed x 6 folds로 screening하는 단계다. 이 결과는 full supervised matrix v1 lock을 대체하지 않으며, 기존 locked result directory를 수정하지 않는다.
+
+Screening에 포함되는 neural family는 CNN-LSTM, CNN-GRU, lite Residual CNN-BiGRU-Attention, TCN, LSTM-only, GRU-only, lite Transformer encoder이다. Classical feature RandomForest와 LinearSVM은 scikit-learn이 설치된 환경에서만 실행하고, 없으면 skipped로 기록한다.
+
+논문 claim에는 다음 제한을 둔다.
+
+- 3 seed full extension 전에는 literature baseline 대비 우월성을 main result로 주장하지 않는다.
+- 1 seed screening과 3 seed locked full matrix를 같은 통계 단위로 비교하지 않는다.
+- Screening 결과는 full extension 후보 선별 및 reviewer 대응 준비용으로만 사용한다.

@@ -305,3 +305,31 @@ Full supervised matrix v1은 final validation policy를 고정한 논문 결과 
 - best mean macro F1: `channel_shared_posres_attention_v3`, 0.8108
 
 Full matrix 결과는 논문 결과 후보로 사용할 수 있다. 다만 paired CI가 all-channel baseline 대비 0을 포함하므로 `channel_shared_posres_attention_v3`의 통계적 우월성은 주장하지 않는다.
+
+## Literature Temporal Baseline Extension v1
+
+`literature_baseline_extension_v1`은 locked full supervised matrix를 수정하지 않고, 별도 결과 디렉토리에서 문헌 기반 temporal baseline을 1 seed로 screening하는 단계다.
+
+추가 baseline:
+
+- `cnn_lstm_literature_v1`
+- `cnn_gru_literature_v1`
+- `rescnn_bigru_attention_lite_v1`
+- `tcn_literature_v1`
+- `lstm_only_literature_v1`
+- `gru_only_literature_v1`
+- `transformer_encoder_lite_v1`
+- `feature_random_forest_v1`
+- `feature_linear_svm_v1`
+
+Screening protocol:
+
+- seeds: `[42]`
+- folds: final validation policy의 6 LOSO folds
+- train/validation/test per fold: 400/100/100
+- scaler fit: train indices only
+- loss/optimizer for neural models: cross entropy, Adam
+- augmentation/focal loss/balanced sampling/SSL/external dataset: disabled
+- classical feature models: 동일 split/scaler policy를 사용하며 scikit-learn이 없으면 skipped로 기록
+
+이 단계는 후보 선별용이다. 1 seed screening 결과와 locked 3 seed full result는 `result_type`을 분리해 병합 요약에 기록하며, 직접 동등 비교하지 않는다. 3 seed full literature extension은 사용자 승인 전 실행하지 않는다.

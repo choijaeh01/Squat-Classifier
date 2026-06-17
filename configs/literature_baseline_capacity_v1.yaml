@@ -1,0 +1,35 @@
+experiment_name: literature_baseline_capacity_v1
+output_dir: results/literature_baseline_capacity_v1
+seed: 20260618
+
+input_shape:
+  batch: 2
+  window_length: 512
+  channels: 18
+num_classes: 5
+
+models:
+  - name: cnn_lstm_literature_v1
+    notes: representative clean-room CNN-LSTM temporal baseline
+  - name: cnn_gru_literature_v1
+    notes: CNN-GRU variant for recurrent-unit comparison
+  - name: rescnn_bigru_attention_lite_v1
+    notes: lite clean-room Residual CNN-BiGRU-Attention reference baseline
+  - name: tcn_literature_v1
+    notes: dilated temporal convolutional network baseline
+  - name: lstm_only_literature_v1
+    notes: recurrent-only LSTM baseline without CNN front-end
+  - name: gru_only_literature_v1
+    notes: recurrent-only GRU baseline without CNN front-end
+  - name: transformer_encoder_lite_v1
+    notes: small Transformer encoder temporal baseline
+  - name: feature_random_forest_v1
+    notes: classical handcrafted feature RandomForest; sklearn required for training
+  - name: feature_linear_svm_v1
+    notes: classical handcrafted feature LinearSVM; sklearn required for training
+
+locked_reference_models:
+  - channel_shared_posres_attention_v3
+  - all_channel_conv1d_v1
+  - all_channel_conv1d_small
+

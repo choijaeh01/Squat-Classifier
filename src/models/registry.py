@@ -5,6 +5,15 @@ from collections.abc import Callable
 from torch import nn
 
 from models.baselines import AllChannelConv1D, AllChannelConv1DSmall, CNN2DBaseline, ClassicalFeatureBaseline
+from models.literature_temporal import (
+    CNNGRULiteratureV1,
+    CNNLSTMLiteratureV1,
+    GRUOnlyLiteratureV1,
+    LSTMOnlyLiteratureV1,
+    ResCNNBiGRUAttentionLiteV1,
+    TCNLiteratureV1,
+    TransformerEncoderLiteV1,
+)
 from models.shared_encoders import (
     ChannelShared1DEncoder,
     ChannelSharedAttentionPoolV2,
@@ -33,6 +42,15 @@ MODEL_REGISTRY: dict[str, ModelFactory] = {
     "modality_shared_sensorattn_v3": ModalitySharedSensorAttentionV3,
     "cnn2d_baseline": CNN2DBaseline,
     "cnn2d_baseline_v1": CNN2DBaseline,
+    "cnn_lstm_literature_v1": CNNLSTMLiteratureV1,
+    "cnn_gru_literature_v1": CNNGRULiteratureV1,
+    "rescnn_bigru_attention_lite_v1": ResCNNBiGRUAttentionLiteV1,
+    "tcn_literature_v1": TCNLiteratureV1,
+    "lstm_only_literature_v1": LSTMOnlyLiteratureV1,
+    "gru_only_literature_v1": GRUOnlyLiteratureV1,
+    "transformer_encoder_lite_v1": TransformerEncoderLiteV1,
+    "feature_random_forest_v1": ClassicalFeatureBaseline,
+    "feature_linear_svm_v1": ClassicalFeatureBaseline,
 }
 
 

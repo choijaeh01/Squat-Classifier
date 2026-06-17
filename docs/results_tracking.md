@@ -199,3 +199,29 @@ Class 3 Excessive Lean:
 | channel_shared_meanpool_v2 | 0.0917 | 0.0840 |
 
 Main shared model 후보는 `channel_shared_posres_attention_v3`이다. 단, all-channel baseline 대비 통계적 우월성은 아직 주장하지 않는다.
+
+## literature_baseline_screening_v1
+
+- 목적: clean-room 문헌 기반 temporal baseline 1 seed screening
+- locked matrix 상태: `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/` 수정 금지
+- config: `configs/literature_baseline_screening_v1.yaml`
+- capacity config: `configs/literature_baseline_capacity_v1.yaml`
+- full extension template: `configs/literature_baseline_full_extension_template_v1.yaml`
+- local dry-run: 완료, 학습 없음
+- CAU screening: 실행 예정
+
+Baseline 목록:
+
+| model | 의도 |
+|---|---|
+| cnn_lstm_literature_v1 | IMU 문헌에서 흔한 CNN-LSTM family 대표 baseline |
+| cnn_gru_literature_v1 | CNN-GRU recurrent unit 비교 |
+| rescnn_bigru_attention_lite_v1 | clean-room lite Residual CNN-BiGRU-Attention reference |
+| tcn_literature_v1 | recurrent 없이 dilated temporal convolution 비교 |
+| lstm_only_literature_v1 | CNN 없이 recurrent modeling만 비교 |
+| gru_only_literature_v1 | LSTM-only 대비 GRU-only 비교 |
+| transformer_encoder_lite_v1 | small Transformer encoder temporal baseline |
+| feature_random_forest_v1 | handcrafted feature classical baseline, sklearn 필요 |
+| feature_linear_svm_v1 | handcrafted feature linear SVM baseline, sklearn 필요 |
+
+주의: 이 결과는 1 seed screening이므로 paper main table에 바로 포함하지 않는다. 3 seed full extension 후보 제안용으로만 사용한다.

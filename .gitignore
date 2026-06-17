@@ -12,3 +12,5 @@ results/
 *.pth
 *.ckpt
 *.log
+.DS_Store
+._*
