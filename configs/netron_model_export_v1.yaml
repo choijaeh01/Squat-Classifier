@@ -1,0 +1,25 @@
+experiment_name: netron_model_export_v1
+output_dir: results/model_diagrams/netron_exports_v1
+seed: 20260618
+
+input_shape:
+  batch: 1
+  window_length: 512
+  channels: 18
+
+num_classes: 5
+
+models:
+  - all_channel_conv1d_v1
+  - all_channel_conv1d_small
+  - cnn2d_baseline_v1
+  - channel_shared_meanpool_v2
+  - channel_shared_attentionpool_v2
+  - channel_shared_posres_attention_v3
+  - modality_shared_sensorattn_v3
+
+export:
+  format: TorchScript
+  netron_target: true
+  trained_weights_loaded: false
+  purpose: architecture_visualization_only

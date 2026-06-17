@@ -1,5 +1,7 @@
 # Model Architecture Diagrams
 
+Netron 기반 TorchScript 구조도와 PNG 캡처는 [Netron Model Visualization v1](netron_model_visualization.md)에 정리하였다. 해당 산출물은 `results/model_diagrams/netron_exports_v1/` 아래에 있으며, 학습된 checkpoint가 아닌 initialized architecture export이다.
+
 ## `all_channel_conv1d_v1`
 
 ```mermaid
