@@ -204,3 +204,33 @@ Pilot output은 `results/pilot_loso/<timestamp>_pilot_loso_v1/`에 저장한다.
 - `figures/*.png`
 
 Pilot metric은 pipeline 검증용이다. 1 seed 결과이므로 논문 결론이나 모델 우열의 최종 근거로 사용하지 않는다.
+
+## Pilot Diagnostics And Overfit Sanity Check
+
+`pilot_loso_diagnostics_v1`은 기존 pilot 결과 CSV만 분석한다. 새 학습, hyperparameter tuning, split 변경, model 변경은 수행하지 않는다.
+
+분석 항목:
+
+- model ranking 재계산
+- fold별 metric table
+- best epoch 분포
+- train/val/test gap
+- prediction class distribution
+- class-wise metric
+- subject-wise heatmap
+- class 3 Excessive Lean 오분류
+- prediction collapse 여부
+
+`overfit_diagnostic_v1`은 일반화 성능 평가가 아니라 작은 balanced subset memorization sanity check다.
+
+- subjects: 3, 4, 5, 6
+- samples per class: 8
+- total samples: 40
+- scaler fit: selected subset only
+- target train accuracy: 0.95
+- max epochs: 150
+- augmentation/focal loss/SSL/external dataset: disabled
+
+Overfit diagnostic에서 train과 eval은 같은 subset을 사용해도 된다. 이 결과는 모델 구현 및 capacity sanity check로만 사용하며 논문 성능으로 해석하지 않는다.
+
+Pilot diagnostics 결과, 현재 v2 shared 모델은 완전한 단일-class collapse는 아니지만 channel-shared mean/attention 구조가 class 3을 거의 맞추지 못하고 class 2/4로 밀리는 경향이 있다. Overfit diagnostic에서도 all-channel Conv1D 계열만 95% train accuracy에 도달했다. 다음 architecture correction에서는 새 모델 구현 전 position-aware shared encoder를 설계 후보로 검토한다.

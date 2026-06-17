@@ -1,0 +1,48 @@
+experiment_name: overfit_diagnostic_v1
+dataset_dir: data/target/processed/v1_manual_windows_resample512
+output_root: results/overfit_diagnostics
+seed: 42
+
+data:
+  subject_ids: [3, 4, 5, 6]
+  samples_per_class: 8
+  total_samples: 40
+  sampling_policy: balanced_by_class_from_train_subjects
+  scaler_fit_on: selected_subset_only
+
+models:
+  - all_channel_conv1d_v1
+  - all_channel_conv1d_small
+  - channel_shared_meanpool_v2
+  - channel_shared_attentionpool_v2
+  - modality_shared_meanpool_v2
+  - cnn2d_baseline_v1
+
+training:
+  diagnostic_mode: true
+  allow_generalization_claims: false
+  max_epochs: 150
+  batch_size: 8
+  loss: cross_entropy
+  optimizer: adam
+  learning_rate: 0.001
+  weight_decay: 0.0
+  early_stopping:
+    enabled: false
+  target_train_accuracy: 0.95
+  stop_when_target_reached: true
+  gradient_clip_norm: null
+
+normalization:
+  global_standard_scaler: true
+  fit_scaler_on: selected_subset_only
+  per_window_zscore: false
+
+augmentation:
+  enabled: false
+
+safety:
+  forbid_ssl: true
+  forbid_augmentation: true
+  forbid_external_dataset: true
+  forbid_focal_loss: true
