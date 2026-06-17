@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -15,7 +16,7 @@ from training.aggregation import aggregate_metrics_by_model, subjectwise_metrics
 from training.checkpointing import load_model_state, save_checkpoint
 from training.metrics import compute_classification_metrics
 from training.scalers import TrainOnlyStandardScaler
-from training.splits import LOSOSmokeSplit, class_counts, make_cyclic_loso_splits
+from training.splits import LOSOSmokeSplit, class_counts, make_cyclic_loso_splits, make_final_protocol_loso_splits
 from training.supervised_trainer import (
     CLASS_NAMES,
     append_run_log,
@@ -41,15 +42,30 @@ def validate_pilot_loso_safety(config: dict[str, Any]) -> None:
     augmentation = config["augmentation"]
     safety = config.get("safety", {})
 
-    if split.get("type") != "loso_with_cyclic_subject_validation":
-        raise ValueError("pilot LOSO requires split.type=loso_with_cyclic_subject_validation")
-    if split.get("validation_policy") != "next_subject_cyclic":
-        raise ValueError("pilot LOSO requires validation_policy=next_subject_cyclic")
+    split_type = str(split.get("type"))
     subjects = [int(item) for item in split.get("subjects", [])]
     if len(subjects) != 6 or len(set(subjects)) != 6:
         raise ValueError("pilot LOSO requires exactly six unique subjects")
-    if split.get("strict_subject_isolation") is not True:
-        raise ValueError("strict subject isolation must be enabled")
+    if split_type == "loso_with_cyclic_subject_validation":
+        if split.get("validation_policy") != "next_subject_cyclic":
+            raise ValueError("pilot LOSO requires validation_policy=next_subject_cyclic")
+        if split.get("strict_subject_isolation") is not True:
+            raise ValueError("strict subject isolation must be enabled")
+        expected_scaler_scope = "train_subjects_only"
+    elif split_type == "loso_with_within_train_subject_stratified_validation":
+        if int(split.get("train_windows_per_subject_class", 0)) != 16:
+            raise ValueError("final protocol requires 16 train windows per subject-class")
+        if int(split.get("val_windows_per_subject_class", 0)) != 4:
+            raise ValueError("final protocol requires 4 validation windows per subject-class")
+        if split.get("strict_subject_isolation_for_test") is not True:
+            raise ValueError("final protocol requires strict test subject isolation")
+        if split.get("strict_index_disjoint_train_val") is not True:
+            raise ValueError("final protocol requires train/validation index disjointness")
+        if safety.get("forbid_full_matrix") is not True:
+            raise ValueError("final protocol pilot must forbid full matrix execution")
+        expected_scaler_scope = "train_indices_only"
+    else:
+        raise ValueError(f"unsupported pilot split.type={split_type}")
 
     if training.get("pilot_mode") is not True:
         raise ValueError("run_pilot_loso requires training.pilot_mode=true")
@@ -57,8 +73,8 @@ def validate_pilot_loso_safety(config: dict[str, Any]) -> None:
         raise ValueError("pilot config must keep allow_full_training=false")
     max_epochs = int(training.get("max_epochs", 0))
     max_allowed_epochs = int(safety.get("max_allowed_epochs_for_pilot", 30))
-    if max_epochs < 1 or max_epochs > max_allowed_epochs or max_epochs > 30:
-        raise ValueError("pilot max_epochs must be in [1, 30]")
+    if max_epochs < 1 or max_epochs > max_allowed_epochs:
+        raise ValueError("pilot max_epochs exceeds configured safety limit")
     if isinstance(config.get("seed"), list):
         raise ValueError("pilot LOSO allows exactly one scalar seed")
     if len(config.get("seeds", [config.get("seed")])) > int(safety.get("max_allowed_seeds_for_pilot", 1)):
@@ -79,8 +95,8 @@ def validate_pilot_loso_safety(config: dict[str, Any]) -> None:
         raise ValueError("safety.forbid_external_dataset must be true")
     if normalization.get("global_standard_scaler") is not True:
         raise ValueError("pilot LOSO expects global_standard_scaler=true")
-    if normalization.get("fit_scaler_on") != "train_subjects_only":
-        raise ValueError("scaler must be fit on train subjects only")
+    if normalization.get("fit_scaler_on") != expected_scaler_scope:
+        raise ValueError(f"scaler must be fit on {expected_scaler_scope}")
     if normalization.get("per_window_zscore") is not False:
         raise ValueError("per-window z-score must remain disabled")
 
@@ -104,25 +120,37 @@ def run_pilot_loso(
 
     dataset_dir = resolve_path(project_root, config["dataset_dir"])
     dataset = ProcessedTargetDataset(dataset_dir)
-    splits = make_cyclic_loso_splits(
-        subject_id=dataset.subject_id,
-        y=dataset.y,
-        subjects=[int(item) for item in config["split"]["subjects"]],
-        strict_subject_isolation=bool(config["split"]["strict_subject_isolation"]),
-    )
+    splits = _make_splits_for_config(config, dataset)
     run_dir = create_run_dir(project_root, config)
     _write_prelude(run_dir, project_root, config, dataset_dir, device, dry_run)
 
     split_plan_rows = [_split_plan_row(index + 1, split, dataset.y) for index, split in enumerate(splits)]
     write_csv(run_dir / "split_plan.csv", split_plan_rows)
+    validation_rows = [
+        _validation_policy_row(index + 1, split, dataset.y, dataset.subject_id)
+        for index, split in enumerate(splits)
+    ]
+    write_csv(run_dir / "validation_policy_summary.csv", validation_rows)
 
     scaled_by_fold: dict[int, np.ndarray] = {}
     scaler_rows: list[dict[str, Any]] = []
+    scaler_audit_rows: list[dict[str, Any]] = []
     for fold_id, split in enumerate(splits, start=1):
         scaler = TrainOnlyStandardScaler().fit(dataset.X, train_idx=split.train_idx)
         scaled_by_fold[fold_id] = scaler.transform(dataset.X)
-        scaler_rows.append(_scaler_row(fold_id, split, scaler))
+        scaler_rows.append(_scaler_row(fold_id, split, scaler, fit_scope=str(config["normalization"]["fit_scaler_on"])))
+        for model_name in config["models"]:
+            scaler_audit_rows.append(
+                build_scaler_fit_audit_row(
+                    fold_id=fold_id,
+                    model_name=str(model_name),
+                    split=split,
+                    scaler=scaler,
+                    scaler_fit_indices=split.train_idx,
+                )
+            )
     write_csv(run_dir / "scaler_stats_by_fold.csv", scaler_rows)
+    write_csv(run_dir / "scaler_fit_audit.csv", scaler_audit_rows)
 
     parameter_rows = _parameter_rows(config, device)
     write_csv(run_dir / "model_parameter_counts.csv", parameter_rows)
@@ -188,6 +216,32 @@ def run_pilot_loso(
         "n_folds": len(splits),
         "n_failed": len(failed_rows),
     }
+
+
+def _make_splits_for_config(config: dict[str, Any], dataset: ProcessedTargetDataset) -> list[LOSOSmokeSplit]:
+    split = config["split"]
+    split_type = str(split["type"])
+    subjects = [int(item) for item in split["subjects"]]
+    if split_type == "loso_with_cyclic_subject_validation":
+        return make_cyclic_loso_splits(
+            subject_id=dataset.subject_id,
+            y=dataset.y,
+            subjects=subjects,
+            strict_subject_isolation=bool(split["strict_subject_isolation"]),
+        )
+    if split_type == "loso_with_within_train_subject_stratified_validation":
+        return make_final_protocol_loso_splits(
+            subject_id=dataset.subject_id,
+            y=dataset.y,
+            metadata=dataset.metadata,
+            subjects=subjects,
+            train_windows_per_subject_class=int(split["train_windows_per_subject_class"]),
+            val_windows_per_subject_class=int(split["val_windows_per_subject_class"]),
+            seed=int(config["seed"]),
+            strict_subject_isolation_for_test=bool(split["strict_subject_isolation_for_test"]),
+            strict_index_disjoint_train_val=bool(split["strict_index_disjoint_train_val"]),
+        )
+    raise ValueError(f"unsupported pilot split.type={split_type}")
 
 
 def _run_model_fold(
@@ -659,17 +713,79 @@ def _split_plan_row(fold_id: int, split: LOSOSmokeSplit, y: np.ndarray) -> dict[
     }
 
 
-def _scaler_row(fold_id: int, split: LOSOSmokeSplit, scaler: TrainOnlyStandardScaler) -> dict[str, Any]:
+def _validation_policy_row(
+    fold_id: int,
+    split: LOSOSmokeSplit,
+    y: np.ndarray,
+    subject_id: np.ndarray,
+) -> dict[str, Any]:
+    train_subjects_present = sorted(int(item) for item in np.unique(subject_id[split.train_idx]).tolist())
+    val_subjects_present = sorted(int(item) for item in np.unique(subject_id[split.val_idx]).tolist())
+    test_subjects_present = sorted(int(item) for item in np.unique(subject_id[split.test_idx]).tolist())
+    return {
+        "fold_id": fold_id,
+        "test_subject": split.test_subject,
+        "candidate_train_subjects": "|".join(str(item) for item in split.train_subjects),
+        "n_train": len(split.train_idx),
+        "n_val": len(split.val_idx),
+        "n_test": len(split.test_idx),
+        "train_class_counts": json.dumps(class_counts(y[split.train_idx]), sort_keys=True),
+        "val_class_counts": json.dumps(class_counts(y[split.val_idx]), sort_keys=True),
+        "test_class_counts": json.dumps(class_counts(y[split.test_idx]), sort_keys=True),
+        "train_subjects_present": "|".join(str(item) for item in train_subjects_present),
+        "val_subjects_present": "|".join(str(item) for item in val_subjects_present),
+        "test_subjects_present": "|".join(str(item) for item in test_subjects_present),
+        "test_subject_isolated": bool(split.test_subject_isolated),
+        "train_val_index_disjoint": bool(split.train_val_index_disjoint),
+    }
+
+
+def _scaler_row(
+    fold_id: int,
+    split: LOSOSmokeSplit,
+    scaler: TrainOnlyStandardScaler,
+    *,
+    fit_scope: str | None = None,
+) -> dict[str, Any]:
     payload = scaler.to_dict()
     return {
         "fold_id": fold_id,
-        "fit_scope": payload["fit_scope"],
+        "fit_scope": fit_scope or payload["fit_scope"],
         "scaler_fit_subjects": "|".join(str(item) for item in split.train_subjects),
         "fit_sample_count": payload["fit_sample_count"],
         "fit_window_count": payload["fit_window_count"],
         "mean": json.dumps(payload["mean"]),
         "scale": json.dumps(payload["scale"]),
     }
+
+
+def build_scaler_fit_audit_row(
+    *,
+    fold_id: int,
+    model_name: str,
+    split: LOSOSmokeSplit,
+    scaler: TrainOnlyStandardScaler,
+    scaler_fit_indices: np.ndarray,
+) -> dict[str, Any]:
+    fit_indices = np.asarray(scaler_fit_indices, dtype=np.int64)
+    fit_set = set(fit_indices.astype(int).tolist())
+    val_overlap = bool(fit_set & set(split.val_idx.astype(int).tolist()))
+    test_overlap = bool(fit_set & set(split.test_idx.astype(int).tolist()))
+    return {
+        "fold_id": fold_id,
+        "model_name": model_name,
+        "scaler_fit_n_windows": int(scaler.fit_sample_count_),
+        "scaler_fit_subjects": "|".join(str(item) for item in split.train_subjects),
+        "scaler_fit_indices_hash": _indices_hash(fit_indices),
+        "val_indices_used_in_scaler": val_overlap,
+        "test_indices_used_in_scaler": test_overlap,
+        "scaler_leakage_check_passed": bool(not val_overlap and not test_overlap),
+    }
+
+
+def _indices_hash(indices: np.ndarray) -> str:
+    sorted_indices = np.asarray(sorted(np.asarray(indices, dtype=np.int64).tolist()), dtype=np.int64)
+    return hashlib.sha256(sorted_indices.tobytes()).hexdigest()
 
 
 def _failed_row(model_name: str, seed: int, fold_id: int, split: LOSOSmokeSplit, exc: Exception) -> dict[str, Any]:
@@ -736,6 +852,9 @@ def _write_prelude(
     device_detail = "cpu"
     if device.type == "cuda" and torch.cuda.is_available():
         device_detail = torch.cuda.get_device_name(device)
+    split = config["split"]
+    validation_policy = split.get("validation_policy", split.get("type", "unknown"))
+    scaler_scope = config.get("normalization", {}).get("fit_scaler_on", "unknown")
     append_run_log(
         run_dir / "run_log.txt",
         [
@@ -745,10 +864,10 @@ def _write_prelude(
             f"device_detail={device_detail}",
             f"torch_version={torch.__version__}",
             f"dataset_dir={dataset_dir}",
-            "validation_policy=next_subject_cyclic",
+            f"validation_policy={validation_policy}",
             "augmentation=disabled",
             "per_window_zscore=false",
-            "scaler_fit=train_subjects_only",
+            f"scaler_fit={scaler_scope}",
         ],
     )
 
