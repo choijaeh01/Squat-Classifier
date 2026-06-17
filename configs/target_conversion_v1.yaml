@@ -1,0 +1,80 @@
+raw_root: ../datasets/raw/labeled
+metadata_root: ../datasets/manually_labeled
+reference_window_root: ../datasets/manually_labeled
+output_dir: data/target/processed/v1_manual_windows_resample512
+
+seed: 20260617
+
+class_mapping:
+  class0:
+    id: 0
+    name: Correct
+  class1:
+    id: 1
+    name: Knee Valgus
+  class2:
+    id: 2
+    name: Butt Wink
+  class3:
+    id: 3
+    name: Excessive Lean
+  class4:
+    id: 4
+    name: Partial Squat
+
+sensor_mapping:
+  s0: lower back / waist / 허리
+  s1: right thigh / 오른쪽 허벅지
+  s2: right calf / 오른쪽 종아리
+
+channel_order:
+  - s0_ax
+  - s0_ay
+  - s0_az
+  - s0_gx
+  - s0_gy
+  - s0_gz
+  - s1_ax
+  - s1_ay
+  - s1_az
+  - s1_gx
+  - s1_gy
+  - s1_gz
+  - s2_ax
+  - s2_ay
+  - s2_az
+  - s2_gx
+  - s2_gy
+  - s2_gz
+
+csv_column_mapping:
+  s0_ax: s0_ax
+  s0_ay: s0_ay
+  s0_az: s0_az
+  s0_gx: s0_gx
+  s0_gy: s0_gy
+  s0_gz: s0_gz
+  s1_ax: s1_ax
+  s1_ay: s1_ay
+  s1_az: s1_az
+  s1_gx: s1_gx
+  s1_gy: s1_gy
+  s1_gz: s1_gz
+  s2_ax: s2_ax
+  s2_ay: s2_ay
+  s2_az: s2_az
+  s2_gx: s2_gx
+  s2_gy: s2_gy
+  s2_gz: s2_gz
+
+target_length: 512
+resampling: linear_phase_interpolation
+normalization: none
+
+expected_num_subjects: 6
+expected_num_classes: 5
+expected_total_windows: 600
+expected_windows_per_subject_class: 20
+strict_mode: true
+make_report: true
+make_plots: true

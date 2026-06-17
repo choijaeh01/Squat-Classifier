@@ -1,0 +1,19 @@
+seed: 20260617
+input_shape:
+  batch: 16
+  window_length: 512
+  channels: 18
+num_classes: 5
+num_subjects: 4
+class_names:
+  0: Correct
+  1: Knee Valgus
+  2: Butt Wink
+  3: Excessive Lean
+  4: Partial Squat
+normalization:
+  per_window_normalization: false
+  loso_scaler_fit_scope: training_subjects_only
+augmentation:
+  enabled: false
+  applies_to: training_windows_only

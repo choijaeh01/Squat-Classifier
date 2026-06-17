@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+data/target/processed/
+results/
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+*.log
