@@ -43,3 +43,7 @@ The strongest interpretation is that channel-shared temporal encoding can be com
 The dataset contains six subjects and 600 windows, so uncertainty remains high. The current experiment does not evaluate SSL, external IMU transfer, augmentation, focal loss, or balanced sampling. Hyperparameters were fixed rather than tuned. The paired confidence intervals against all-channel baselines include zero, so superiority claims should be avoided.
 
 Future ablations should isolate the contribution of channel identity embeddings, sensor/modality/axis embeddings, attention pooling, and the residual branch.
+
+## Locked Result Note
+
+본 문서는 `paper_result_lock_v1` 이후의 locked full supervised matrix 결과를 기준으로 한다. Locked run은 `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/`이며, integrity check는 126 runs 성공, 0 실패, leakage/scaler check 전체 통과로 기록됐다.
