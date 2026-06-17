@@ -52,6 +52,30 @@ class AllChannelConv1D(nn.Module):
         return self.classifier(features)
 
 
+class AllChannelConv1DSmall(nn.Module):
+    """Smaller all-channel Conv1D baseline for capacity-matched v2 comparisons."""
+
+    def __init__(self, input_length: int = 512, input_channels: int = 18, num_classes: int = 5) -> None:
+        super().__init__()
+        self.input_length = input_length
+        self.input_channels = input_channels
+        self.encoder = nn.Sequential(
+            nn.Conv1d(input_channels, 16, kernel_size=7, padding=3),
+            nn.BatchNorm1d(16),
+            nn.ReLU(),
+            nn.Conv1d(16, 24, kernel_size=5, padding=2),
+            nn.BatchNorm1d(24),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool1d(1),
+        )
+        self.classifier = nn.Linear(24, num_classes)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = ensure_btc(x, self.input_length, self.input_channels)
+        features = self.encoder(x.transpose(1, 2)).squeeze(-1)
+        return self.classifier(features)
+
+
 class CNN2DBaseline(nn.Module):
     def __init__(self, input_length: int = 512, input_channels: int = 18, num_classes: int = 5) -> None:
         super().__init__()

@@ -91,7 +91,7 @@ class ModelRegistryTests(unittest.TestCase):
             "modality_shared_acc_gyro_encoder",
             "cnn2d_baseline",
         }
-        self.assertEqual(set(list_models()), expected)
+        self.assertTrue(expected.issubset(set(list_models())))
 
         x = torch.randn(2, 512, 18)
         for name in sorted(expected):
@@ -174,13 +174,13 @@ class MetricsAndSmokeTests(unittest.TestCase):
             self.assertTrue(metrics_path.exists())
             metrics = json.loads(metrics_path.read_text())
             self.assertEqual(metrics["smoke_test"]["input_shape"], [16, 512, 18])
-            self.assertEqual(set(metrics["model_parameter_counts"]), {
+            self.assertTrue({
                 "classical_feature_baseline",
                 "all_channel_conv1d",
                 "channel_shared_1d_encoder",
                 "modality_shared_acc_gyro_encoder",
                 "cnn2d_baseline",
-            })
+            }.issubset(set(metrics["model_parameter_counts"])))
 
 
 if __name__ == "__main__":

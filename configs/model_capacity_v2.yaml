@@ -1,0 +1,24 @@
+seed: 20260617
+input_shape:
+  batch: 4
+  window_length: 512
+  channels: 18
+num_classes: 5
+output_dir: results/model_capacity_v2
+models:
+  - name: all_channel_conv1d_v1
+    notes: 기존 all-channel Conv1D baseline alias
+  - name: all_channel_conv1d_small
+    notes: v2 shared 모델과 비교하기 위한 작은 all-channel baseline
+  - name: channel_shared_1d_encoder
+    notes: 기존 flatten-head shared encoder; capacity 비교용
+  - name: channel_shared_meanpool_v2
+    notes: shared encoder 1개 + channel mean pooling + small head
+  - name: channel_shared_attentionpool_v2
+    notes: shared encoder 1개 + small attention pooling + small head
+  - name: modality_shared_acc_gyro_encoder
+    notes: 기존 acc/gyro shared encoder; flatten-head capacity 비교용
+  - name: modality_shared_meanpool_v2
+    notes: acc encoder 1개 + gyro encoder 1개 + modality-wise mean pooling
+  - name: cnn2d_baseline_v1
+    notes: 기존 2D time-channel baseline alias
