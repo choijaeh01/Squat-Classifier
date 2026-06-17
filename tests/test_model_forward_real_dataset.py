@@ -29,6 +29,8 @@ class ModelForwardRealDatasetTests(unittest.TestCase):
             "channel_shared_meanpool_v2",
             "channel_shared_attentionpool_v2",
             "modality_shared_meanpool_v2",
+            "channel_shared_posres_attention_v3",
+            "modality_shared_sensorattn_v3",
             "cnn2d_baseline_v1",
         ]:
             with self.subTest(model=model_name):

@@ -1,0 +1,22 @@
+seed: 20260617
+input_shape:
+  batch: 4
+  window_length: 512
+  channels: 18
+num_classes: 5
+output_dir: results/model_capacity_v3
+models:
+  - name: all_channel_conv1d_v1
+    notes: 기존 all-channel Conv1D baseline
+  - name: all_channel_conv1d_small
+    notes: 작은 all-channel capacity reference
+  - name: channel_shared_meanpool_v2
+    notes: v2 shared encoder + mean pooling
+  - name: channel_shared_attentionpool_v2
+    notes: v2 shared encoder + attention pooling
+  - name: modality_shared_meanpool_v2
+    notes: v2 acc/gyro shared encoder + mean pooling
+  - name: channel_shared_posres_attention_v3
+    notes: shared encoder + channel/sensor/modality/axis identity embedding + attention + residual raw summary branch
+  - name: modality_shared_sensorattn_v3
+    notes: acc/gyro shared encoders + sensor-aware attention + gated fusion

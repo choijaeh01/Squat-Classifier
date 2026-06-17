@@ -59,3 +59,43 @@ flowchart LR
 ```
 
 이 모델은 time x channel grid를 2D 입력처럼 다루는 baseline이다.
+
+## `channel_shared_posres_attention_v3`
+
+```mermaid
+flowchart LR
+  X["Input X<br/>(batch, 512, 18)"] --> S["Split into 18 single-channel sequences"]
+  S --> E["One shared TemporalEncoder1D object<br/>reused for all channels"]
+  E --> T["Channel token embeddings<br/>(batch, 18, 32)"]
+  T --> M["Add channel, sensor, modality, axis embeddings"]
+  M --> A["Small attention pooling<br/>over 18 tokens"]
+  X --> R["Residual branch<br/>per-channel mean, std, min, max"]
+  R --> RP["Small residual projection"]
+  A --> C["Concat shared attention rep + residual rep"]
+  RP --> C
+  C --> H["Classifier<br/>Linear 64 -> 64 -> 5"]
+  H --> Y["Logits<br/>(batch, 5)"]
+```
+
+이 모델은 encoder weight sharing을 유지하면서 channel identity를 보존한다. residual branch는 shared encoder가 공통 feature를 학습하는 동안 channel별 raw summary 정보를 잃지 않도록 한다.
+
+## `modality_shared_sensorattn_v3`
+
+```mermaid
+flowchart LR
+  X["Input X<br/>(batch, 512, 18)"] --> A["Accelerometer channels<br/>9 sequences"]
+  X --> G["Gyroscope channels<br/>9 sequences"]
+  A --> AE["One acc shared TemporalEncoder1D object"]
+  G --> GE["One gyro shared TemporalEncoder1D object"]
+  AE --> AT["Acc tokens + sensor, modality, axis embeddings"]
+  GE --> GT["Gyro tokens + sensor, modality, axis embeddings"]
+  AT --> AP["Acc attention pooling"]
+  GT --> GP["Gyro attention pooling"]
+  AP --> C["Concat acc + gyro representations"]
+  GP --> C
+  C --> F["Small gated fusion"]
+  F --> H["Classifier<br/>Linear 64 -> 32 -> 5"]
+  H --> Y["Logits<br/>(batch, 5)"]
+```
+
+이 모델은 acc/gyro modality별 encoder를 분리하고, 각 modality 내부 channel을 sensor-aware attention으로 집계한다. 기존 mean pooling v2와 달리 modality별 token 중요도를 학습할 수 있다.

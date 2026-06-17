@@ -3,6 +3,13 @@ from __future__ import annotations
 import torch
 from torch import nn
 
+from models.channel_metadata import (
+    acc_channel_indices,
+    axis_indices,
+    gyro_channel_indices,
+    modality_indices,
+    sensor_indices,
+)
 from models.common import TemporalEncoder1D, ensure_btc, target_acc_gyro_indices
 
 
@@ -203,3 +210,153 @@ class ModalitySharedMeanPoolV2(nn.Module):
         encoded = encoder(subset.permute(0, 2, 1).reshape(batch_size * channels, 1, time_steps))
         embeddings = encoded.reshape(batch_size, channels, encoded.shape[-1])
         return embeddings.mean(dim=1)
+
+
+class ChannelSharedPosResAttentionV3(nn.Module):
+    """Position-aware shared encoder with attention pooling and a small residual branch.
+
+    Weight sharing still happens at ``self.shared_encoder``. Every channel is encoded by
+    this exact same object, then channel/sensor/modality/axis embeddings restore target
+    IMU channel identity before attention pooling.
+    """
+
+    def __init__(
+        self,
+        input_length: int = 512,
+        input_channels: int = 18,
+        num_classes: int = 5,
+        embedding_dim: int = 32,
+        residual_dim: int = 32,
+        attention_hidden_dim: int = 16,
+        head_hidden_dim: int = 64,
+    ) -> None:
+        super().__init__()
+        if input_channels != 18:
+            raise ValueError("channel_shared_posres_attention_v3 expects the approved 18-channel target layout")
+        self.input_length = input_length
+        self.input_channels = input_channels
+        self.shared_encoder = TemporalEncoder1D(in_channels=1, output_dim=embedding_dim)
+        self.channel_encoder_refs = [self.shared_encoder for _ in range(input_channels)]
+        self.register_buffer("sensor_ids", torch.as_tensor(sensor_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("modality_ids", torch.as_tensor(modality_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("axis_ids", torch.as_tensor(axis_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("channel_ids", torch.arange(input_channels, dtype=torch.long), persistent=False)
+        self.aggregation = nn.ModuleDict(
+            {
+                "channel_embedding": nn.Embedding(input_channels, embedding_dim),
+                "sensor_embedding": nn.Embedding(3, embedding_dim),
+                "modality_embedding": nn.Embedding(2, embedding_dim),
+                "axis_embedding": nn.Embedding(3, embedding_dim),
+                "token_norm": nn.LayerNorm(embedding_dim),
+                "attention_pool": ChannelAttentionPooling(embedding_dim=embedding_dim, hidden_dim=attention_hidden_dim),
+                "residual_projection": nn.Sequential(
+                    nn.Linear(input_channels * 4, 64),
+                    nn.ReLU(),
+                    nn.Linear(64, residual_dim),
+                    nn.ReLU(),
+                ),
+            }
+        )
+        self.classifier = nn.Sequential(
+            nn.Linear(embedding_dim + residual_dim, head_hidden_dim),
+            nn.ReLU(),
+            nn.Linear(head_hidden_dim, num_classes),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = ensure_btc(x, self.input_length, self.input_channels)
+        tokens = self._encode_position_aware_tokens(x)
+        pooled = self.aggregation["attention_pool"](tokens)
+        residual = self.aggregation["residual_projection"](_raw_summary_features(x))
+        return self.classifier(torch.cat([pooled, residual], dim=1))
+
+    def _encode_position_aware_tokens(self, x: torch.Tensor) -> torch.Tensor:
+        batch_size, time_steps, channels = x.shape
+        encoded = self.shared_encoder(x.permute(0, 2, 1).reshape(batch_size * channels, 1, time_steps))
+        tokens = encoded.reshape(batch_size, channels, encoded.shape[-1])
+        metadata = (
+            self.aggregation["channel_embedding"](self.channel_ids)
+            + self.aggregation["sensor_embedding"](self.sensor_ids)
+            + self.aggregation["modality_embedding"](self.modality_ids)
+            + self.aggregation["axis_embedding"](self.axis_ids)
+        )
+        return self.aggregation["token_norm"](tokens + metadata.unsqueeze(0))
+
+
+class ModalitySharedSensorAttentionV3(nn.Module):
+    """Acc/Gyro-specific shared encoders with sensor-aware attention and gated fusion."""
+
+    def __init__(
+        self,
+        input_length: int = 512,
+        input_channels: int = 18,
+        num_classes: int = 5,
+        embedding_dim: int = 32,
+        attention_hidden_dim: int = 16,
+        fusion_dim: int = 64,
+        head_hidden_dim: int = 32,
+    ) -> None:
+        super().__init__()
+        if input_channels != 18:
+            raise ValueError("modality_shared_sensorattn_v3 expects the approved 18-channel target layout")
+        self.input_length = input_length
+        self.input_channels = input_channels
+        self.acc_indices = acc_channel_indices()
+        self.gyro_indices = gyro_channel_indices()
+        self.acc_encoder = TemporalEncoder1D(in_channels=1, output_dim=embedding_dim)
+        self.gyro_encoder = TemporalEncoder1D(in_channels=1, output_dim=embedding_dim)
+        self.acc_encoder_refs = [self.acc_encoder for _ in self.acc_indices]
+        self.gyro_encoder_refs = [self.gyro_encoder for _ in self.gyro_indices]
+        self.register_buffer("sensor_ids", torch.as_tensor(sensor_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("modality_ids", torch.as_tensor(modality_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("axis_ids", torch.as_tensor(axis_indices(), dtype=torch.long), persistent=False)
+        self.aggregation = nn.ModuleDict(
+            {
+                "sensor_embedding": nn.Embedding(3, embedding_dim),
+                "modality_embedding": nn.Embedding(2, embedding_dim),
+                "axis_embedding": nn.Embedding(3, embedding_dim),
+                "token_norm": nn.LayerNorm(embedding_dim),
+                "acc_attention_pool": ChannelAttentionPooling(embedding_dim=embedding_dim, hidden_dim=attention_hidden_dim),
+                "gyro_attention_pool": ChannelAttentionPooling(embedding_dim=embedding_dim, hidden_dim=attention_hidden_dim),
+                "fusion_candidate": nn.Sequential(nn.Linear(embedding_dim * 2, fusion_dim), nn.ReLU()),
+                "fusion_gate": nn.Sequential(nn.Linear(embedding_dim * 2, fusion_dim), nn.Sigmoid()),
+            }
+        )
+        self.classifier = nn.Sequential(
+            nn.Linear(fusion_dim, head_hidden_dim),
+            nn.ReLU(),
+            nn.Linear(head_hidden_dim, num_classes),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = ensure_btc(x, self.input_length, self.input_channels)
+        acc_tokens = self._encode_tokens(x, self.acc_indices, self.acc_encoder)
+        gyro_tokens = self._encode_tokens(x, self.gyro_indices, self.gyro_encoder)
+        acc_rep = self.aggregation["acc_attention_pool"](acc_tokens)
+        gyro_rep = self.aggregation["gyro_attention_pool"](gyro_tokens)
+        combined = torch.cat([acc_rep, gyro_rep], dim=1)
+        candidate = self.aggregation["fusion_candidate"](combined)
+        gate = self.aggregation["fusion_gate"](combined)
+        fused = gate * candidate + (1.0 - gate) * combined
+        return self.classifier(fused)
+
+    def _encode_tokens(self, x: torch.Tensor, indices: list[int], encoder: TemporalEncoder1D) -> torch.Tensor:
+        subset = x[:, :, indices]
+        batch_size, time_steps, channels = subset.shape
+        encoded = encoder(subset.permute(0, 2, 1).reshape(batch_size * channels, 1, time_steps))
+        tokens = encoded.reshape(batch_size, channels, encoded.shape[-1])
+        index_tensor = torch.as_tensor(indices, dtype=torch.long, device=x.device)
+        metadata = (
+            self.aggregation["sensor_embedding"](self.sensor_ids[index_tensor])
+            + self.aggregation["modality_embedding"](self.modality_ids[index_tensor])
+            + self.aggregation["axis_embedding"](self.axis_ids[index_tensor])
+        )
+        return self.aggregation["token_norm"](tokens + metadata.unsqueeze(0))
+
+
+def _raw_summary_features(x: torch.Tensor) -> torch.Tensor:
+    means = x.mean(dim=1)
+    stds = x.std(dim=1, unbiased=False)
+    mins = x.amin(dim=1)
+    maxs = x.amax(dim=1)
+    return torch.cat([means, stds, mins, maxs], dim=1)

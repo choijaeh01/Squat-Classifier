@@ -9,8 +9,10 @@ from models.shared_encoders import (
     ChannelShared1DEncoder,
     ChannelSharedAttentionPoolV2,
     ChannelSharedMeanPoolV2,
+    ChannelSharedPosResAttentionV3,
     ModalitySharedAccGyroEncoder,
     ModalitySharedMeanPoolV2,
+    ModalitySharedSensorAttentionV3,
 )
 
 
@@ -25,8 +27,10 @@ MODEL_REGISTRY: dict[str, ModelFactory] = {
     "channel_shared_1d_encoder": ChannelShared1DEncoder,
     "channel_shared_meanpool_v2": ChannelSharedMeanPoolV2,
     "channel_shared_attentionpool_v2": ChannelSharedAttentionPoolV2,
+    "channel_shared_posres_attention_v3": ChannelSharedPosResAttentionV3,
     "modality_shared_acc_gyro_encoder": ModalitySharedAccGyroEncoder,
     "modality_shared_meanpool_v2": ModalitySharedMeanPoolV2,
+    "modality_shared_sensorattn_v3": ModalitySharedSensorAttentionV3,
     "cnn2d_baseline": CNN2DBaseline,
     "cnn2d_baseline_v1": CNN2DBaseline,
 }

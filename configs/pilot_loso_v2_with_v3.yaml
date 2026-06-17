@@ -1,0 +1,75 @@
+experiment_name: pilot_loso_v2_with_v3
+dataset_dir: data/target/processed/v1_manual_windows_resample512
+output_root: results/pilot_loso
+seed: 42
+
+split:
+  type: loso_with_cyclic_subject_validation
+  subjects: [1, 2, 3, 4, 5, 6]
+  validation_policy: next_subject_cyclic
+  strict_subject_isolation: true
+
+models:
+  - all_channel_conv1d_v1
+  - all_channel_conv1d_small
+  - channel_shared_meanpool_v2
+  - channel_shared_attentionpool_v2
+  - modality_shared_meanpool_v2
+  - channel_shared_posres_attention_v3
+  - modality_shared_sensorattn_v3
+
+training:
+  pilot_mode: true
+  allow_full_training: false
+  max_epochs: 30
+  batch_size: 16
+  loss: cross_entropy
+  optimizer: adam
+  learning_rate: 0.001
+  weight_decay: 0.0
+  early_stopping:
+    enabled: true
+    monitor: val_macro_f1
+    mode: max
+    patience: 8
+    min_delta: 0.0001
+    restore_best: true
+  gradient_clip_norm: null
+  mixed_precision: false
+  failure_policy: abort
+
+normalization:
+  global_standard_scaler: true
+  fit_scaler_on: train_subjects_only
+  per_window_zscore: false
+  save_scaler_stats: true
+
+augmentation:
+  enabled: false
+
+checkpointing:
+  save_best_checkpoint: true
+  save_last_checkpoint: false
+  save_model_state_dict: true
+
+metrics:
+  accuracy: true
+  macro_f1: true
+  class_wise_precision_recall_f1: true
+  confusion_matrix: true
+  subject_wise_metrics: true
+
+reproducibility:
+  deterministic: true
+  save_config_snapshot: true
+  save_git_status: true
+  save_manifest_checksum: true
+  save_model_parameter_count: true
+
+safety:
+  max_allowed_epochs_for_pilot: 30
+  max_allowed_seeds_for_pilot: 1
+  forbid_ssl: true
+  forbid_augmentation: true
+  forbid_focal_loss: true
+  forbid_external_dataset: true

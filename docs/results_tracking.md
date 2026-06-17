@@ -78,3 +78,54 @@ Class 3 recall:
 | cnn2d_baseline_v1 | false | - | 0.6250 |
 
 해석: shared 계열은 full generalization 이전 단계인 small subset memorization에서도 제한이 보인다. 다음 architecture correction에서는 position-aware shared encoder를 검토한다.
+
+## model_capacity_v3
+
+- 목적: position-aware shared encoder v3 모델의 parameter budget 확인
+- 결과 경로: `results/model_capacity_v3/model_capacity_table.csv`
+- target range: all-channel Conv1D v1의 0.5배-2배, 약 8k-32k
+
+| model | total params | encoder | aggregation | head |
+|---|---:|---:|---:|---:|
+| channel_shared_posres_attention_v3 | 14742 | 2064 | 8193 | 4485 |
+| modality_shared_sensorattn_v3 | 16103 | 4128 | 9730 | 2245 |
+
+두 모델 모두 목표 parameter range 안에 있다.
+
+## overfit_diagnostic_v2_with_v3
+
+- 목적: v3 모델이 40개 balanced subset을 외울 수 있는지 확인
+- 실행 위치: CAU
+- 결과 경로: `results/overfit_diagnostics/20260617_130057_overfit_diagnostic_v2_with_v3/`
+- 일반화 성능 해석 금지
+
+| model | reached 95% train acc | epoch | final train acc |
+|---|---|---:|---:|
+| all_channel_conv1d_v1 | true | 10 | 0.9500 |
+| all_channel_conv1d_small | true | 18 | 0.9500 |
+| channel_shared_meanpool_v2 | false | - | 0.5250 |
+| channel_shared_attentionpool_v2 | false | - | 0.6250 |
+| modality_shared_meanpool_v2 | false | - | 0.7500 |
+| channel_shared_posres_attention_v3 | true | 30 | 0.9500 |
+| modality_shared_sensorattn_v3 | true | 87 | 0.9500 |
+
+## pilot_loso_v2_with_v3
+
+- 목적: v3 shared 모델의 1 seed 6-fold pilot 검증
+- 실행 위치: CAU
+- 결과 경로: `results/pilot_loso/20260617_130150_pilot_loso_v2_with_v3/`
+- 성공/실패: 42 성공, 0 실패
+- leakage: 모든 fold에서 subject isolation 통과
+- scaler: fold별 train subjects only
+
+| model | mean accuracy | mean macro F1 |
+|---|---:|---:|
+| all_channel_conv1d_v1 | 0.6817 | 0.6457 |
+| channel_shared_posres_attention_v3 | 0.6850 | 0.6439 |
+| all_channel_conv1d_small | 0.6417 | 0.5902 |
+| modality_shared_sensorattn_v3 | 0.4550 | 0.3852 |
+| modality_shared_meanpool_v2 | 0.3467 | 0.2485 |
+| channel_shared_attentionpool_v2 | 0.3000 | 0.2133 |
+| channel_shared_meanpool_v2 | 0.2550 | 0.1400 |
+
+`channel_shared_posres_attention_v3`는 v2 shared 모델 대비 큰 개선을 보였고, full supervised matrix에 포함할 가치가 있다. 단, 이 결과는 1 seed pilot이다.
