@@ -1,0 +1,56 @@
+experiment_name: real_smoke_training_v1
+dataset_dir: data/target/processed/v1_manual_windows_resample512
+output_root: results/smoke_training
+seed: 42
+
+split:
+  type: loso_smoke
+  test_subject_id: 1
+  val_subject_id: 2
+  train_subject_policy: all_remaining
+  strict_subject_isolation: true
+
+models:
+  - all_channel_conv1d_v1
+  - all_channel_conv1d_small
+  - channel_shared_meanpool_v2
+  - channel_shared_attentionpool_v2
+  - modality_shared_meanpool_v2
+  - cnn2d_baseline_v1
+
+training:
+  smoke_mode: true
+  allow_full_training: false
+  max_epochs: 1
+  max_train_batches: 3
+  max_val_batches: 3
+  max_test_batches: 3
+  batch_size: 16
+  loss: cross_entropy
+  optimizer: adam
+  learning_rate: 0.001
+  weight_decay: 0.0
+  gradient_clip_norm: null
+  mixed_precision: false
+
+normalization:
+  global_standard_scaler: true
+  fit_scaler_on: train_subjects_only
+  per_window_zscore: false
+  save_scaler_stats: true
+
+augmentation:
+  enabled: false
+
+metrics:
+  accuracy: true
+  macro_f1: true
+  class_wise_precision_recall_f1: true
+  confusion_matrix: true
+
+reproducibility:
+  deterministic: true
+  save_config_snapshot: true
+  save_git_status: true
+  save_manifest_checksum: true
+  save_model_parameter_count: true

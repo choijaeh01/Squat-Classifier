@@ -156,6 +156,20 @@ class MetricsAndSmokeTests(unittest.TestCase):
             saved = json.loads(path.read_text())
         self.assertIn("accuracy", saved)
 
+    def test_subject_wise_metrics_handle_integer_subject_ids(self):
+        from training.metrics import compute_classification_metrics
+
+        metrics = compute_classification_metrics(
+            y_true=np.array([0, 1, 0, 1]),
+            y_pred=np.array([0, 1, 0, 1]),
+            subject_ids=np.array([1, 1, 2, 2], dtype=np.int64),
+            num_classes=2,
+            class_names=["A", "B"],
+        )
+
+        self.assertEqual(metrics["subject_wise_macro_f1"]["1"], 1.0)
+        self.assertEqual(metrics["subject_wise_macro_f1"]["2"], 1.0)
+
     def test_smoke_script_writes_dummy_metrics(self):
         with tempfile.TemporaryDirectory() as tmp:
             project_copy = pathlib.Path(tmp) / "squat_imu_experiments"

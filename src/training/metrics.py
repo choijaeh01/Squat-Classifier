@@ -46,11 +46,11 @@ def compute_classification_metrics(
     macro_f1 = float(f1.mean()) if len(f1) else 0.0
 
     subject_scores: dict[str, float] = {}
-    for subject in sorted(str(item) for item in np.unique(subject_ids)):
+    for subject in sorted(np.unique(subject_ids).tolist()):
         mask = subject_ids == subject
         subject_matrix = confusion_matrix(y_true[mask], y_pred[mask], num_classes)
         _, _, subject_f1 = precision_recall_f1_from_confusion(subject_matrix)
-        subject_scores[subject] = float(subject_f1.mean())
+        subject_scores[str(subject)] = float(subject_f1.mean())
 
     return {
         "accuracy": accuracy,
