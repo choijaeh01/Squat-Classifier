@@ -38,6 +38,20 @@ Literature baseline full extension v1에서는 RandomForest, LinearSVM, ResCNN-B
 
 ## v3 Component Ablation
 
+v3 component ablation v1은 original `channel_shared_posres_attention_v3`의 구조적 요소를 제거한 4개 variant를 동일 final LOSO protocol에서 평가했다. 기존 locked full matrix와 literature full extension 결과 디렉터리는 수정하지 않았다.
+
+가장 큰 차이는 residual branch 제거에서 나타났다. `channel_shared_posres_attention_v3_no_residual`은 Macro F1 0.5937로 original v3의 0.8108보다 크게 낮았다. Paired delta는 -0.2171이고 confidence interval은 [-0.2945, -0.1449]였다. 이는 residual summary branch가 현재 dataset에서 중요한 signal을 제공했을 가능성을 보여준다.
+
+Identity embedding 제거 variant는 Macro F1 0.7675로 original v3보다 낮았다. Paired delta는 -0.0434이고 confidence interval은 [-0.0852, -0.0072]였다. 단, 이 variant에는 residual branch가 남아 있으므로 channel-position cue를 완전히 제거한 실험은 아니다.
+
+Attention pooling을 mean pooling으로 대체한 variant는 Macro F1 0.8082로 original v3와 매우 가까웠다. Paired delta는 -0.0026이고 confidence interval은 [-0.0402, 0.0343]였다. 따라서 attention pooling을 v3 성능의 핵심 원인으로 강하게 주장하기는 어렵다. 더 안전한 논의는 attention pooling을 learnable aggregation option으로 설명하고, position-aware identity 및 residual summary branch를 더 중요한 component로 다루는 것이다.
+
+Residual-only MLP는 Macro F1 0.8036으로 original v3와 가까웠다. 이는 small-subject IMU squat dataset에서 channel-wise summary statistics가 강한 baseline signal을 가질 수 있음을 보여준다. 이 결과는 proposed model의 shared encoder claim을 과장하지 않도록 만드는 중요한 limitation이다.
+
+Attention-RF alignment 분석에서는 v3 attention weight와 RandomForest feature importance가 모두 `s1_ax` 관련 정보를 상위로 보았고, channel-level Pearson correlation은 0.6361이었다. 그러나 attention weight와 feature importance는 계산 의미가 다르므로 동일한 해석 지표로 간주하지 않는다.
+
+## v3 Component Ablation
+
 v3 component ablation v1에서는 residual branch 제거, residual-only MLP, identity embedding 제거, attention 제거 mean-pooling variant를 3 seeds x 6 folds로 평가했다. 모든 run은 동일 final validation policy와 train-only scaler policy를 사용했고, augmentation, focal loss, balanced sampling, SSL, external dataset은 사용하지 않았다.
 
 가장 큰 변화는 residual branch 제거에서 나타났다. `channel_shared_posres_attention_v3_no_residual`의 Macro F1은 0.5937로 original v3의 0.8108보다 낮았고, paired delta는 -0.2171이었다. 이는 residual branch가 본 데이터셋에서 중요한 역할을 했을 가능성을 시사한다.

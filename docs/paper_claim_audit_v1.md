@@ -108,6 +108,36 @@ CAU screening에서는 54개 run이 모두 성공했고 skipped run은 없었다
 
 ## 13. v3 component ablation 관련 claim 제한
 
+`v3_component_ablation_v1`은 original `channel_shared_posres_attention_v3`를 새로 튜닝하지 않고, component 제거 variant 4개를 같은 final validation policy에서 3 seeds x 6 folds로 실행한 분석이다. 기존 locked full matrix와 literature full extension 결과는 read-only reference로만 사용했다.
+
+결과 요약:
+
+- `channel_shared_posres_attention_v3_no_residual`: Macro F1 0.5937
+- `channel_shared_posres_attention_v3_residual_only_mlp`: Macro F1 0.8036
+- `channel_shared_posres_attention_v3_no_identity`: Macro F1 0.7675
+- `channel_shared_posres_meanpool_v3_no_attention`: Macro F1 0.8082
+- original `channel_shared_posres_attention_v3`: locked Macro F1 0.8108
+
+Original v3 대비 paired delta는 no residual -0.2171, residual-only MLP -0.0072, no identity -0.0434, no attention -0.0026이었다. no residual과 no identity의 confidence interval은 0을 포함하지 않았고, residual-only MLP와 no attention은 0을 포함했다.
+
+안전한 문장:
+
+- Component ablation에서 residual summary branch 제거는 큰 성능 하락과 연결됐다.
+- Identity embedding 제거도 original v3 대비 낮은 결과를 보였다.
+- Attention pooling을 mean pooling으로 바꾼 ablation은 original v3와 매우 가까운 결과를 보였다.
+- Residual-only MLP가 강하게 관찰되어, small-subject IMU dataset에서는 raw channel summary statistics도 강한 signal을 제공할 수 있다.
+
+조심해야 할 문장:
+
+- Attention pooling이 v3 성능의 주된 원인이라는 주장
+- Shared temporal encoder만으로 v3 성능을 설명하는 주장
+- Residual-only MLP 결과를 근거로 proposed model을 반드시 바꿔야 한다는 결론
+- Attention weight와 RandomForest feature importance를 동일한 설명량으로 해석하는 문장
+
+Attention-RF alignment는 channel-level Pearson 0.6361, Spearman 0.3870으로 기록됐다. 둘 다 `s1_ax` 관련 정보를 상위로 보았지만, attention weight와 feature importance는 산출 의미가 다르므로 정성적 참고 분석으로만 사용한다.
+
+## 13. v3 component ablation 관련 claim 제한
+
 `v3_component_ablation_v1`은 기존 locked full supervised matrix와 literature baseline full extension을 수정하지 않고, 별도 결과 디렉토리에서 4개 component ablation 모델을 3 seeds x 6 folds로 실행한 실험이다. 총 72개 run이 모두 성공했고 split/scaler leakage check는 모두 통과했다.
 
 관찰된 Macro F1은 다음과 같다.

@@ -364,6 +364,30 @@ Full extension protocol:
 
 ## v3 Component Ablation v1
 
+`v3_component_ablation_v1`은 기존 locked full matrix와 literature full extension 결과를 수정하지 않고, original `channel_shared_posres_attention_v3`의 주요 component를 제거한 4개 ablation model을 같은 final validation policy에서 평가한 별도 실행이다.
+
+포함 모델:
+
+- `channel_shared_posres_attention_v3_no_residual`
+- `channel_shared_posres_attention_v3_residual_only_mlp`
+- `channel_shared_posres_attention_v3_no_identity`
+- `channel_shared_posres_meanpool_v3_no_attention`
+
+Protocol:
+
+- seeds: 42, 123, 2025
+- total runs: 72
+- train/validation/test per fold: 400/100/100
+- scaler fit: train indices only
+- per-window z-score, augmentation, focal loss, balanced sampling, SSL, external dataset: disabled
+- 기존 result directories: read-only reference
+
+실행 결과는 `results/v3_component_ablation/20260617_202714_v3_component_ablation_v1/`에 저장됐다. 모든 run이 성공했고 split leakage 및 scaler leakage check는 모두 통과했다.
+
+수치상 residual branch 제거는 큰 성능 하락을 보였고, identity embedding 제거도 original v3 대비 낮았다. 반면 mean pooling ablation과 residual-only MLP는 original v3와 가까운 Macro F1을 보였다. 따라서 논문에서는 attention pooling 단독 효과를 강하게 주장하지 않고, position-aware identity와 residual summary branch의 역할을 더 조심스럽게 서술한다.
+
+## v3 Component Ablation v1
+
 `v3_component_ablation_v1`은 proposed v3 구조의 component별 기여를 확인하기 위한 별도 ablation이다. 기존 locked full supervised matrix와 literature full extension 결과 디렉토리는 read-only reference로만 사용하며 수정하지 않는다.
 
 Ablation model:
