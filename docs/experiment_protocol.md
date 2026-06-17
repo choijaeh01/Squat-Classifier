@@ -256,3 +256,29 @@ v3 모델은 shared encoder 논리를 유지하되 channel identity를 명시적
 - pilot LOSO v2에서 `channel_shared_posres_attention_v3`는 mean macro F1 0.6439로 all-channel v1 0.6457과 거의 같았다.
 
 이 결과는 full supervised matrix 실행 전 후보 선정을 위한 1 seed 제한 검증이다. 최종 논문 성능으로 해석하지 않는다.
+
+## Final Protocol Pilot v1
+
+논문용 primary validation policy 후보는 `loso_with_within_train_subject_stratified_validation`으로 둔다.
+
+각 fold:
+
+- test subject: 현재 LOSO held-out subject 1명, 총 100 windows
+- candidate train subjects: 나머지 5명
+- 각 candidate train subject-class 조합: 20 windows 중 16 train, 4 validation
+- fold별 train/validation/test 크기: 400/100/100
+- scaler fit: train indices 400개만 사용
+- per-window z-score, augmentation, focal loss, SSL, external dataset: disabled
+
+이 policy는 기존 next-subject cyclic validation과 다르다. Cyclic validation은 validation subject 1명을 통째로 제외했지만, final protocol은 test subject만 완전히 제외하고 나머지 subject 내부에서 class-stratified validation을 만든다. 따라서 validation은 train 후보 subject 분포를 더 직접적으로 반영한다.
+
+`final_protocol_pilot_v1` 실행 결과:
+
+- CAU 결과 경로: `results/final_protocol_pilot/20260617_140012_final_protocol_pilot_v1/`
+- split leakage: 모든 fold 통과
+- scaler leakage: 모든 fold 및 모델 통과
+- fold 성공/실패: 24 성공, 0 실패
+- `channel_shared_posres_attention_v3`: mean accuracy 0.8067, mean macro F1 0.7950
+- `all_channel_conv1d_v1`: mean accuracy 0.8150, mean macro F1 0.7893
+
+이 결과는 1 seed final-protocol pilot이며 최종 논문 성능으로 해석하지 않는다. 다만 split/scaler policy가 요구 조건을 만족했으므로, 다음 단계에서 3 seed full supervised matrix로 넘어갈 수 있다.

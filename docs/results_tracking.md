@@ -129,3 +129,33 @@ Class 3 recall:
 | channel_shared_meanpool_v2 | 0.2550 | 0.1400 |
 
 `channel_shared_posres_attention_v3`는 v2 shared 모델 대비 큰 개선을 보였고, full supervised matrix에 포함할 가치가 있다. 단, 이 결과는 1 seed pilot이다.
+
+## final_protocol_pilot_v1
+
+- 목적: 논문용 primary LOSO validation policy 확정 전 제한 pilot
+- 실행 위치: CAU
+- commit: `a92b830f5cd921292676058ca250f54fcabb38a0`
+- 결과 경로: `results/final_protocol_pilot/20260617_140012_final_protocol_pilot_v1/`
+- split policy: `loso_with_within_train_subject_stratified_validation`
+- fold 크기: train 400, validation 100, test 100
+- leakage: test subject isolation 및 train/validation index disjoint 모두 통과
+- scaler: train indices only, val/test index 사용 없음
+- 성공/실패: 24 성공, 0 실패
+
+| model | mean accuracy | mean macro F1 |
+|---|---:|---:|
+| all_channel_conv1d_small | 0.8517 | 0.8298 |
+| all_channel_conv1d_v1 | 0.8150 | 0.7893 |
+| channel_shared_posres_attention_v3 | 0.8067 | 0.7950 |
+| modality_shared_sensorattn_v3 | 0.5800 | 0.5357 |
+
+Class 3 Excessive Lean:
+
+| model | class 3 recall | class 3 F1 |
+|---|---:|---:|
+| all_channel_conv1d_small | 0.7333 | 0.7288 |
+| all_channel_conv1d_v1 | 0.6583 | 0.6884 |
+| channel_shared_posres_attention_v3 | 0.7667 | 0.7562 |
+| modality_shared_sensorattn_v3 | 0.4833 | 0.4197 |
+
+이 결과는 1 seed final-protocol pilot이다. 최종 논문 성능으로 해석하지 않는다. Split/scaler policy가 통과했으므로 3 seed full supervised matrix로 넘어갈 수 있다.
