@@ -25,7 +25,6 @@ from analysis.full_matrix_analysis import (
 from data.processed_loader import ProcessedTargetDataset
 from models.registry import build_model, count_parameter_groups
 from training.loso_runner import (
-    _aggregate_confusion_rows,
     _classwise_rows,
     _confusion_rows,
     _make_splits_for_config,
@@ -238,7 +237,8 @@ def run_full_supervised_matrix(
                 _update_run_plan_status(run_plan, key, run_status[key])
                 _write_intermediate_outputs(run_dir, run_plan, fold_rows, classwise_rows, history_rows, confusion_rows, prediction_rows, failed_rows)
 
-    confusion_rows.extend(_aggregate_confusion_rows([row for row in confusion_rows if row.get("scope") == "fold"]))
+    fold_confusion_rows = [row for row in confusion_rows if row.get("scope") == "fold"]
+    confusion_rows = fold_confusion_rows + _aggregate_confusion_rows_full(fold_confusion_rows)
     statistics = config["statistics"]
     aggregate_seed_rows = aggregate_full_matrix_by_model_seed(fold_rows)
     aggregate_rows = aggregate_full_matrix_by_model(
@@ -306,6 +306,8 @@ def summarize_full_matrix_run(run_dir: str | Path, *, bootstrap_n: int = 10000, 
     write_csv(run_dir / "classwise_metrics_by_model.csv", classwise_by_model_rows)
     write_csv(run_dir / "paired_model_differences.csv", paired_rows)
     write_csv(run_dir / "bootstrap_confidence_intervals.csv", ci_rows)
+    confusion_rows = [row for row in _read_csv_dicts(run_dir / "confusion_matrices.csv") if row.get("scope") == "fold"]
+    write_csv(run_dir / "confusion_matrices.csv", confusion_rows + _aggregate_confusion_rows_full(confusion_rows))
     generate_full_matrix_figures(run_dir)
     return {"run_dir": str(run_dir), "n_fold_rows": len(fold_rows), "n_models": len(aggregate_rows)}
 
@@ -502,6 +504,30 @@ def _failed_fold_row(failed: dict[str, Any]) -> dict[str, Any]:
         "scaler_leakage_check_passed": False,
         "status": "failed",
     }
+
+
+def _aggregate_confusion_rows_full(confusion_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    totals: dict[tuple[str, int, int], int] = {}
+    for row in confusion_rows:
+        if row.get("scope") != "fold":
+            continue
+        key = (str(row["model_name"]), int(row["true_class"]), int(row["pred_class"]))
+        totals[key] = totals.get(key, 0) + int(row["count"])
+    rows = []
+    for (model_name, true_class, pred_class), count in sorted(totals.items()):
+        rows.append(
+            {
+                "scope": "aggregate",
+                "model_name": model_name,
+                "seed": "all",
+                "fold_id": "all",
+                "test_subject": "all",
+                "true_class": true_class,
+                "pred_class": pred_class,
+                "count": count,
+            }
+        )
+    return rows
 
 
 def _with_seed(rows: list[dict[str, Any]], seed: int) -> list[dict[str, Any]]:

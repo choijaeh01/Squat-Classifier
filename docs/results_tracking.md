@@ -159,3 +159,43 @@ Class 3 Excessive Lean:
 | modality_shared_sensorattn_v3 | 0.4833 | 0.4197 |
 
 이 결과는 1 seed final-protocol pilot이다. 최종 논문 성능으로 해석하지 않는다. Split/scaler policy가 통과했으므로 3 seed full supervised matrix로 넘어갈 수 있다.
+
+## full_supervised_matrix_v1
+
+- 목적: 논문 결과 후보 supervised LOSO full matrix
+- 실행 위치: CAU
+- commit: `9e49ddcb64b0cfef1d77a05c83fa9d68de961ca7`
+- 결과 경로: `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/`
+- run 수: 126
+- 성공/실패: 126 성공, 0 실패
+- split leakage: 통과
+- scaler leakage: 통과
+
+| model | accuracy | macro F1 | weighted F1 | macro F1 CI |
+|---|---:|---:|---:|---|
+| channel_shared_posres_attention_v3 | 0.8217 | 0.8108 | 0.8108 | [0.7644, 0.8537] |
+| all_channel_conv1d_small | 0.8044 | 0.7740 | 0.7740 | [0.7026, 0.8424] |
+| all_channel_conv1d_v1 | 0.7839 | 0.7531 | 0.7531 | [0.6502, 0.8429] |
+| modality_shared_sensorattn_v3 | 0.6444 | 0.6023 | 0.6023 | [0.5003, 0.6944] |
+| cnn2d_baseline_v1 | 0.4472 | 0.3688 | 0.3688 | [0.2904, 0.4489] |
+| channel_shared_attentionpool_v2 | 0.3794 | 0.3136 | 0.3136 | [0.2553, 0.3731] |
+| channel_shared_meanpool_v2 | 0.3172 | 0.2356 | 0.2356 | [0.1780, 0.2955] |
+
+Paired macro F1 difference:
+
+- `channel_shared_posres_attention_v3` minus `all_channel_conv1d_v1`: +0.0577, CI [-0.0251, 0.1511]
+- `channel_shared_posres_attention_v3` minus `all_channel_conv1d_small`: +0.0368, CI [-0.0319, 0.1097]
+
+Class 3 Excessive Lean:
+
+| model | class 3 recall | class 3 F1 |
+|---|---:|---:|
+| channel_shared_posres_attention_v3 | 0.6889 | 0.7184 |
+| all_channel_conv1d_v1 | 0.7000 | 0.6693 |
+| all_channel_conv1d_small | 0.6444 | 0.6373 |
+| modality_shared_sensorattn_v3 | 0.5250 | 0.4548 |
+| cnn2d_baseline_v1 | 0.5028 | 0.3937 |
+| channel_shared_attentionpool_v2 | 0.1917 | 0.1664 |
+| channel_shared_meanpool_v2 | 0.0917 | 0.0840 |
+
+Main shared model 후보는 `channel_shared_posres_attention_v3`이다. 단, all-channel baseline 대비 통계적 우월성은 아직 주장하지 않는다.

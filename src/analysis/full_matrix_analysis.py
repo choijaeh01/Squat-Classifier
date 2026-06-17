@@ -374,7 +374,7 @@ def _plot_confusion(plt: Any, rows: list[dict[str, str]], path: Path) -> None:
         matrix = np.zeros((5, 5), dtype=float)
         for row in aggregate:
             if row["model_name"] == model:
-                matrix[int(row["true_class"]), int(row["pred_class"])] = float(row["count"])
+                matrix[int(row["true_class"]), int(row["pred_class"])] += float(row["count"])
         ax.imshow(matrix, aspect="auto")
         ax.set_title(model, fontsize=8)
         ax.set_xlabel("pred")

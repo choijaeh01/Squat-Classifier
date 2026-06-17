@@ -282,3 +282,26 @@ v3 모델은 shared encoder 논리를 유지하되 channel identity를 명시적
 - `all_channel_conv1d_v1`: mean accuracy 0.8150, mean macro F1 0.7893
 
 이 결과는 1 seed final-protocol pilot이며 최종 논문 성능으로 해석하지 않는다. 다만 split/scaler policy가 요구 조건을 만족했으므로, 다음 단계에서 3 seed full supervised matrix로 넘어갈 수 있다.
+
+## Full Supervised Matrix v1
+
+Full supervised matrix v1은 final validation policy를 고정한 논문 결과 후보 실행이다.
+
+- seeds: 42, 123, 2025
+- folds: 6 LOSO folds
+- models: 7
+- total runs: 126
+- train/validation/test per fold: 400/100/100
+- scaler fit: train indices only
+- optimizer/loss: Adam, cross entropy
+- augmentation/focal loss/balanced sampling/SSL/external dataset: disabled
+
+실행 결과:
+
+- CAU 결과 경로: `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/`
+- 성공/실패: 126 성공, 0 실패
+- split leakage: 모두 통과
+- scaler leakage: 모두 통과
+- best mean macro F1: `channel_shared_posres_attention_v3`, 0.8108
+
+Full matrix 결과는 논문 결과 후보로 사용할 수 있다. 다만 paired CI가 all-channel baseline 대비 0을 포함하므로 `channel_shared_posres_attention_v3`의 통계적 우월성은 주장하지 않는다.
