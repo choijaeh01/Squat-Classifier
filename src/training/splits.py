@@ -62,6 +62,34 @@ def make_loso_smoke_split(
     )
 
 
+def make_cyclic_loso_splits(
+    *,
+    subject_id: np.ndarray,
+    y: np.ndarray,
+    subjects: list[int],
+    strict_subject_isolation: bool = True,
+) -> list[LOSOSmokeSplit]:
+    if len(subjects) < 3:
+        raise ValueError("cyclic LOSO requires at least three subjects")
+    ordered_subjects = [int(item) for item in subjects]
+    if len(set(ordered_subjects)) != len(ordered_subjects):
+        raise ValueError("subjects must be unique")
+
+    splits: list[LOSOSmokeSplit] = []
+    for index, test_subject in enumerate(ordered_subjects):
+        val_subject = ordered_subjects[(index + 1) % len(ordered_subjects)]
+        splits.append(
+            make_loso_smoke_split(
+                subject_id=subject_id,
+                y=y,
+                test_subject_id=test_subject,
+                val_subject_id=val_subject,
+                strict_subject_isolation=strict_subject_isolation,
+            )
+        )
+    return splits
+
+
 def summarize_split(
     split: LOSOSmokeSplit,
     *,

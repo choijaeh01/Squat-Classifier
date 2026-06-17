@@ -160,3 +160,47 @@ real-data smoke training은 full training이 아니다. 목적은 processed data
 - external dataset adapter
 
 Smoke metric은 성능 해석에 사용하지 않는다. full LOSO로 넘어가기 전에는 fold별 저장 규칙, validation subject 정책, checkpoint 규칙, scaler stats 검증을 별도로 확장해야 한다.
+
+## Pilot LOSO v1
+
+`pilot_loso_v1`은 final full experiment가 아니라, 전체 6-fold LOSO runner가 CAU 서버에서 끝까지 동작하는지 확인하기 위한 1 seed 제한 실행이다.
+
+Config:
+
+- `configs/pilot_loso_v1.yaml`
+- seed: `42`
+- models: `all_channel_conv1d_v1`, `all_channel_conv1d_small`, `channel_shared_meanpool_v2`, `channel_shared_attentionpool_v2`, `modality_shared_meanpool_v2`, `cnn2d_baseline_v1`
+- max epochs: `30`
+- early stopping: `val_macro_f1`, patience `8`, restore best checkpoint
+- loss: `cross_entropy`
+- optimizer: `adam`
+- augmentation, focal loss, mixup, Time-CutMix, SSL, external dataset: disabled
+
+Validation subject policy는 next-subject cyclic으로 고정한다.
+
+| fold | test subject | validation subject | train subjects |
+|---:|---:|---:|---|
+| 1 | 1 | 2 | 3, 4, 5, 6 |
+| 2 | 2 | 3 | 1, 4, 5, 6 |
+| 3 | 3 | 4 | 1, 2, 5, 6 |
+| 4 | 4 | 5 | 1, 2, 3, 6 |
+| 5 | 5 | 6 | 1, 2, 3, 4 |
+| 6 | 6 | 1 | 2, 3, 4, 5 |
+
+각 fold에서 scaler는 해당 fold의 train subjects 4명, 즉 400개 window에만 fit한다. validation/test subject는 scaler fit, early stopping 이외의 tuning, augmentation, SSL pretraining에 사용하지 않는다.
+
+Pilot output은 `results/pilot_loso/<timestamp>_pilot_loso_v1/`에 저장한다.
+
+- `split_plan.csv`
+- `scaler_stats_by_fold.csv`
+- `fold_metrics.csv`
+- `classwise_metrics.csv`
+- `training_history.csv`
+- `confusion_matrices.csv`
+- `predictions.csv`
+- `aggregate_metrics_by_model.csv`
+- `subjectwise_metrics_by_model.csv`
+- `failed_runs.csv`
+- `figures/*.png`
+
+Pilot metric은 pipeline 검증용이다. 1 seed 결과이므로 논문 결론이나 모델 우열의 최종 근거로 사용하지 않는다.
