@@ -35,3 +35,15 @@ Literature baseline full extension v1에서는 RandomForest, LinearSVM, ResCNN-B
 이 결과는 두 가지 논의점을 만든다. 첫째, handcrafted feature classical baseline이 small-subject IMU dataset에서 강할 수 있으므로 neural model claim은 strong classical baseline을 함께 제시해야 한다. 둘째, Lee-style adapted CNN-LSTM은 simple CNN-LSTM보다 높았지만 여전히 TCN 및 ResCNN-BiGRU-Attention-lite보다 낮았으므로, CNN-LSTM family 자체가 본 데이터에서 항상 강한 것은 아니다.
 
 최종 논문에서 이 extension을 main table에 포함할지, appendix 또는 additional comparison으로 둘지는 사용자 판단으로 남긴다.
+
+## v3 Component Ablation
+
+v3 component ablation v1에서는 residual branch 제거, residual-only MLP, identity embedding 제거, attention 제거 mean-pooling variant를 3 seeds x 6 folds로 평가했다. 모든 run은 동일 final validation policy와 train-only scaler policy를 사용했고, augmentation, focal loss, balanced sampling, SSL, external dataset은 사용하지 않았다.
+
+가장 큰 변화는 residual branch 제거에서 나타났다. `channel_shared_posres_attention_v3_no_residual`의 Macro F1은 0.5937로 original v3의 0.8108보다 낮았고, paired delta는 -0.2171이었다. 이는 residual branch가 본 데이터셋에서 중요한 역할을 했을 가능성을 시사한다.
+
+반면 `channel_shared_posres_attention_v3_residual_only_mlp`는 Macro F1 0.8036, `channel_shared_posres_meanpool_v3_no_attention`은 0.8082로 original v3와 매우 가까웠다. 따라서 논문에서는 attention pooling 자체가 성능 향상의 핵심 원인이라고 단정하기보다, channel-wise residual summary와 position-aware token representation의 결합을 보수적으로 설명하는 편이 안전하다.
+
+`no_identity`는 Macro F1 0.7675로 original v3보다 낮았다. 그러나 residual branch가 channel-order 기반 summary를 계속 사용하므로, 이 실험은 token identity embedding의 제거를 의미할 뿐 모든 channel position cue 제거를 의미하지 않는다.
+
+Attention-RF alignment에서는 v3 attention과 RandomForest channel importance 사이의 Pearson correlation이 0.6361, Spearman correlation이 0.3870으로 관찰됐다. `s1_ax`는 두 분석 모두에서 중요하게 나타났지만, attention weight와 feature importance는 동일한 의미가 아니므로 정성적 참고로만 사용한다.

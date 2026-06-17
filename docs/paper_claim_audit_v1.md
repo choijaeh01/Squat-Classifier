@@ -105,3 +105,33 @@ CAU screening에서는 54개 run이 모두 성공했고 skipped run은 없었다
 - Literature extension 결과 때문에 기존 main model을 반드시 바꿔야 한다는 주장
 - Lee-style 결과를 Lee et al. exact reproduction 결과로 표현하는 문장
 - 결과를 보고 tuning하지 않았는데도 최적 literature baseline 성능이라고 표현하는 문장
+
+## 13. v3 component ablation 관련 claim 제한
+
+`v3_component_ablation_v1`은 기존 locked full supervised matrix와 literature baseline full extension을 수정하지 않고, 별도 결과 디렉토리에서 4개 component ablation 모델을 3 seeds x 6 folds로 실행한 실험이다. 총 72개 run이 모두 성공했고 split/scaler leakage check는 모두 통과했다.
+
+관찰된 Macro F1은 다음과 같다.
+
+| model | macro F1 | CI |
+|---|---:|---|
+| channel_shared_posres_attention_v3 | 0.8108 | [0.7644, 0.8537] |
+| channel_shared_posres_meanpool_v3_no_attention | 0.8082 | [0.7471, 0.8603] |
+| channel_shared_posres_attention_v3_residual_only_mlp | 0.8036 | [0.7488, 0.8530] |
+| channel_shared_posres_attention_v3_no_identity | 0.7675 | [0.7112, 0.8195] |
+| channel_shared_posres_attention_v3_no_residual | 0.5937 | [0.4998, 0.6842] |
+
+안전한 문장:
+
+- Residual branch를 제거하면 Macro F1이 크게 낮아졌다.
+- Residual-only MLP가 original v3와 가까운 성능을 보였으므로, v3 성능의 상당 부분은 channel-wise summary statistics와 관련될 수 있다.
+- Identity embedding 제거 모델은 original v3보다 낮았지만, residual branch가 남아 있어 모든 position cue를 제거한 실험은 아니다.
+- Attention pooling을 mean pooling으로 바꾼 모델은 original v3와 가까운 성능을 보였고 paired CI가 0을 포함했다.
+- Attention-RF alignment는 정성적 post-hoc 비교이며, attention weight와 RF feature importance는 같은 의미가 아니다.
+
+피해야 할 문장:
+
+- Attention pooling이 v3 성능 향상의 핵심 원인이라고 단정하는 문장
+- Shared encoder 자체가 residual summary보다 더 중요한 성능 원인이라고 단정하는 문장
+- Residual-only MLP 결과를 RandomForest와 동일한 모델 또는 동일한 해석 단위로 표현하는 문장
+- `no_identity` 결과만으로 channel/sensor/modality/axis identity 전체가 필수라고 단정하는 문장
+- Ablation 결과를 보고 모델 구조를 바꾸거나 hyperparameter tuning을 수행했다는 인상을 주는 문장

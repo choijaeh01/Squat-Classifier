@@ -361,3 +361,35 @@ Full extension protocol:
 - classical features: IMU signal-derived feature만 허용하며 subject, label, filename, metadata boundary, source path는 feature로 사용하지 않는다.
 
 실행 결과는 `results/literature_baseline_full_extension/20260617_183952_literature_baseline_full_extension_v1/`에 저장됐다. 모든 run이 성공했고 leakage/scaler check는 모두 통과했다. 이 extension은 기존 locked main result를 보완하는 reference comparison이며, 최종 학술 해석은 사용자가 판단한다.
+
+## v3 Component Ablation v1
+
+`v3_component_ablation_v1`은 proposed v3 구조의 component별 기여를 확인하기 위한 별도 ablation이다. 기존 locked full supervised matrix와 literature full extension 결과 디렉토리는 read-only reference로만 사용하며 수정하지 않는다.
+
+Ablation model:
+
+- `channel_shared_posres_attention_v3_no_residual`: residual branch 제거
+- `channel_shared_posres_attention_v3_residual_only_mlp`: residual raw-summary MLP만 사용
+- `channel_shared_posres_attention_v3_no_identity`: channel/sensor/modality/axis token embedding 제거
+- `channel_shared_posres_meanpool_v3_no_attention`: attention pooling을 mean pooling으로 대체
+
+Protocol:
+
+- seeds: 42, 123, 2025
+- folds: final validation policy의 6 LOSO folds
+- total runs: 72
+- train/validation/test per fold: 400/100/100
+- scaler fit: train indices only
+- per-window z-score, augmentation, focal loss, balanced sampling, SSL, external dataset: disabled
+- optimizer/loss: Adam, cross entropy
+
+실행 결과는 `results/v3_component_ablation/20260617_202714_v3_component_ablation_v1/`에 저장됐다. 모든 run이 성공했고 leakage/scaler check는 모두 통과했다.
+
+주요 관찰:
+
+- `no_residual`은 original v3 대비 큰 Macro F1 하락을 보였다.
+- `residual_only_mlp`와 `no_attention`은 original v3와 매우 가까운 평균 Macro F1을 보였다.
+- `no_identity`는 original v3보다 낮았지만 residual branch가 남아 있어 위치 정보 전체 제거 실험은 아니다.
+- Attention-RF alignment는 inference-only/post-hoc 정성 비교로만 사용한다.
+
+이 ablation은 결과 해석 보조용이며, 결과를 보고 모델 구조, learning rate, split, preprocessing을 변경하지 않았다.

@@ -67,6 +67,22 @@ Merged reference ranking placed `channel_shared_posres_attention_v3` first with 
 
 `lee_style_cnn_lstm_2d_v1` improved over the simple CNN-LSTM baseline but did not reach the ResCNN-BiGRU-Attention-lite, TCN, Transformer, or RandomForest baselines. This Lee-style model is an adapted clean-room baseline, not an exact reproduction of Lee et al.
 
+## 8. v3 Component Ablation
+
+`v3_component_ablation_v1` was conducted after the locked supervised matrix to inspect the contributions of the residual branch, identity embeddings, and attention pooling. The locked full supervised matrix result directory was not modified.
+
+| model | accuracy | macro F1 | macro F1 CI |
+|---|---:|---:|---|
+| channel_shared_posres_attention_v3 | 0.8217 | 0.8108 | [0.7644, 0.8537] |
+| channel_shared_posres_meanpool_v3_no_attention | 0.8161 | 0.8082 | [0.7471, 0.8603] |
+| channel_shared_posres_attention_v3_residual_only_mlp | 0.8111 | 0.8036 | [0.7488, 0.8530] |
+| channel_shared_posres_attention_v3_no_identity | 0.7817 | 0.7675 | [0.7112, 0.8195] |
+| channel_shared_posres_attention_v3_no_residual | 0.6261 | 0.5937 | [0.4998, 0.6842] |
+
+Removing the residual branch produced the largest degradation. The residual-only MLP and the mean-pooling variant were close to the original v3 in mean Macro F1, so attention pooling should not be described as the sole source of the improvement. The no-identity variant was lower than original v3, but residual branch features still preserve channel-order information.
+
+An inference-only comparison between v3 attention weights and RandomForest feature importance showed moderate channel-level Pearson correlation (0.6361) and lower Spearman correlation (0.3870). This comparison is qualitative because attention weights and feature importances are not equivalent quantities.
+
 ## Locked Result Note
 
 본 문서는 `paper_result_lock_v1` 이후의 locked full supervised matrix 결과를 기준으로 한다. Locked run은 `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/`이며, integrity check는 126 runs 성공, 0 실패, leakage/scaler check 전체 통과로 기록됐다.

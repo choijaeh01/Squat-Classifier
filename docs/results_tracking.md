@@ -292,3 +292,44 @@ Merged reference ranking 상위:
 | 6 | all_channel_conv1d_v1 | locked_3seed_full | 0.7531 |
 
 해석 주의: 이번 extension도 3 seed full protocol이지만, 기존 locked main matrix를 덮어쓰지 않는다. Literature/classical baseline 포함 여부와 논문 narrative 조정은 사용자가 판단한다.
+
+## v3_component_ablation_v1
+
+- 목적: proposed `channel_shared_posres_attention_v3`의 residual branch, identity embedding, attention pooling component 기여 확인
+- locked matrix 상태: `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/` 수정 금지
+- literature extension 상태: `results/literature_baseline_full_extension/20260617_183952_literature_baseline_full_extension_v1/` 수정 금지
+- config: `configs/v3_component_ablation_v1.yaml`
+- capacity config: `configs/v3_component_ablation_capacity_v1.yaml`
+- 실행 위치: CAU
+- CAU 경로: `/home/user3/workspace/Jae/squat_imu_experiments`
+- 실행 commit: `28ee3a13aa6d2405258bc4195de57b1afc285bd9`
+- 결과 경로: `results/v3_component_ablation/20260617_202714_v3_component_ablation_v1/`
+- 성공/실패: 72 성공, 0 실패
+- leakage/scaler check: 72/72 통과
+
+3 seed component ablation 결과:
+
+| model | accuracy | macro F1 | weighted F1 | macro F1 CI |
+|---|---:|---:|---:|---|
+| channel_shared_posres_meanpool_v3_no_attention | 0.8161 | 0.8082 | 0.8082 | [0.7471, 0.8603] |
+| channel_shared_posres_attention_v3_residual_only_mlp | 0.8111 | 0.8036 | 0.8036 | [0.7488, 0.8530] |
+| channel_shared_posres_attention_v3_no_identity | 0.7817 | 0.7675 | 0.7675 | [0.7112, 0.8195] |
+| channel_shared_posres_attention_v3_no_residual | 0.6261 | 0.5937 | 0.5937 | [0.4998, 0.6842] |
+
+Original v3 대비 paired delta:
+
+| comparison | delta macro F1 | CI |
+|---|---:|---|
+| no_residual - original v3 | -0.2171 | [-0.2945, -0.1449] |
+| residual_only_mlp - original v3 | -0.0072 | [-0.0520, 0.0421] |
+| no_identity - original v3 | -0.0434 | [-0.0852, -0.0072] |
+| no_attention - original v3 | -0.0026 | [-0.0402, 0.0343] |
+
+Attention-RF alignment:
+
+- channel-level Pearson correlation: 0.6361
+- channel-level Spearman correlation: 0.3870
+- v3 attention 상위 채널: `s1_ax`, `s0_ay`, `s0_ax`, `s1_az`, `s2_ax`
+- RF top feature는 `s1_ax` 관련 summary feature에 집중됐다.
+
+해석 주의: 이 ablation은 성능 개선 목적의 새 모델 개발이 아니며, 결과를 보고 model width, learning rate, split, preprocessing을 변경하지 않았다. 최종 학술 해석은 사용자가 판단한다.
