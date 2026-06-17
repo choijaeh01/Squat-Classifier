@@ -568,6 +568,7 @@ def _fold_metric_row(
         "best_val_macro_f1": best_val_macro_f1,
         "test_accuracy": test_eval["metrics"]["accuracy"],
         "test_macro_f1": test_eval["metrics"]["macro_f1"],
+        "test_weighted_f1": test_eval["metrics"]["weighted_f1"],
         "leakage_check_passed": split.leakage_check_passed,
         "scaler_fit_subjects": "|".join(str(item) for item in split.train_subjects),
         "status": status,

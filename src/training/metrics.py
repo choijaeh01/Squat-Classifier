@@ -44,6 +44,8 @@ def compute_classification_metrics(
     precision, recall, f1 = precision_recall_f1_from_confusion(matrix)
     accuracy = float((y_true == y_pred).mean()) if len(y_true) else 0.0
     macro_f1 = float(f1.mean()) if len(f1) else 0.0
+    support = matrix.sum(axis=1).astype(np.float64)
+    weighted_f1 = float((f1 * support).sum() / support.sum()) if support.sum() else 0.0
 
     subject_scores: dict[str, float] = {}
     for subject in sorted(np.unique(subject_ids).tolist()):
@@ -55,6 +57,7 @@ def compute_classification_metrics(
     return {
         "accuracy": accuracy,
         "macro_f1": macro_f1,
+        "weighted_f1": weighted_f1,
         "class_wise": {
             class_names[index]: {
                 "precision": float(precision[index]),
