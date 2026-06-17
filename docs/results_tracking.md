@@ -208,7 +208,11 @@ Main shared model 후보는 `channel_shared_posres_attention_v3`이다. 단, all
 - capacity config: `configs/literature_baseline_capacity_v1.yaml`
 - full extension template: `configs/literature_baseline_full_extension_template_v1.yaml`
 - local dry-run: 완료, 학습 없음
-- CAU screening: 실행 예정
+- CAU screening: 완료
+- 결과 경로: `results/literature_baseline_screening/20260617_174804_literature_baseline_screening_v1/`
+- 실행 commit: `0842ffc5a8926e3156e844495e45cfd39dca5f39`
+- 성공/실패/skipped: 54 성공, 0 실패, 0 skipped
+- leakage/scaler check: 모두 통과
 
 Baseline 목록:
 
@@ -225,3 +229,27 @@ Baseline 목록:
 | feature_linear_svm_v1 | handcrafted feature linear SVM baseline, sklearn 필요 |
 
 주의: 이 결과는 1 seed screening이므로 paper main table에 바로 포함하지 않는다. 3 seed full extension 후보 제안용으로만 사용한다.
+
+1 seed screening 결과:
+
+| model | accuracy | macro F1 | weighted F1 |
+|---|---:|---:|---:|
+| feature_random_forest_v1 | 0.8150 | 0.7900 | 0.7900 |
+| rescnn_bigru_attention_lite_v1 | 0.7817 | 0.7485 | 0.7485 |
+| feature_linear_svm_v1 | 0.7350 | 0.7164 | 0.7164 |
+| tcn_literature_v1 | 0.7467 | 0.7049 | 0.7049 |
+| transformer_encoder_lite_v1 | 0.7217 | 0.6847 | 0.6847 |
+| cnn_gru_literature_v1 | 0.5600 | 0.5096 | 0.5096 |
+| cnn_lstm_literature_v1 | 0.5167 | 0.4632 | 0.4632 |
+| gru_only_literature_v1 | 0.4517 | 0.4065 | 0.4065 |
+| lstm_only_literature_v1 | 0.3617 | 0.3021 | 0.3021 |
+
+Class 3 Excessive Lean:
+
+| model | class 3 recall | class 3 F1 |
+|---|---:|---:|
+| feature_random_forest_v1 | 0.6833 | 0.6917 |
+| feature_linear_svm_v1 | 0.6667 | 0.6512 |
+| rescnn_bigru_attention_lite_v1 | 0.7000 | 0.6332 |
+| tcn_literature_v1 | 0.6000 | 0.5860 |
+| transformer_encoder_lite_v1 | 0.3167 | 0.3646 |

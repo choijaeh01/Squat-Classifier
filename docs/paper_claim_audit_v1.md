@@ -76,6 +76,8 @@ External IMU dataset은 sensor count, channel layout, task label, sampling rate�
 
 Screening에 포함되는 neural family는 CNN-LSTM, CNN-GRU, lite Residual CNN-BiGRU-Attention, TCN, LSTM-only, GRU-only, lite Transformer encoder이다. Classical feature RandomForest와 LinearSVM은 scikit-learn이 설치된 환경에서만 실행하고, 없으면 skipped로 기록한다.
 
+CAU screening에서는 54개 run이 모두 성공했고 skipped run은 없었다. 1 seed screening macro F1은 `feature_random_forest_v1` 0.7900, `rescnn_bigru_attention_lite_v1` 0.7485, `feature_linear_svm_v1` 0.7164, `tcn_literature_v1` 0.7049 순이었다.
+
 논문 claim에는 다음 제한을 둔다.
 
 - 3 seed full extension 전에는 literature baseline 대비 우월성을 main result로 주장하지 않는다.
