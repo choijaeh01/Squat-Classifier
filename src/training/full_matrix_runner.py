@@ -135,7 +135,7 @@ def run_full_supervised_matrix(
     validate_full_matrix_safety(config)
     if not dry_run and not confirm_full_matrix:
         raise ValueError("refusing full matrix without --confirm-full-matrix")
-    if not dry_run and str(git_status(project_root)).strip():
+    if not dry_run and not is_clean_git_status(git_status(project_root)):
         raise ValueError("git status is dirty; commit or stash before full matrix run")
 
     set_global_seed(int(config["seeds"][0]))
@@ -313,6 +313,11 @@ def summarize_full_matrix_run(run_dir: str | Path, *, bootstrap_n: int = 10000, 
 def config_digest(config: dict[str, Any]) -> str:
     payload = yaml.safe_dump(config, allow_unicode=True, sort_keys=True)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def is_clean_git_status(status_text: str) -> bool:
+    normalized = str(status_text).strip()
+    return normalized in {"", "clean"}
 
 
 def _config_for_seed(config: dict[str, Any], seed: int) -> dict[str, Any]:

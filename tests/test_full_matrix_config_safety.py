@@ -44,6 +44,13 @@ class FullMatrixConfigSafetyTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_full_matrix_safety(unsafe)
 
+    def test_clean_git_status_string_is_accepted_by_guard(self):
+        from training.full_matrix_runner import is_clean_git_status
+
+        self.assertTrue(is_clean_git_status(""))
+        self.assertTrue(is_clean_git_status("clean"))
+        self.assertFalse(is_clean_git_status(" M src/file.py"))
+
 
 if __name__ == "__main__":
     unittest.main()
