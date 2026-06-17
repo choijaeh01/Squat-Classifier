@@ -1,0 +1,26 @@
+experiment_name: v3_component_ablation_capacity_v1
+output_dir: results/v3_component_ablation_capacity_v1
+seed: 20260618
+
+input_shape:
+  batch: 2
+  window_length: 512
+  channels: 18
+num_classes: 5
+
+models:
+  - name: channel_shared_posres_attention_v3
+    removed_component: none
+    notes: original locked proposed v3 model
+  - name: channel_shared_posres_attention_v3_no_residual
+    removed_component: residual_branch
+    notes: keeps shared encoder, identity embeddings, and attention pooling
+  - name: channel_shared_posres_attention_v3_residual_only_mlp
+    removed_component: shared_encoder_and_attention
+    notes: uses only the original v3 raw summary statistics with an MLP
+  - name: channel_shared_posres_attention_v3_no_identity
+    removed_component: channel_sensor_modality_axis_embeddings
+    notes: keeps shared encoder, attention pooling, and residual branch
+  - name: channel_shared_posres_meanpool_v3_no_attention
+    removed_component: attention_pooling
+    notes: keeps shared encoder, identity embeddings, and residual branch but mean-pools tokens

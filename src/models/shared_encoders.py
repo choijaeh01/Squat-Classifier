@@ -283,6 +283,210 @@ class ChannelSharedPosResAttentionV3(nn.Module):
         return self.aggregation["token_norm"](tokens + metadata.unsqueeze(0))
 
 
+class ChannelSharedPosResAttentionV3NoResidual(nn.Module):
+    """v3 ablation that removes the raw-summary residual branch only."""
+
+    def __init__(
+        self,
+        input_length: int = 512,
+        input_channels: int = 18,
+        num_classes: int = 5,
+        embedding_dim: int = 32,
+        attention_hidden_dim: int = 16,
+        head_hidden_dim: int = 64,
+    ) -> None:
+        super().__init__()
+        if input_channels != 18:
+            raise ValueError("channel_shared_posres_attention_v3_no_residual expects the approved 18-channel target layout")
+        self.input_length = input_length
+        self.input_channels = input_channels
+        self.shared_encoder = TemporalEncoder1D(in_channels=1, output_dim=embedding_dim)
+        self.channel_encoder_refs = [self.shared_encoder for _ in range(input_channels)]
+        self.register_buffer("sensor_ids", torch.as_tensor(sensor_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("modality_ids", torch.as_tensor(modality_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("axis_ids", torch.as_tensor(axis_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("channel_ids", torch.arange(input_channels, dtype=torch.long), persistent=False)
+        self.aggregation = nn.ModuleDict(
+            {
+                "channel_embedding": nn.Embedding(input_channels, embedding_dim),
+                "sensor_embedding": nn.Embedding(3, embedding_dim),
+                "modality_embedding": nn.Embedding(2, embedding_dim),
+                "axis_embedding": nn.Embedding(3, embedding_dim),
+                "token_norm": nn.LayerNorm(embedding_dim),
+                "attention_pool": ChannelAttentionPooling(embedding_dim=embedding_dim, hidden_dim=attention_hidden_dim),
+            }
+        )
+        self.classifier = nn.Sequential(nn.Linear(embedding_dim, head_hidden_dim), nn.ReLU(), nn.Linear(head_hidden_dim, num_classes))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = ensure_btc(x, self.input_length, self.input_channels)
+        tokens = self._encode_position_aware_tokens(x)
+        pooled = self.aggregation["attention_pool"](tokens)
+        return self.classifier(pooled)
+
+    def _encode_position_aware_tokens(self, x: torch.Tensor) -> torch.Tensor:
+        batch_size, time_steps, channels = x.shape
+        encoded = self.shared_encoder(x.permute(0, 2, 1).reshape(batch_size * channels, 1, time_steps))
+        tokens = encoded.reshape(batch_size, channels, encoded.shape[-1])
+        metadata = (
+            self.aggregation["channel_embedding"](self.channel_ids)
+            + self.aggregation["sensor_embedding"](self.sensor_ids)
+            + self.aggregation["modality_embedding"](self.modality_ids)
+            + self.aggregation["axis_embedding"](self.axis_ids)
+        )
+        return self.aggregation["token_norm"](tokens + metadata.unsqueeze(0))
+
+
+class ChannelSharedPosResAttentionV3ResidualOnlyMLP(nn.Module):
+    """v3 ablation that uses only the original residual raw-summary statistics."""
+
+    def __init__(
+        self,
+        input_length: int = 512,
+        input_channels: int = 18,
+        num_classes: int = 5,
+        residual_dim: int = 32,
+        head_hidden_dim: int = 64,
+    ) -> None:
+        super().__init__()
+        if input_channels != 18:
+            raise ValueError("channel_shared_posres_attention_v3_residual_only_mlp expects the approved 18-channel target layout")
+        self.input_length = input_length
+        self.input_channels = input_channels
+        self.residual_projection = nn.Sequential(
+            nn.Linear(input_channels * 4, 64),
+            nn.ReLU(),
+            nn.Linear(64, residual_dim),
+            nn.ReLU(),
+        )
+        self.classifier = nn.Sequential(nn.Linear(residual_dim, head_hidden_dim), nn.ReLU(), nn.Linear(head_hidden_dim, num_classes))
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = ensure_btc(x, self.input_length, self.input_channels)
+        residual = self.residual_projection(_raw_summary_features(x))
+        return self.classifier(residual)
+
+
+class ChannelSharedPosResAttentionV3NoIdentity(nn.Module):
+    """v3 ablation that removes channel/sensor/modality/axis identity embeddings.
+
+    The residual branch remains channel-order dependent, so this ablation removes
+    identity embeddings from token attention only, not all possible position cues.
+    """
+
+    def __init__(
+        self,
+        input_length: int = 512,
+        input_channels: int = 18,
+        num_classes: int = 5,
+        embedding_dim: int = 32,
+        residual_dim: int = 32,
+        attention_hidden_dim: int = 16,
+        head_hidden_dim: int = 64,
+    ) -> None:
+        super().__init__()
+        if input_channels != 18:
+            raise ValueError("channel_shared_posres_attention_v3_no_identity expects the approved 18-channel target layout")
+        self.input_length = input_length
+        self.input_channels = input_channels
+        self.shared_encoder = TemporalEncoder1D(in_channels=1, output_dim=embedding_dim)
+        self.channel_encoder_refs = [self.shared_encoder for _ in range(input_channels)]
+        self.aggregation = nn.ModuleDict(
+            {
+                "token_norm": nn.LayerNorm(embedding_dim),
+                "attention_pool": ChannelAttentionPooling(embedding_dim=embedding_dim, hidden_dim=attention_hidden_dim),
+                "residual_projection": nn.Sequential(
+                    nn.Linear(input_channels * 4, 64),
+                    nn.ReLU(),
+                    nn.Linear(64, residual_dim),
+                    nn.ReLU(),
+                ),
+            }
+        )
+        self.classifier = nn.Sequential(
+            nn.Linear(embedding_dim + residual_dim, head_hidden_dim),
+            nn.ReLU(),
+            nn.Linear(head_hidden_dim, num_classes),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = ensure_btc(x, self.input_length, self.input_channels)
+        tokens = self._encode_tokens_without_identity(x)
+        pooled = self.aggregation["attention_pool"](tokens)
+        residual = self.aggregation["residual_projection"](_raw_summary_features(x))
+        return self.classifier(torch.cat([pooled, residual], dim=1))
+
+    def _encode_tokens_without_identity(self, x: torch.Tensor) -> torch.Tensor:
+        batch_size, time_steps, channels = x.shape
+        encoded = self.shared_encoder(x.permute(0, 2, 1).reshape(batch_size * channels, 1, time_steps))
+        tokens = encoded.reshape(batch_size, channels, encoded.shape[-1])
+        return self.aggregation["token_norm"](tokens)
+
+
+class ChannelSharedPosResMeanPoolV3NoAttention(nn.Module):
+    """v3 ablation that keeps identity embeddings and residual branch but mean-pools tokens."""
+
+    def __init__(
+        self,
+        input_length: int = 512,
+        input_channels: int = 18,
+        num_classes: int = 5,
+        embedding_dim: int = 32,
+        residual_dim: int = 32,
+        head_hidden_dim: int = 64,
+    ) -> None:
+        super().__init__()
+        if input_channels != 18:
+            raise ValueError("channel_shared_posres_meanpool_v3_no_attention expects the approved 18-channel target layout")
+        self.input_length = input_length
+        self.input_channels = input_channels
+        self.shared_encoder = TemporalEncoder1D(in_channels=1, output_dim=embedding_dim)
+        self.channel_encoder_refs = [self.shared_encoder for _ in range(input_channels)]
+        self.register_buffer("sensor_ids", torch.as_tensor(sensor_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("modality_ids", torch.as_tensor(modality_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("axis_ids", torch.as_tensor(axis_indices(), dtype=torch.long), persistent=False)
+        self.register_buffer("channel_ids", torch.arange(input_channels, dtype=torch.long), persistent=False)
+        self.aggregation = nn.ModuleDict(
+            {
+                "channel_embedding": nn.Embedding(input_channels, embedding_dim),
+                "sensor_embedding": nn.Embedding(3, embedding_dim),
+                "modality_embedding": nn.Embedding(2, embedding_dim),
+                "axis_embedding": nn.Embedding(3, embedding_dim),
+                "token_norm": nn.LayerNorm(embedding_dim),
+                "residual_projection": nn.Sequential(
+                    nn.Linear(input_channels * 4, 64),
+                    nn.ReLU(),
+                    nn.Linear(64, residual_dim),
+                    nn.ReLU(),
+                ),
+            }
+        )
+        self.classifier = nn.Sequential(
+            nn.Linear(embedding_dim + residual_dim, head_hidden_dim),
+            nn.ReLU(),
+            nn.Linear(head_hidden_dim, num_classes),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = ensure_btc(x, self.input_length, self.input_channels)
+        tokens = self._encode_position_aware_tokens(x)
+        pooled = tokens.mean(dim=1)
+        residual = self.aggregation["residual_projection"](_raw_summary_features(x))
+        return self.classifier(torch.cat([pooled, residual], dim=1))
+
+    def _encode_position_aware_tokens(self, x: torch.Tensor) -> torch.Tensor:
+        batch_size, time_steps, channels = x.shape
+        encoded = self.shared_encoder(x.permute(0, 2, 1).reshape(batch_size * channels, 1, time_steps))
+        tokens = encoded.reshape(batch_size, channels, encoded.shape[-1])
+        metadata = (
+            self.aggregation["channel_embedding"](self.channel_ids)
+            + self.aggregation["sensor_embedding"](self.sensor_ids)
+            + self.aggregation["modality_embedding"](self.modality_ids)
+            + self.aggregation["axis_embedding"](self.axis_ids)
+        )
+        return self.aggregation["token_norm"](tokens + metadata.unsqueeze(0))
+
+
 class ModalitySharedSensorAttentionV3(nn.Module):
     """Acc/Gyro-specific shared encoders with sensor-aware attention and gated fusion."""
 
