@@ -253,3 +253,42 @@ Class 3 Excessive Lean:
 | rescnn_bigru_attention_lite_v1 | 0.7000 | 0.6332 |
 | tcn_literature_v1 | 0.6000 | 0.5860 |
 | transformer_encoder_lite_v1 | 0.3167 | 0.3646 |
+
+## literature_baseline_full_extension_v1
+
+- 목적: Lee-style adapted CNN-LSTM과 선택된 literature/classical baselines의 3 seed full extension
+- locked matrix 상태: `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/` 수정 금지
+- config: `configs/literature_baseline_full_extension_v1.yaml`
+- capacity config: `configs/literature_baseline_capacity_v2.yaml`
+- 실행 위치: CAU
+- CAU 경로: `/home/user3/workspace/Jae/squat_imu_experiments`
+- 실행 commit: `ce0245a746dea9174e24ec578a352123baf49f0b`
+- 결과 경로: `results/literature_baseline_full_extension/20260617_183952_literature_baseline_full_extension_v1/`
+- 성공/실패/skipped: 144 성공, 0 실패, 0 skipped
+- leakage/scaler check: 144/144 통과
+
+3 seed full extension 결과:
+
+| model | accuracy | macro F1 | weighted F1 | macro F1 CI |
+|---|---:|---:|---:|---|
+| feature_random_forest_v1 | 0.8056 | 0.7845 | 0.7845 | [0.7318, 0.8376] |
+| rescnn_bigru_attention_lite_v1 | 0.7944 | 0.7691 | 0.7691 | [0.7076, 0.8270] |
+| transformer_encoder_lite_v1 | 0.7883 | 0.7580 | 0.7580 | [0.6860, 0.8188] |
+| feature_linear_svm_v1 | 0.7461 | 0.7213 | 0.7213 | [0.6612, 0.7828] |
+| tcn_literature_v1 | 0.7561 | 0.7151 | 0.7151 | [0.6090, 0.8155] |
+| lee_style_cnn_lstm_2d_v1 | 0.6622 | 0.6269 | 0.6269 | [0.5237, 0.7165] |
+| cnn_lstm_literature_v1 | 0.5756 | 0.5325 | 0.5325 | [0.4298, 0.6334] |
+| cnn_gru_literature_v1 | 0.5478 | 0.5045 | 0.5045 | [0.3901, 0.6202] |
+
+Merged reference ranking 상위:
+
+| rank | model | result type | macro F1 |
+|---:|---|---|---:|
+| 1 | channel_shared_posres_attention_v3 | locked_3seed_full | 0.8108 |
+| 2 | feature_random_forest_v1 | literature_extension_3seed_full | 0.7845 |
+| 3 | all_channel_conv1d_small | locked_3seed_full | 0.7740 |
+| 4 | rescnn_bigru_attention_lite_v1 | literature_extension_3seed_full | 0.7691 |
+| 5 | transformer_encoder_lite_v1 | literature_extension_3seed_full | 0.7580 |
+| 6 | all_channel_conv1d_v1 | locked_3seed_full | 0.7531 |
+
+해석 주의: 이번 extension도 3 seed full protocol이지만, 기존 locked main matrix를 덮어쓰지 않는다. Literature/classical baseline 포함 여부와 논문 narrative 조정은 사용자가 판단한다.

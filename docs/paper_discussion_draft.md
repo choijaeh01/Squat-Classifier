@@ -25,3 +25,13 @@ Subject 수는 6명으로 작다. External dataset transfer, SSL, augmentation, 
 ## Future Work
 
 후속 연구에서는 v3 ablation, external IMU dataset transfer, self-supervised pretraining을 검토할 수 있다. 단, 현재 논문 단계에서는 결과 lock 이후 추가 실험보다 manuscript draft를 먼저 정리하는 것이 적절하다.
+
+## Literature Baseline Full Extension
+
+Literature baseline full extension v1에서는 RandomForest, LinearSVM, ResCNN-BiGRU-Attention-lite, TCN, Transformer, simple CNN-LSTM/GRU, Lee-style adapted CNN-LSTM을 같은 final LOSO protocol에서 추가 평가했다. 모든 run은 3 seeds x 6 folds로 실행됐고 leakage/scaler check를 통과했다.
+
+수치상 `feature_random_forest_v1`은 Macro F1 0.7845로 extension 내 가장 높았고, `rescnn_bigru_attention_lite_v1`은 Macro F1 0.7691로 neural temporal baseline 중 가장 높았다. 기존 locked `channel_shared_posres_attention_v3`는 Macro F1 0.8108로 merged ranking에서 가장 높았다.
+
+이 결과는 두 가지 논의점을 만든다. 첫째, handcrafted feature classical baseline이 small-subject IMU dataset에서 강할 수 있으므로 neural model claim은 strong classical baseline을 함께 제시해야 한다. 둘째, Lee-style adapted CNN-LSTM은 simple CNN-LSTM보다 높았지만 여전히 TCN 및 ResCNN-BiGRU-Attention-lite보다 낮았으므로, CNN-LSTM family 자체가 본 데이터에서 항상 강한 것은 아니다.
+
+최종 논문에서 이 extension을 main table에 포함할지, appendix 또는 additional comparison으로 둘지는 사용자 판단으로 남긴다.

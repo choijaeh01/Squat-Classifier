@@ -83,3 +83,25 @@ CAU screening에서는 54개 run이 모두 성공했고 skipped run은 없었다
 - 3 seed full extension 전에는 literature baseline 대비 우월성을 main result로 주장하지 않는다.
 - 1 seed screening과 3 seed locked full matrix를 같은 통계 단위로 비교하지 않는다.
 - Screening 결과는 full extension 후보 선별 및 reviewer 대응 준비용으로만 사용한다.
+
+## 12. literature baseline full extension 관련 claim 제한
+
+`literature_baseline_full_extension_v1`은 3 seed x 6 folds x 8 models = 144 runs로 완료됐고, 실패 및 skipped run은 없었다. 모든 split leakage와 scaler leakage check가 통과했다.
+
+추가로 구현한 `lee_style_cnn_lstm_2d_v1`은 Lee et al.의 exact reproduction이 아니라, 현재 18채널 IMU squat dataset과 final LOSO protocol에 맞춘 adapted clean-room CNN-LSTM baseline이다. 따라서 Lee et al. 논문 결과 재현이라고 주장하면 안 된다.
+
+수치상 `feature_random_forest_v1`은 Macro F1 0.7845로 literature/classical extension 내 가장 높았고, `rescnn_bigru_attention_lite_v1`은 Macro F1 0.7691로 neural temporal baseline 중 가장 높았다. 기존 locked `channel_shared_posres_attention_v3`의 Macro F1은 0.8108이다.
+
+안전한 문장:
+
+- Literature/classical baseline full extension을 동일 final validation policy에서 추가 평가했다.
+- RandomForest와 ResCNN-BiGRU-Attention-lite는 강한 reference baseline으로 관찰됐다.
+- Lee-style adapted CNN-LSTM은 simple CNN-LSTM보다 높은 Macro F1을 보였다.
+- 기존 proposed v3는 merged reference ranking에서 가장 높은 평균 Macro F1을 유지했다.
+
+조심해야 할 문장:
+
+- RandomForest보다 neural proposed model이 통계적으로 우수하다는 주장
+- Literature extension 결과 때문에 기존 main model을 반드시 바꿔야 한다는 주장
+- Lee-style 결과를 Lee et al. exact reproduction 결과로 표현하는 문장
+- 결과를 보고 tuning하지 않았는데도 최적 literature baseline 성능이라고 표현하는 문장

@@ -44,23 +44,28 @@ The dataset contains six subjects and 600 windows, so uncertainty remains high. 
 
 Future ablations should isolate the contribution of channel identity embeddings, sensor/modality/axis embeddings, attention pooling, and the residual branch.
 
-## 7. Preliminary Literature Temporal Baseline Screening
+## 7. Literature Baseline Full Extension
 
-`literature_baseline_screening_v1`은 기존 locked full matrix 이후 별도 extension으로 수행한다. 이 screening은 CNN-LSTM, CNN-GRU, lite Residual CNN-BiGRU-Attention, TCN, LSTM-only, GRU-only, lite Transformer encoder, 그리고 scikit-learn 사용 가능 시 handcrafted feature RandomForest/LinearSVM을 포함한다.
+`literature_baseline_full_extension_v1`은 기존 locked full matrix 이후 별도 extension으로 수행했다. 이 extension은 CNN-LSTM, CNN-GRU, Lee-style adapted CNN-LSTM, lite Residual CNN-BiGRU-Attention, TCN, lite Transformer encoder, 그리고 handcrafted feature RandomForest/LinearSVM을 포함한다.
 
-This section is preliminary. The main paper result table should continue to use the locked 3-seed full supervised matrix until a separate 3-seed full literature extension is explicitly approved and completed. The one-seed screening results must not be used to claim final superiority over literature temporal baselines.
+The locked supervised matrix remains the main result source. The literature extension provides additional reviewer-facing baselines under the same final LOSO validation policy. Final inclusion in the manuscript main table should be decided separately by the user.
 
-Preliminary 1 seed screening observations:
+3 seed full extension observations:
 
-| model | result type | macro F1 |
-|---|---|---:|
-| feature_random_forest_v1 | literature_1seed_screening | 0.7900 |
-| rescnn_bigru_attention_lite_v1 | literature_1seed_screening | 0.7485 |
-| feature_linear_svm_v1 | literature_1seed_screening | 0.7164 |
-| tcn_literature_v1 | literature_1seed_screening | 0.7049 |
-| transformer_encoder_lite_v1 | literature_1seed_screening | 0.6847 |
+| model | accuracy | macro F1 | macro F1 CI |
+|---|---:|---:|---|
+| feature_random_forest_v1 | 0.8056 | 0.7845 | [0.7318, 0.8376] |
+| rescnn_bigru_attention_lite_v1 | 0.7944 | 0.7691 | [0.7076, 0.8270] |
+| transformer_encoder_lite_v1 | 0.7883 | 0.7580 | [0.6860, 0.8188] |
+| feature_linear_svm_v1 | 0.7461 | 0.7213 | [0.6612, 0.7828] |
+| tcn_literature_v1 | 0.7561 | 0.7151 | [0.6090, 0.8155] |
+| lee_style_cnn_lstm_2d_v1 | 0.6622 | 0.6269 | [0.5237, 0.7165] |
+| cnn_lstm_literature_v1 | 0.5756 | 0.5325 | [0.4298, 0.6334] |
+| cnn_gru_literature_v1 | 0.5478 | 0.5045 | [0.3901, 0.6202] |
 
-These rows should remain outside the manuscript main comparison table until the user approves and completes a 3-seed full extension.
+Merged reference ranking placed `channel_shared_posres_attention_v3` first with Macro F1 0.8108, followed by `feature_random_forest_v1` at 0.7845, `all_channel_conv1d_small` at 0.7740, `rescnn_bigru_attention_lite_v1` at 0.7691, and `transformer_encoder_lite_v1` at 0.7580.
+
+`lee_style_cnn_lstm_2d_v1` improved over the simple CNN-LSTM baseline but did not reach the ResCNN-BiGRU-Attention-lite, TCN, Transformer, or RandomForest baselines. This Lee-style model is an adapted clean-room baseline, not an exact reproduction of Lee et al.
 
 ## Locked Result Note
 

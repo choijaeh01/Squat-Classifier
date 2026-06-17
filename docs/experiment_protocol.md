@@ -306,9 +306,9 @@ Full supervised matrix v1은 final validation policy를 고정한 논문 결과 
 
 Full matrix 결과는 논문 결과 후보로 사용할 수 있다. 다만 paired CI가 all-channel baseline 대비 0을 포함하므로 `channel_shared_posres_attention_v3`의 통계적 우월성은 주장하지 않는다.
 
-## Literature Temporal Baseline Extension v1
+## Literature Temporal Baseline Screening v1
 
-`literature_baseline_extension_v1`은 locked full supervised matrix를 수정하지 않고, 별도 결과 디렉토리에서 문헌 기반 temporal baseline을 1 seed로 screening하는 단계다.
+`literature_baseline_screening_v1`은 locked full supervised matrix를 수정하지 않고, 별도 결과 디렉토리에서 문헌 기반 temporal baseline을 1 seed로 screening한 단계다.
 
 추가 baseline:
 
@@ -333,3 +333,31 @@ Screening protocol:
 - classical feature models: 동일 split/scaler policy를 사용하며 scikit-learn이 없으면 skipped로 기록
 
 이 단계는 후보 선별용이다. 1 seed screening 결과와 locked 3 seed full result는 `result_type`을 분리해 병합 요약에 기록하며, 직접 동등 비교하지 않는다. 3 seed full literature extension은 사용자 승인 전 실행하지 않는다.
+
+## Literature Baseline Full Extension v1
+
+`literature_baseline_full_extension_v1`은 screening 이후 승인된 literature/classical baseline을 final validation policy에서 3 seeds x 6 folds로 실행한 별도 extension이다. 기존 locked result directory인 `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/`는 수정하지 않는다.
+
+추가 model:
+
+- `feature_random_forest_v1`
+- `feature_linear_svm_v1`
+- `rescnn_bigru_attention_lite_v1`
+- `tcn_literature_v1`
+- `transformer_encoder_lite_v1`
+- `cnn_lstm_literature_v1`
+- `cnn_gru_literature_v1`
+- `lee_style_cnn_lstm_2d_v1`
+
+`lee_style_cnn_lstm_2d_v1`은 exact reproduction이 아니라 clean-room adapted CNN-LSTM baseline이다. 입력 `(512,18)`은 데이터셋 수준에서 바꾸지 않고, 모델 내부에서 deterministic 40-step representation으로 downsample한 뒤 time x channel 2D CNN과 1-layer LSTM을 적용한다.
+
+Full extension protocol:
+
+- seeds: 42, 123, 2025
+- total runs: 144
+- train/validation/test per fold: 400/100/100
+- scaler fit: train indices only
+- per-window z-score, augmentation, focal loss, balanced sampling, SSL, external dataset: disabled
+- classical features: IMU signal-derived feature만 허용하며 subject, label, filename, metadata boundary, source path는 feature로 사용하지 않는다.
+
+실행 결과는 `results/literature_baseline_full_extension/20260617_183952_literature_baseline_full_extension_v1/`에 저장됐다. 모든 run이 성공했고 leakage/scaler check는 모두 통과했다. 이 extension은 기존 locked main result를 보완하는 reference comparison이며, 최종 학술 해석은 사용자가 판단한다.
