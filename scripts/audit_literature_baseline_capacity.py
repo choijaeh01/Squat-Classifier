@@ -62,7 +62,7 @@ def audit_literature_capacity(config: dict[str, Any]) -> list[dict[str, Any]]:
                     "other_params": "",
                     "input_shape": f"({batch}, {window_length}, {channels})",
                     "output_shape": "not_applicable",
-                    "notes": f"classical baseline; sklearn_available={sklearn_available()}",
+                    "notes": "classical baseline; parameter count not applicable; training requires scikit-learn",
                 }
             )
             continue
