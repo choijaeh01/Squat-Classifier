@@ -1,0 +1,12 @@
+flowchart TD
+  N0["Shared token"]
+  N1["identity embedding gives token origin"]
+  N0 --> N1
+  N2["residual branch gives signal statistics"]
+  N1 --> N2
+  N3["identity helps shared-only"]
+  N2 --> N3
+  N4["residual dominates final story"]
+  N3 --> N4
+  NOTE["Identity is not the core claim; residual branch is the core bottleneck fix."]
+  N4 -.-> NOTE

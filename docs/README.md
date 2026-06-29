@@ -73,3 +73,9 @@
 - GitHub에서 검토해야 하는 핵심 CSV/MD/PNG는 `docs/results_artifacts/`에 선별 복사한다.
 - raw processed data, checkpoint, dependency cache, full generated results는 제외한다.
 - 기존 result directory는 read-only reference로 취급한다.
+
+## Professor Master Report v1
+
+- [Professor Master Report v1](professor_master_report_v1/Professor%20Master%20Report%20-%20Full%20Story.md): 기존 v1/v2/v3 교수님 보고서와 controlled comparison, XGBoost, literature extension, v3 ablation 결과를 새 학습 없이 통합한 종합 보고서입니다.
+- [10min Brief](professor_master_report_v1/Professor%20Master%20Report%20-%2010min%20Brief.md): 교수님께 10~15분 안에 설명하기 위한 요약 흐름입니다.
+

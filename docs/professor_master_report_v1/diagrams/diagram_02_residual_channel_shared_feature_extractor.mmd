@@ -1,0 +1,16 @@
+flowchart TD
+  N0["Input 512x18"]
+  N1["18 single-channel streams"]
+  N0 --> N1
+  N2["shared temporal encoder"]
+  N1 --> N2
+  N3["token pooling"]
+  N2 --> N3
+  N4["parallel mean/std/min/max branch"]
+  N3 --> N4
+  N5["fusion to 64-dim"]
+  N4 --> N5
+  N6["common head"]
+  N5 --> N6
+  NOTE["Residual branch preserves signal-derived channel statistics."]
+  N6 -.-> NOTE

@@ -1,0 +1,7 @@
+stage,question,action,evidence,takeaway
+From undergraduate system to journal scope,기존 IMU+Vision+on-device 시스템을 그대로 논문 중심으로 둘 것인가?,저널 논문 범위를 IMU-only supervised feature extractor comparison으로 축소했다.,보고서 v1/v2/v3와 controlled comparison 결과,시스템 구현보다 clean-room protocol과 feature extractor 비교를 중심으로 설명한다.
+Clean-room dataset reconstruction,raw/manual boundary 기반 target dataset을 재현 가능하게 만들 수 있는가?,raw CSV와 manually labeled boundary에서 512x18 processed dataset v1을 생성했다.,"600 windows, 6 subjects, 5 classes, NaN/Inf 없음",논문 실험은 새 clean-room pipeline에서 생성한 공식 target dataset을 사용한다.
+Why common head comparison was needed,모델별 head 차이가 feature extractor 효과를 가리는가?,"64-dim representation과 4,485-param common MLP head를 고정했다.",common head verification and controlled model parameter audit,비교 초점은 classifier가 아니라 classifier 앞 feature extractor다.
+Architecture comparison,shared encoder가 왜 낮았고 어떤 보완이 필요한가?,"Shared 1D, identity, residual, all-channel, 2D, summary, tree baselines를 비교했다.",main controlled table and residual/identity interaction table,단순 공유 구조는 병목이 크고 residual statistics가 이를 크게 완화한다.
+Practical baselines,간단한 통계 feature와 tree model이 얼마나 강한가?,"Statistical Summary MLP, Random Forest, XGBoost, SVM을 같은 split/scaler policy로 평가했다.","Stats MLP 0.8174, XGBoost 0.7961, RF 0.7845 Macro F1",summary statistics가 강한 dataset임을 투명하게 보고해야 한다.
+Paper claim,무엇을 안전하게 주장할 수 있는가?,압도적 우월성이 아니라 shared encoder bottleneck 완화와 경쟁 가능성으로 claim을 보수화했다.,Residual branch effect and CI-overlapping strong baselines,국내 저널 범위는 supervised IMU-only extractor comparison이 가장 안전하다.

@@ -1,0 +1,11 @@
+rank,rf_feature,rf_importance,xgb_feature,xgb_importance,interpretation_note
+1,s1_ax_std,0.0612,s1_ax_std,0.0674,"반복적으로 s1_ax/s1_gx 계열이 보이지만, feature importance는 causal evidence가 아니다."
+2,s1_ax_energy,0.0505,s1_gx_mean,0.0656,모델 내부 중요도이며 생체역학적 인과로 단정하지 않는다.
+3,s1_ax_rms,0.0479,s1_ax_energy,0.0601,모델 내부 중요도이며 생체역학적 인과로 단정하지 않는다.
+4,s1_ax_max,0.0432,s0_ax_mean,0.0321,모델 내부 중요도이며 생체역학적 인과로 단정하지 않는다.
+5,s1_gx_mean,0.0409,s0_az_std,0.0303,모델 내부 중요도이며 생체역학적 인과로 단정하지 않는다.
+6,s1_ax_mean,0.0374,s0_ax_median,0.0225,모델 내부 중요도이며 생체역학적 인과로 단정하지 않는다.
+7,s1_ax_ptp,0.0347,s2_gy_max,0.0197,모델 내부 중요도이며 생체역학적 인과로 단정하지 않는다.
+8,s1_gy_mean,0.0248,s2_az_median,0.0195,모델 내부 중요도이며 생체역학적 인과로 단정하지 않는다.
+9,s2_gy_mean,0.0221,s0_ay_median,0.0182,모델 내부 중요도이며 생체역학적 인과로 단정하지 않는다.
+10,s0_ax_mean,0.0220,s1_az_mean,0.0170,모델 내부 중요도이며 생체역학적 인과로 단정하지 않는다.

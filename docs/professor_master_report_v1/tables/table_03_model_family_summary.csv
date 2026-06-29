@@ -1,0 +1,11 @@
+model_display_name,family,input_handling,feature_extractor,classifier_head,parameters,role
+Statistical Summary MLP,Practical neural baseline,512x18 scaled signal -> 72 statistics,mean/std/min/max projection,common MLP head,9157,small summary baseline
+Residual Channel-Shared Feature Extractor,Proposed core,18 single-channel streams + residual statistics,shared temporal encoder plus residual statistics branch,common MLP head,20021,shared bottleneck mitigation
+All-Channel 1D CNN,Neural baseline,all 18 channels jointly,all-channel Conv1D,common MLP head,20197,strong joint-channel baseline
+Shared 1D Encoder,Neural ablation,18 single-channel streams,same temporal encoder reused then pooled,common MLP head,7093,shared-only failure reference
+Shared 1D + Identity,Neural ablation,shared tokens plus identity embeddings,channel/sensor/modality/axis identity,common MLP head,8885,token origin ablation
+2D CNN,Neural baseline,time x channel matrix,2D convolution,common MLP head,14853,time-channel image-like baseline
+Random Forest,Practical tree baseline,162 signal-derived features,hand-crafted feature extraction,Random Forest estimator,not_applicable,strong non-neural reference
+XGBoost,Practical boosted tree baseline,162 signal-derived features,hand-crafted feature extraction,XGBoost estimator,not_applicable,boosted tree reference
+ResCNN-BiGRU-Attention,Literature reference,512x18 sequence,Residual CNN + BiGRU + attention,model-specific head,38934,temporal literature baseline
+Lee-style CNN-LSTM,Literature reference,internal 40-step downsampled time-channel matrix,2D CNN + LSTM,model-specific head,62637,adapted CNN-LSTM reference

@@ -1,0 +1,18 @@
+internal_model_name,display_name
+all_channel_conv1d_small,Previous Compact All-Channel Conv1D
+all_channel_conv1d_v1,Previous All-Channel Conv1D
+channel_shared_posres_attention_v3,Previous Position-Aware Shared Encoder
+controlled_2d_cnn,2D CNN
+controlled_all_channel_1d_cnn,All-Channel 1D CNN
+controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN
+controlled_flatten_mlp,Raw Flatten MLP
+controlled_shared_1d,Shared 1D Encoder
+controlled_shared_1d_identity,Shared 1D + Identity
+controlled_shared_1d_residual,Residual Channel-Shared Feature Extractor
+controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity
+controlled_stats_mlp,Statistical Summary MLP
+feature_linear_svm_v1,Linear SVM
+feature_random_forest_v1,Random Forest
+feature_xgboost_v1,XGBoost
+lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM
+rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention

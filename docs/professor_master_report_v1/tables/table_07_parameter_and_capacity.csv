@@ -1,0 +1,13 @@
+model_display_name,total_params,extractor_params,common_head_params,macro_f1,interpretation
+Statistical Summary MLP,9157,4672,4485,0.8174,small summary-statistics neural baseline.
+Residual Channel-Shared Feature Extractor,20021,15536,4485,0.8004,moderate-size proposed extractor with residual statistics.
+Residual Channel-Shared + Identity,21813,17328,4485,0.7973,controlled neural comparison model.
+All-Channel 1D CNN,20197,15712,4485,0.7994,controlled neural comparison model.
+Compact All-Channel 1D CNN,11317,6832,4485,0.7562,controlled neural comparison model.
+Shared 1D + Identity,8885,4400,4485,0.5182,controlled neural comparison model.
+Shared 1D Encoder,7093,2608,4485,0.2806,controlled neural comparison model.
+2D CNN,14853,10368,4485,0.4452,controlled neural comparison model.
+Raw Flatten MLP,594373,589888,4485,0.7046,parameter count is high but not best performing.
+XGBoost,not_applicable,not_applicable,not_applicable,0.7961,classical estimator; neural parameter count is not comparable.
+Random Forest,not_applicable,not_applicable,not_applicable,0.7845,classical estimator; neural parameter count is not comparable.
+ResCNN-BiGRU-Attention,38934,,not_applicable,0.7691,literature/reference temporal model; head is not common-head controlled.

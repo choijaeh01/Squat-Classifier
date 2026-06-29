@@ -44,3 +44,4 @@ Run unit tests from the parent workspace:
 ```bash
 python -m unittest discover -s squat_imu_experiments/tests -v
 ```
+- `docs/professor_master_report_v1/`: 교수님 보고용 master report mirror. 새 학습 없이 기존 결과를 read-only로 통합한 산출물입니다.

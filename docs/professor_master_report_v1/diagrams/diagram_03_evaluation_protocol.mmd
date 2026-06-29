@@ -1,0 +1,14 @@
+flowchart TD
+  N0["6 subjects"]
+  N1["LOSO held-out test subject"]
+  N0 --> N1
+  N2["remaining 5 subjects"]
+  N1 --> N2
+  N3["per subject-class: 16 train / 4 val"]
+  N2 --> N3
+  N4["train-only StandardScaler"]
+  N3 --> N4
+  N5["test subject only for final test"]
+  N4 --> N5
+  NOTE["Test subject is excluded from training, validation, and scaler fitting."]
+  N5 -.-> NOTE

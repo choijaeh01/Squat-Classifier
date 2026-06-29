@@ -1,0 +1,6 @@
+effect_name,contrast,mean_delta,bootstrap_ci,n_pairs,interpretation
+identity_effect_without_residual,Shared 1D + Identity - Shared 1D,0.2376,"[0.1632, 0.3140]",18,Identity는 residual이 없을 때 token origin 손실을 일부 보완한다.
+identity_effect_with_residual,Residual + Identity - Residual,-0.0031,"[-0.0284, 0.0193]",18,Residual branch가 들어간 뒤 identity 추가 이득은 거의 없거나 약간 음수다.
+residual_effect_without_identity,Residual - Shared 1D,0.5198,"[0.4637, 0.5799]",18,Residual branch는 shared-only 병목을 가장 크게 완화한다.
+residual_effect_with_identity,Residual + Identity - Shared 1D + Identity,0.2791,"[0.2022, 0.3641]",18,Identity가 있어도 residual branch의 추가 효과는 크다.
+interaction_effect,(Residual+Identity - Residual) - (Identity - Shared),-0.2407,"[-0.3211, -0.1620]",18,음수 interaction은 residual branch가 identity embedding의 일부 역할을 대체했을 가능성을 시사한다.

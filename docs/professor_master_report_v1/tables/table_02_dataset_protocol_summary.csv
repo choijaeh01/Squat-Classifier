@@ -1,0 +1,11 @@
+item,value,note
+Sensors,3 MPU-6050 IMUs,"s0 lower back/waist, s1 right thigh, s2 right calf"
+Channels,18,accelerometer 3-axis + gyroscope 3-axis per IMU
+Window length,512,phase-normalized linear interpolation from manually labeled boundaries
+Samples,600 windows,6 subjects x 5 classes x 20 windows
+Classes,5,"Correct, Knee Valgus, Butt Wink, Excessive Lean, Partial Squat"
+Evaluation,LOSO with within-train stratified validation,held-out subject is test only
+Fold size,train 400 / val 100 / test 100,candidate training subjects: 16 train and 4 val windows per subject-class
+Normalization,train-only StandardScaler,"fit only on train indices, transform train/val/test"
+Disabled,"per-window z-score, augmentation, focal loss, SSL, external transfer",not used in locked comparison
+Leakage audit,passed,split and scaler audit passed in full experiments

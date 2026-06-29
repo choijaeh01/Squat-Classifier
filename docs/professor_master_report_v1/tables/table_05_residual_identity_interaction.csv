@@ -1,0 +1,3 @@
+residual_branch,identity_absent_model,identity_absent_macro_f1,identity_present_model,identity_present_macro_f1,identity_effect,interpretation
+Absent,Shared 1D Encoder,0.2806,Shared 1D + Identity,0.5182,+0.2376,identity는 shared-only 구조에서 token origin 손실을 일부 보완한다.
+Present,Residual Channel-Shared Feature Extractor,0.8004,Residual Channel-Shared + Identity,0.7973,-0.0031,residual branch가 있으면 identity 추가 이득은 거의 없다.

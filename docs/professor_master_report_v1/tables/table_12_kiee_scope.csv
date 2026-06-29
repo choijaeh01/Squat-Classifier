@@ -1,0 +1,11 @@
+item,include_in_kiee,reason,future_work
+IMU-only supervised squat posture classification,yes,현재 결과와 protocol이 가장 완성되어 있다.,
+Clean-room target dataset conversion,yes,논문 실험 재현성과 데이터 누수 방지의 기반이다.,
+LOSO with train-only StandardScaler,yes,subject-independent 평가와 leakage control의 핵심이다.,
+Common-head feature extractor comparison,yes,교수님 피드백에 직접 대응하고 architecture claim을 정리한다.,
+Residual branch and identity interaction,yes,왜 residual을 proposed core로 둘 수 있는지 설명한다.,
+RF/XGBoost/Statistical Summary MLP baselines,yes,practical baseline이 강한 점을 투명하게 보고해야 한다.,
+Class 3 Excessive Lean analysis,maybe,모델별 차이를 보여주는 보조 분석으로 유용하다.,본문 공간에 따라 appendix 배치 가능
+Vision pipeline and on-device system,no,이번 architecture 논문 main contribution을 흐릴 수 있다.,시스템 논문 또는 appendix background
+SSL and external dataset transfer,no,현재 supervised paper의 검증 범위를 넘는다.,후속 국제 논문 후보
+Real-time deployment claim,no,현재 수치의 핵심은 LOSO supervised offline evaluation이다.,응용 시스템 확장

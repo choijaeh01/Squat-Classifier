@@ -1,0 +1,18 @@
+step,operation,leakage_risk,current_policy,evidence
+Raw CSV + manual boundary,variable-length raw window extraction,boundary or label misuse,manual metadata is used only for window segmentation and labels,target conversion report
+Conversion,linear phase interpolation to 512,normalization before split,normalization none during conversion,conversion config and report
+LOSO split,held-out subject test and within-train validation,test subject entering val/train,test subject never used in train/val/scaler,split and scaler audit
+Scaler fit,StandardScaler fit,val/test distribution leak,fit on train indices only,scaler_fit_audit.csv
+Feature extraction,neural residual/stat features or RF/XGBoost features,metadata-derived feature leakage,signal-derived features only after train-only scaling,feature_audit and code audit
+Disabled operations,"per-window z-score, augmentation, focal loss, SSL, external transfer",uncontrolled protocol changes,disabled in locked comparisons,configs and reports
+Dataset conversion 단계에서 normalization을 했는가?,No,audit item,confirmed,target conversion report and config specify normalization none; scaler is applied only inside fold runners.
+512 resampling은 언제 이루어졌는가?,"Before training, during target conversion from raw CSV/manual boundaries to processed X.npy.",audit item,confirmed,processed dataset v1 contains 512-step windows; training runners load processed arrays.
+학습 fold에서 StandardScaler는 언제 fit되는가?,"After LOSO split construction and before model/classical feature evaluation, using train indices only.",audit item,confirmed,"Both supervised feature-extractor and XGBoost completion runners call TrainOnlyStandardScaler().fit(dataset.X, train_idx=split.train_idx)."
+scaler fit에 사용된 sample은 train indices 400개뿐인가?,Yes,audit item,confirmed,All scaler_fit_audit rows have scaler_fit_n_windows=400: True.
+validation/test window가 scaler fit에 들어갔는가?,No,audit item,confirmed,val/test used flags are all False and scaler checks all passed: True.
+per-window z-score는 사용했는가?,No,audit item,confirmed,"feature-extractor comparison=False, xgboost=False."
+augmentation은 사용했는가?,No,audit item,confirmed,feature-extractor comparison augmentation enabled=False; xgboost safety forbids augmentation=True.
+"classical feature baseline의 feature는 scaler 적용 전 raw signal에서 계산되는가, train-scaled signal에서 계산되는가?",Train-scaled signal에서 계산된다.,audit item,confirmed_from_code,"runner creates X_scaled=scaler.transform(dataset.X), then run_classical_fold calls extract_window_features(X)."
+Statistical Summary MLP와 residual branch statistics는 scaler 적용 전/후 어느 단계에서 계산되는가?,"Train-scaled tensor가 model input으로 들어간 뒤, model 내부에서 mean/std/min/max를 계산한다.",audit item,confirmed_from_code,The feature-extractor runner passes X_scaled to the fold evaluator; StatsMLPExtractor and Shared1DExtractor call raw_summary_features(x).
+XGBoost와 RF는 같은 feature set을 썼는가?,Yes,audit item,confirmed,feature_audit allowed all features=True; both use extract_window_features.
+"Tree model은 normalization에 덜 민감하지만, feature extraction/scaler policy는 neural baseline과 어떻게 맞췄는가?",동일 LOSO split과 train-only StandardScaler transform 후 같은 signal-derived feature set으로 fit/predict했다.,audit item,confirmed,RF/SVM and XGBoost completion paths both use TrainOnlyStandardScaler and extract_window_features on X_scaled.

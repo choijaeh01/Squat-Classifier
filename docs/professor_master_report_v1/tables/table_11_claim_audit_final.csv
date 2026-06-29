@@ -1,0 +1,9 @@
+claim,status,rationale,safe_wording
+Residual branch mitigates shared encoder bottleneck.,safe,Shared 1D Encoder 0.2806에서 Residual Channel-Shared Feature Extractor 0.8004로 크게 증가했다.,잔차 branch는 naive shared encoder의 정보 병목을 크게 완화했다.
+Residual Channel-Shared Feature Extractor is competitive with All-Channel CNN and tree baselines.,safe,"Residual Channel-Shared 0.8004, All-Channel 1D CNN 0.7994, XGBoost 0.7961, RF 0.7845로 근접했다.",강한 neural/practical baseline과 경쟁 가능한 성능을 보였다.
+The proposed method is statistically superior to all baselines.,avoid,"Statistical Summary MLP가 0.8174로 가장 높고, 주요 모델 간 CI overlap 가능성이 있다.",최고 또는 유의한 우월성 대신 경쟁 가능성과 병목 완화로 서술한다.
+Identity embedding is the core contribution.,avoid,identity는 residual이 없을 때 +0.2376이지만 residual 이후 -0.0031이다.,"identity는 shared-only 구조에서 보완 효과가 있었고, core contribution은 residual branch다."
+Attention-centered novelty.,avoid,현재 종합 story의 핵심 효과는 residual statistics branch에서 나온다.,attention은 token aggregation 구현 요소로 낮춘다.
+Feature importance as biomechanical proof.,avoid,RF/XGBoost importance는 model-specific statistic이며 causal evidence로 해석하지 않는다.,특정 thigh-axis feature가 반복적으로 중요하게 관찰되었다고 제한적으로 말한다.
+Transfer learning or external generalization is validated.,avoid,이번 lock된 범위에는 SSL/external dataset experiment가 없다.,후속 연구 또는 future work로 남긴다.
+Summary statistics are strong for this dataset.,safe,"Statistical Summary MLP, RF/XGBoost, residual branch가 모두 높은 성능을 보였다.",이 데이터셋에서는 channel-wise summary statistics가 강한 signal로 관찰되었다.

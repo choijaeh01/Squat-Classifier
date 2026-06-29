@@ -1,0 +1,15 @@
+rank,model_display_name,group,accuracy,macro_f1,weighted_f1,macro_f1_ci,role,safe_interpretation
+1,Statistical Summary MLP,Practical Baseline,0.8250,0.8174,0.8174,"[0.7744, 0.8584]",summary-statistics upper practical reference,summary statistics alone are strong in this dataset.
+2,Residual Channel-Shared Feature Extractor,Proposed Core,0.8094,0.8004,0.8004,"[0.7423, 0.8540]",proposed core feature extractor,residual branch mitigates shared encoder bottleneck.
+3,All-Channel 1D CNN,Neural Baseline,0.8250,0.7994,0.7994,"[0.7404, 0.8564]",strong all-channel neural baseline,joint all-channel learning remains a strong baseline.
+4,Residual Channel-Shared + Identity,Shared Encoder Ablation,0.8072,0.7973,0.7973,"[0.7397, 0.8493]",residual plus identity ablation,identity adds little after residual statistics are present.
+5,XGBoost,Practical Baseline,0.8156,0.7961,0.7961,"[0.7567, 0.8328]",boosted tree practical baseline,strong practical baseline; do not overclaim neural superiority.
+6,Random Forest,Practical Baseline,0.8056,0.7845,0.7845,"[0.7318, 0.8376]",tree practical baseline,tree baseline confirms strength of hand-crafted signal features.
+7,ResCNN-BiGRU-Attention,Literature Reference,0.7944,0.7691,0.7691,"[0.7076, 0.8270]",literature temporal reference,temporal literature reference under same protocol.
+8,Compact All-Channel 1D CNN,Neural Baseline,0.7806,0.7562,0.7562,"[0.6786, 0.8242]",comparison model,reference result.
+9,Linear SVM,Practical Baseline,0.7461,0.7213,0.7213,"[0.6612, 0.7828]",comparison model,reference result.
+10,Raw Flatten MLP,Neural Baseline,0.7344,0.7046,0.7046,"[0.5953, 0.8074]",comparison model,reference result.
+11,Lee-style CNN-LSTM,Literature Reference,0.6622,0.6269,0.6269,"[0.5237, 0.7165]",comparison model,reference result.
+12,Shared 1D + Identity,Shared Encoder Ablation,0.5617,0.5182,0.5182,"[0.4335, 0.5968]",identity-only ablation,identity helps shared-only but is not sufficient.
+13,2D CNN,Neural Baseline,0.5056,0.4452,0.4452,"[0.3472, 0.5413]",comparison model,reference result.
+14,Shared 1D Encoder,Shared Encoder Ablation,0.3500,0.2806,0.2806,"[0.2233, 0.3385]",shared-only failure reference,naive shared pooling underfits heavily.

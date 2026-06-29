@@ -1,0 +1,17 @@
+{
+  "markdown_files": 7,
+  "csv_files": 13,
+  "png_files": 18,
+  "mmd_files": 4,
+  "expected_artifacts_present": true,
+  "unused_expected_figure_set_size": 0,
+  "controlled_name_violations": [],
+  "controlled_name_violation_count": 0,
+  "table_pipe_errors": [],
+  "missing_image_links": [],
+  "no_causal_overclaim": true,
+  "identity_not_core_claim": true,
+  "attention_not_core_claim": true,
+  "passed": true,
+  "quality_check": "/home/jae/Projects/aiot/New_Squat/squat_imu_experiments/docs/professor_master_report_v1/report_quality_check.md"
+}

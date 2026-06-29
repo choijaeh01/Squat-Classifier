@@ -1,0 +1,8 @@
+model_display_name,class3_recall,class3_f1,major_confusion_pattern,interpretation
+Statistical Summary MLP,0.6917,0.7150,Class 3 -> Butt Wink (48),class-wise reference.
+Residual Channel-Shared Feature Extractor,0.7222,0.7542,Class 3 -> Correct (55),"proposed core shows strong Class 3 result, but not a solved-class claim."
+All-Channel 1D CNN,0.6806,0.6692,Class 3 -> Butt Wink (60),class-wise reference.
+XGBoost,0.6444,0.6614,Class 3 -> Correct (63),tree practical baseline reference.
+Random Forest,0.6500,0.6848,Class 3 -> Correct (50),tree practical baseline reference.
+ResCNN-BiGRU-Attention,0.6833,0.6552,not_available,class-wise reference.
+Shared 1D Encoder,0.1556,0.1573,Class 3 -> Butt Wink (113),shared-only failure pattern reference.
