@@ -1,0 +1,6 @@
+model_display_name,accuracy,macro_f1,macro_f1_ci,role
+Statistical Summary MLP,0.8250,0.8174,"[0.7744, 0.8584]",summary-statistics practical baseline
+Residual Channel-Shared Encoder,0.8094,0.8004,"[0.7423, 0.8540]",proposed core extractor
+All-Channel 1D CNN,0.8250,0.7994,"[0.7404, 0.8564]",all-channel neural baseline
+XGBoost,0.8156,0.7961,"[0.7567, 0.8328]",boosted tree practical baseline
+Random Forest,0.8056,0.7845,"[0.7318, 0.8376]",tree-based practical baseline

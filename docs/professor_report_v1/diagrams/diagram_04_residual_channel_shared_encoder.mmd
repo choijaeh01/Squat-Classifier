@@ -1,0 +1,14 @@
+flowchart TD
+  N0["18 single-channel streams"]
+  N1["shared Temporal Encoder f_theta"]
+  N0 --> N1
+  N2["pooled shared representation"]
+  N1 --> N2
+  N3["raw IMU residual summary branch"]
+  N2 --> N3
+  N4["fusion to 64-dim"]
+  N3 --> N4
+  N5["Common MLP head"]
+  N4 --> N5
+  Note["shared encoder 병목을 residual branch가 보완한다."]
+  N5 --> Note

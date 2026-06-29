@@ -1,0 +1,10 @@
+flowchart TD
+  N0["Input 512x18"]
+  N1["signal-derived summary features"]
+  N0 --> N1
+  N2["Random Forest / XGBoost / Linear SVM"]
+  N1 --> N2
+  N3["5-class prediction"]
+  N2 --> N3
+  Note["same feature audit, no metadata/label/subject leakage."]
+  N3 --> Note

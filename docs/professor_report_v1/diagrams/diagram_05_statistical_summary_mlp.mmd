@@ -1,0 +1,10 @@
+flowchart TD
+  N0["Input 512x18"]
+  N1["signal-derived summary statistics"]
+  N0 --> N1
+  N2["projection to 64-dim"]
+  N1 --> N2
+  N3["Common MLP head"]
+  N2 --> N3
+  Note["channel-wise summary statistics가 강한 practical baseline이다."]
+  N3 --> Note

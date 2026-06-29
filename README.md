@@ -2,18 +2,16 @@
 
 Clean-room experimental codebase for IMU-only squat posture classification and future external IMU transfer experiments.
 
-This project intentionally does not import modules from older squat repositories. Official paper results should be generated from this codebase after the full training pipeline is implemented.
+This project intentionally does not import modules from older squat repositories. The current supervised IMU paper-candidate results are generated from this clean-room codebase.
 
 Current scope:
 
-- Project skeleton
-- Data manifest system
-- Target dataset loader scaffold
-- Preprocessing scaffold with LOSO-safe scaler fitting
-- Model registry scaffold
-- Metrics and result-saving scaffold
-- Synthetic-data smoke test
-- Experiment protocol documentation
+- Target dataset conversion from raw CSV and manual window metadata
+- LOSO evaluation with within-train stratified validation
+- Train-only scaler fitting and leakage audit outputs
+- Controlled feature extractor comparison with a shared classifier head
+- XGBoost, Random Forest, SVM, literature temporal baseline comparisons
+- v3 component ablation and professor-facing report assets
 - Curated, GitHub-friendly result artifacts under `docs/results_artifacts/`
 
 Documentation entry points:
@@ -22,11 +20,13 @@ Documentation entry points:
 - `docs/experiment_protocol.md`: experiment protocol
 - `docs/results_tracking.md`: run history and metric summaries
 - `docs/results_artifacts/README.md`: selected CSV/MD/PNG artifacts copied from generated `results/`
+- `docs/professor_report_v1/Professor Report - Residual Channel-Shared Encoder.md`: professor-facing report mirror with tables, figures, and diagrams
 
 Generated outputs policy:
 
 - Full `results/`, processed target arrays, checkpoints, and dependency caches are not committed.
 - Selected lightweight result tables and figures are mirrored under `docs/results_artifacts/` for review.
+- Professor-facing Obsidian report assets are mirrored under `docs/professor_report_v1/`; the personal Obsidian vault copy remains outside this repository.
 
 Run the smoke test:
 

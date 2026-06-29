@@ -1,0 +1,7 @@
+professor_request,executed,evidence,note
+XGBoost 비교,yes,xgboost_only_completion_v1,"동일 feature set, 18 runs 완료"
+RandomForest feature importance 확인,yes,random_forest_feature_importance_aggregate.csv,s1_ax 관련 feature 반복 관찰
+normalization/scaler 확인,yes,scaler_fit_audit.csv,train indices only
+같은 classifier head 비교,yes,common_head_verification.csv,64-dim representation + 동일 MLP head
+1D / residual / 2D / MLP 비교,yes,controlled comparison,display name table로 정리
+국내 저널 범위 축소,yes,table_09_final_recommended_scope.csv,SSL/transfer는 후속 연구로 분리

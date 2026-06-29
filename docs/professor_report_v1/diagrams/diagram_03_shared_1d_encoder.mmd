@@ -1,0 +1,12 @@
+flowchart TD
+  N0["18 single-channel streams"]
+  N1["same Temporal Encoder f_theta reused"]
+  N0 --> N1
+  N2["token pooling"]
+  N1 --> N2
+  N3["64-dim representation"]
+  N2 --> N3
+  N4["Common MLP head"]
+  N3 --> N4
+  Note["parameter sharing은 하지만 channel-specific 정보가 약화될 수 있다."]
+  N4 --> Note

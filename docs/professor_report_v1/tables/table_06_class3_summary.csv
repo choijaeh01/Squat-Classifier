@@ -1,0 +1,7 @@
+model_display_name,class3_recall,class3_f1,interpretation
+Statistical Summary MLP,0.6917,0.7150,summary feature도 Class 3에서 강함.
+Residual Channel-Shared Encoder,0.7222,0.7542,어려운 Excessive Lean class에서 높은 F1.
+All-Channel 1D CNN,0.6806,0.6692,class-wise reference.
+XGBoost,0.6444,0.6614,precision은 높지만 recall은 제한적.
+Random Forest,0.6500,0.6848,class-wise reference.
+ResCNN-BiGRU-Attention,0.6833,0.6552,class-wise reference.

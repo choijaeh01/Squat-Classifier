@@ -1,0 +1,9 @@
+item,value,note
+Sensors,3 MPU-6050 IMUs,"허리, 오른쪽 허벅지, 오른쪽 종아리"
+Channels,18,각 IMU acc 3축 + gyro 3축
+Window length,512,phase-normalized linear interpolation
+Subjects,6,subject-independent LOSO
+Classes,5,"Correct, Knee Valgus, Butt Wink, Excessive Lean, Partial Squat"
+Windows,600,subject-class 조합별 20 windows
+Validation policy,LOSO with within-train stratified validation,train 400 / val 100 / test 100
+Scaler,Train-only StandardScaler,held-out test subject는 fit에 미사용

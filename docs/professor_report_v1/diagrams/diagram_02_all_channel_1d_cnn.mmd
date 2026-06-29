@@ -1,0 +1,12 @@
+flowchart TD
+  N0["Input 512x18"]
+  N1["Conv1D over all channels"]
+  N0 --> N1
+  N2["Global pooling / projection"]
+  N1 --> N2
+  N3["64-dim representation"]
+  N2 --> N3
+  N4["Common MLP head"]
+  N3 --> N4
+  Note["18채널을 처음부터 함께 보며 channel-specific information을 직접 학습한다."]
+  N4 --> Note

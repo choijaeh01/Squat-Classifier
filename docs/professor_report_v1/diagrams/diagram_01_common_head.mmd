@@ -1,0 +1,16 @@
+flowchart TD
+  N0["Feature Extractor"]
+  N1["64-dim Representation"]
+  N0 --> N1
+  N2["Linear 64->64"]
+  N1 --> N2
+  N3["ReLU"]
+  N2 --> N3
+  N4["Dropout 0.1"]
+  N3 --> N4
+  N5["Linear 64->5"]
+  N4 --> N5
+  N6["5-class logits"]
+  N5 --> N6
+  Note["모든 controlled neural model에서 classifier head는 동일하다."]
+  N6 --> Note

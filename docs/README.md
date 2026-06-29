@@ -10,6 +10,7 @@
 - 논문 결과 초안: `paper_results_draft_v2.md`
 - 논문 claim audit: `paper_claim_audit_v2.md`
 - 논문 discussion 초안: `paper_discussion_draft_v2.md`
+- 교수님 보고서 mirror: `professor_report_v1/Professor Report - Residual Channel-Shared Encoder.md`
 
 ## 주요 주제별 문서
 
@@ -40,6 +41,7 @@
 - `literature_baseline_interpretation_notes_for_user.md`
 - `v3_component_ablation_interpretation_notes_for_user.md`
 - `paper_claim_audit_v2.md`
+- `professor_report_v1/Figure and Table Index.md`
 
 ### Manuscript Drafts
 
@@ -47,6 +49,12 @@
 - `paper_results_draft_v2.md`
 - `paper_discussion_draft_v2.md`
 - `paper_outline_kiee.md`
+
+### Professor Report
+
+- `professor_report_v1/Professor Report - Residual Channel-Shared Encoder.md`
+- `professor_report_v1/Figure and Table Index.md`
+- `professor_report_v1/figures/captions.md`
 
 ## 결과 산출물 관리 원칙
 

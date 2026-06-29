@@ -1,0 +1,8 @@
+item,include_in_kiee,reason,future_work
+Clean-room dataset conversion,yes,데이터/누수 통제의 신뢰 기반,외부 공개 가능성 검토
+Controlled feature extractor comparison,yes,교수님 피드백의 핵심 비교,추가 dataset에서 재검증
+Residual Channel-Shared Encoder,yes,shared encoder 병목 완화 claim의 중심,위치 embedding/attention 세부 ablation 확장
+RF/XGBoost/Stats MLP practical baselines,yes,강한 practical baseline을 투명하게 보고,feature robustness 분석
+SSL,no,이번 supervised protocol 범위 밖,후속 국제 논문 후보
+External transfer benchmark,no,adapter 및 protocol 미확정,후속 연구
+Real-time system,limited,배경/응용 가능성으로만 언급,시스템 논문으로 분리

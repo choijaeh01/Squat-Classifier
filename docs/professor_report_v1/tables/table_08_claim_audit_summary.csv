@@ -1,0 +1,6 @@
+claim,status,rationale,safe_wording
+Residual branch가 shared encoder bottleneck을 크게 완화했다.,safe,Shared 1D Macro F1 0.2806에서 Residual Channel-Shared Encoder 0.8004로 상승했다.,잔차 통계 branch는 naive shared encoder의 성능 저하를 크게 완화했다.
+Residual Channel-Shared Encoder가 모든 baseline보다 우월하다.,avoid,"Statistical Summary MLP가 가장 높고, XGBoost 및 all-channel CNN과의 paired CI가 0을 포함한다.",Residual Channel-Shared Encoder는 강한 practical/neural baseline과 경쟁 가능한 성능을 보였다.
+Attention이 핵심 성능 요인이다.,avoid,v3 ablation에서 no-attention meanpool이 original v3와 가까웠다.,"attention은 해석 보조 요소이며, 핵심 claim은 residual branch와 shared bottleneck 완화에 둔다."
+RF/XGBoost feature importance는 원인 설명이다.,avoid,feature importance는 모델 내부 기준이며 생체역학적 인과를 직접 증명하지 않는다.,s1_ax 및 s1_gx 관련 요약 통계가 모델에서 반복적으로 중요하게 관찰되었다.
+Transfer learning 효과를 검증했다.,avoid,이번 보고 범위에는 SSL/external dataset adapter/transfer learning 실험이 없다.,Transfer learning은 후속 연구 범위로 남긴다.
