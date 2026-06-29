@@ -1,0 +1,7 @@
+flowchart TD
+  A["64-dim feature representation"] --> B["Linear 64 to 64"]
+  B --> C["ReLU"]
+  C --> D["Dropout 0.1"]
+  D --> E["Linear 64 to 5"]
+  E --> F["5-class logits"]
+  G["Same head for controlled neural models, 4,485 params"] -.-> B

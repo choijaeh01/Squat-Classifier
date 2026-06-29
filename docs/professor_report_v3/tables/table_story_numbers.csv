@@ -1,0 +1,10 @@
+item,value,note
+Shared 1D Encoder,0.2806,"controlled comparison, 3 seeds x 6 folds"
+Shared 1D + Identity,0.5182,"controlled comparison, 3 seeds x 6 folds"
+Residual Channel-Shared Encoder,0.8004,"controlled comparison, 3 seeds x 6 folds"
+Residual Channel-Shared + Identity,0.7973,"controlled comparison, 3 seeds x 6 folds"
+identity_effect_without_residual,0.2376,"bootstrap CI [0.1632, 0.3140], n=18"
+identity_effect_with_residual,-0.0031,"bootstrap CI [-0.0284, 0.0193], n=18"
+residual_effect_without_identity,0.5198,"bootstrap CI [0.4637, 0.5799], n=18"
+residual_effect_with_identity,0.2791,"bootstrap CI [0.2022, 0.3641], n=18"
+interaction_effect,-0.2407,"bootstrap CI [-0.3211, -0.1620], n=18"

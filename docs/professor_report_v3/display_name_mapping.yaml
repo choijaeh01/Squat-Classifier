@@ -1,0 +1,15 @@
+mapping:
+  controlled_flatten_mlp: Raw Flatten MLP
+  controlled_stats_mlp: Statistical Summary MLP
+  controlled_all_channel_1d_cnn: All-Channel 1D CNN
+  controlled_all_channel_1d_cnn_small: Compact All-Channel 1D CNN
+  controlled_shared_1d: Shared 1D Encoder
+  controlled_shared_1d_identity: Shared 1D + Identity
+  controlled_shared_1d_residual: Residual Channel-Shared Encoder
+  controlled_shared_1d_residual_identity: Residual Channel-Shared + Identity
+  controlled_2d_cnn: 2D CNN
+  feature_random_forest_v1: Random Forest
+  feature_xgboost_v1: XGBoost
+  feature_linear_svm_v1: Linear SVM
+  rescnn_bigru_attention_lite_v1: ResCNN-BiGRU-Attention
+  lee_style_cnn_lstm_2d_v1: Lee-style CNN-LSTM

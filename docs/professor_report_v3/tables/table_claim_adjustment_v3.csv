@@ -1,0 +1,5 @@
+claim,status,reason,safe_wording
+Residual branch mitigates shared encoder bottleneck.,safe,Shared 1D 0.2806에서 Residual Channel-Shared 0.8004로 증가.,잔차 통계 branch는 shared encoder 병목을 크게 완화했다.
+Identity embedding is the main contribution.,avoid,identity는 residual이 없을 때만 크게 개선되고 residual 이후 추가 이득은 작음.,identity는 shared-only 구조에서 일부 보완 효과가 있었지만 핵심 claim은 residual branch다.
+Residual Channel-Shared is statistically superior to all baselines.,avoid,"Statistical Summary MLP, XGBoost, RF와 점수가 가깝고 CI overlap 가능.",강한 practical/neural baseline과 경쟁 가능한 성능을 보였다.
+Summary statistics are important in this dataset.,safe,"Statistical Summary MLP, RF/XGBoost, residual branch가 모두 높은 성능.",이 데이터셋에서는 channel-wise summary statistics가 강한 signal로 관찰되었다.

@@ -1,0 +1,13 @@
+flowchart LR
+  subgraph A["A. All-Channel 1D CNN"]
+    A0["Input 512x18"] --> A1["Conv1D sees all 18 channels jointly"] --> A2["Channel identity preserved through joint input"] --> A3["Common MLP head"]
+  end
+  subgraph B["B. Shared 1D Encoder"]
+    B0["Input 512x18"] --> B1["18 single-channel streams"] --> B2["same encoder f_theta reused"] --> B3["token pooling"] --> B4["channel cues can be weakened"] --> B5["Common MLP head"]
+  end
+  subgraph C["C. Shared 1D + Identity"]
+    C0["shared tokens"] --> C1["add channel/sensor/modality/axis embeddings"] --> C2["token origin partly restored"] --> C3["still lacks explicit statistics"] --> C4["Common MLP head"]
+  end
+  subgraph D["D. Residual Channel-Shared Encoder"]
+    D0["shared encoder branch"] --> D1["parallel train-scaled channel-wise statistics"] --> D2["mean/std/min/max, 18x4=72 features"] --> D3["fusion to 64-dim"] --> D4["Common MLP head"]
+  end

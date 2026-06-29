@@ -1,0 +1,9 @@
+flowchart TD
+  A["Shared encoder token"] --> B["Add identity metadata embeddings"]
+  C["channel_id"] --> B
+  D["sensor_id"] --> B
+  E["modality_id"] --> B
+  F["axis_id"] --> B
+  B --> G["LayerNorm(token + metadata)"]
+  G --> H["Token origin is partly restored"]
+  H --> I["Raw statistics are not directly provided"]

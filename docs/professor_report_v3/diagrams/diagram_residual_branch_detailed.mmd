@@ -1,0 +1,12 @@
+flowchart TD
+  A["Train-scaled tensor, 512x18"] --> B["Per-channel mean"]
+  A --> C["Per-channel std"]
+  A --> D["Per-channel min"]
+  A --> E["Per-channel max"]
+  B --> F["72 signal-derived features"]
+  C --> F
+  D --> F
+  E --> F
+  F --> G["Projection / fusion"]
+  G --> H["64-dim representation"]
+  I["No metadata, label, subject id, filename, boundary, or original length"] -.-> F
