@@ -114,9 +114,15 @@ def _capacity_report(rows: list[dict[str, Any]], config: dict[str, Any]) -> str:
         "|---|---|---:|---:|---:|---:|---|",
     ]
     for row in rows:
+        notes = _report_note(row)
         lines.append(
             "| {model_name} | {model_group} | {total_params} | {extractor_params} | {common_head_params} | "
-            "{representation_dim} | {notes} |".format(**{key: _md_cell(value) for key, value in row.items()})
+            "{representation_dim} | {notes} |".format(
+                **{
+                    **{key: _md_cell(value) for key, value in row.items()},
+                    "notes": _md_cell(notes),
+                }
+            )
         )
     lines.extend(
         [
@@ -139,6 +145,12 @@ def _escape_signature(value: str) -> str:
 
 def _md_cell(value: Any) -> str:
     return str(value).replace("|", "&#124;")
+
+
+def _report_note(row: dict[str, Any]) -> str:
+    if row.get("model_group") == "classical_practical":
+        return "classical baseline; dependency availability is environment-dependent and recorded in CSV/run logs"
+    return str(row.get("notes", ""))
 
 
 def _load_yaml(path: Path) -> dict[str, Any]:

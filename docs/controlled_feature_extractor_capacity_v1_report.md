@@ -24,9 +24,9 @@
 | controlled_shared_1d_residual | controlled_neural | 20021 | 15536 | 4485 | 64 | controlled neural model with common classifier head |
 | controlled_shared_1d_residual_identity | controlled_neural | 21813 | 17328 | 4485 | 64 | controlled neural model with common classifier head |
 | controlled_2d_cnn | controlled_neural | 14853 | 10368 | 4485 | 64 | controlled neural model with common classifier head |
-| feature_random_forest_v1 | classical_practical |  |  |  | not_applicable | classical baseline; available=False |
-| feature_xgboost_v1 | classical_practical |  |  |  | not_applicable | classical baseline; available=False |
-| feature_linear_svm_v1 | classical_practical |  |  |  | not_applicable | classical baseline; available=False |
+| feature_random_forest_v1 | classical_practical |  |  |  | not_applicable | classical baseline; dependency availability is environment-dependent and recorded in CSV/run logs |
+| feature_xgboost_v1 | classical_practical |  |  |  | not_applicable | classical baseline; dependency availability is environment-dependent and recorded in CSV/run logs |
+| feature_linear_svm_v1 | classical_practical |  |  |  | not_applicable | classical baseline; dependency availability is environment-dependent and recorded in CSV/run logs |
 | rescnn_bigru_attention_lite_v1 | literature_reference | 38934 |  |  |  | literature reference model |
 | lee_style_cnn_lstm_2d_v1 | literature_reference | 62637 |  |  |  | literature reference model |
 | channel_shared_posres_attention_v3 | locked_reference | 14742 |  | not_applicable |  | read-only locked matrix reference architecture |
