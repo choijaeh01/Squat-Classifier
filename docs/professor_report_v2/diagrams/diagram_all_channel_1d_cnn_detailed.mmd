@@ -1,0 +1,12 @@
+flowchart TD
+  N0["Input 512x18"]
+  N1["Conv1D jointly over 18 channels"]
+  N0 --> N1
+  N2["Temporal pooling/projection"]
+  N1 --> N2
+  N3["64-dim representation"]
+  N2 --> N3
+  N4["Common head"]
+  N3 --> N4
+  NOTE["Params: total=20197, extractor=15712, head=4485."]
+  N4 -.-> NOTE

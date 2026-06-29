@@ -1,0 +1,13 @@
+model_display_name,group,total_params,extractor_params,common_head_params,residual_branch_params,identity_embedding_params,representation_dim,macro_f1,interpretation
+Statistical Summary MLP,Practical Baseline,9157,4672,4485,4672,0,64,0.8174,작은 neural summary baseline.
+Residual Channel-Shared Encoder,Proposed Core,20021,15536,4485,12928,0,64,0.8004,shared encoder에 작은 residual branch를 결합.
+All-Channel 1D CNN,Neural Baseline,20197,15712,4485,0,0,64,0.7994,controlled neural parameter count.
+Residual Channel-Shared + Identity,Neural Baseline,21813,17328,4485,12928,1664,64,0.7973,controlled neural parameter count.
+Compact All-Channel 1D CNN,Neural Baseline,11317,6832,4485,0,0,64,0.7562,controlled neural parameter count.
+Raw Flatten MLP,Neural Baseline,,,,,,,0.7046,매우 큰 parameter count에도 최고 성능은 아님.
+Shared 1D + Identity,Neural Baseline,8885,4400,4485,0,1664,64,0.5182,controlled neural parameter count.
+2D CNN,Neural Baseline,14853,10368,4485,0,0,64,0.4452,controlled neural parameter count.
+Shared 1D Encoder,Neural Baseline,7093,2608,4485,0,0,64,0.2806,controlled neural parameter count.
+Random Forest,Practical Baseline,not_applicable,not_applicable,not_applicable,not_applicable,not_applicable,not_applicable,0.7845,classical/tree model; neural parameter count와 직접 비교하지 않음.
+XGBoost,Practical Baseline,not_applicable,not_applicable,not_applicable,not_applicable,not_applicable,not_applicable,0.7961,classical/tree model; neural parameter count와 직접 비교하지 않음.
+Linear SVM,Practical Baseline,not_applicable,not_applicable,not_applicable,not_applicable,not_applicable,not_applicable,0.7213,classical/tree model; neural parameter count와 직접 비교하지 않음.

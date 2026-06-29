@@ -1,0 +1,12 @@
+question,answer,evidence,status
+Dataset conversion 단계에서 normalization을 했는가?,No,target conversion report and config specify normalization none; scaler is applied only inside fold runners.,confirmed
+512 resampling은 언제 이루어졌는가?,"Before training, during target conversion from raw CSV/manual boundaries to processed X.npy.",processed dataset v1 contains 512-step windows; training runners load processed arrays.,confirmed
+학습 fold에서 StandardScaler는 언제 fit되는가?,"After LOSO split construction and before model/classical feature evaluation, using train indices only.","Both supervised feature-extractor and XGBoost completion runners call TrainOnlyStandardScaler().fit(dataset.X, train_idx=split.train_idx).",confirmed
+scaler fit에 사용된 sample은 train indices 400개뿐인가?,Yes,All scaler_fit_audit rows have scaler_fit_n_windows=400: True.,confirmed
+validation/test window가 scaler fit에 들어갔는가?,No,val/test used flags are all False and scaler checks all passed: True.,confirmed
+per-window z-score는 사용했는가?,No,"feature-extractor comparison=False, xgboost=False.",confirmed
+augmentation은 사용했는가?,No,feature-extractor comparison augmentation enabled=False; xgboost safety forbids augmentation=True.,confirmed
+"classical feature baseline의 feature는 scaler 적용 전 raw signal에서 계산되는가, train-scaled signal에서 계산되는가?",Train-scaled signal에서 계산된다.,"runner creates X_scaled=scaler.transform(dataset.X), then run_classical_fold calls extract_window_features(X).",confirmed_from_code
+Statistical Summary MLP와 residual branch statistics는 scaler 적용 전/후 어느 단계에서 계산되는가?,"Train-scaled tensor가 model input으로 들어간 뒤, model 내부에서 mean/std/min/max를 계산한다.",The feature-extractor runner passes X_scaled to the fold evaluator; StatsMLPExtractor and Shared1DExtractor call raw_summary_features(x).,confirmed_from_code
+XGBoost와 RF는 같은 feature set을 썼는가?,Yes,feature_audit allowed all features=True; both use extract_window_features.,confirmed
+"Tree model은 normalization에 덜 민감하지만, feature extraction/scaler policy는 neural baseline과 어떻게 맞췄는가?",동일 LOSO split과 train-only StandardScaler transform 후 같은 signal-derived feature set으로 fit/predict했다.,RF/SVM and XGBoost completion paths both use TrainOnlyStandardScaler and extract_window_features on X_scaled.,confirmed

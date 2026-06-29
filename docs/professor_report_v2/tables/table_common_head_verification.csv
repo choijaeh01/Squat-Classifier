@@ -1,0 +1,9 @@
+model_display_name,representation_dim,common_head_params,common_head_signature,representation_dim_is_64,common_head_param_count_is_4485,common_head_signature_matches
+Statistical Summary MLP,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True,True
+All-Channel 1D CNN,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True,True
+Compact All-Channel 1D CNN,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True,True
+Shared 1D Encoder,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True,True
+Shared 1D + Identity,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True,True
+Residual Channel-Shared Encoder,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True,True
+Residual Channel-Shared + Identity,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True,True
+2D CNN,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True,True

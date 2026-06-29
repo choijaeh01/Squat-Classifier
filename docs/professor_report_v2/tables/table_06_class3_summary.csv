@@ -1,0 +1,7 @@
+model_display_name,class3_recall,class3_f1,interpretation
+Statistical Summary MLP,0.6917,0.7150,class-wise reference.
+Residual Channel-Shared Encoder,0.7222,0.7542,Class 3에서 높은 F1을 보인 proposed core.
+All-Channel 1D CNN,0.6806,0.6692,class-wise reference.
+XGBoost,0.6444,0.6614,tree baseline reference.
+Random Forest,0.6500,0.6848,class-wise reference.
+Shared 1D Encoder,0.1556,0.1573,Shared-only failure pattern 확인용.

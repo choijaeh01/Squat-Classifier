@@ -1,0 +1,14 @@
+flowchart TD
+  N0["Feature Extractor Output: 64-dim"]
+  N1["Linear 64->64"]
+  N0 --> N1
+  N2["ReLU"]
+  N1 --> N2
+  N3["Dropout p=0.1"]
+  N2 --> N3
+  N4["Linear 64->5"]
+  N3 --> N4
+  N5["5-class logits"]
+  N4 --> N5
+  NOTE["All controlled neural models use the same classifier head. Common head params: 4,485."]
+  N5 -.-> NOTE

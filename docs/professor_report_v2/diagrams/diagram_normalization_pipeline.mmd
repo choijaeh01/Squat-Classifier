@@ -1,0 +1,12 @@
+flowchart TD
+  A["Raw CSV + manual boundaries"] --> B["512-step phase-normalized resampling"]
+  B --> C["Processed X.npy / y.npy / subject_id.npy"]
+  C --> D["LOSO split with within-train validation"]
+  D --> E["Train indices only: 400 windows"]
+  E --> F["Fit global StandardScaler"]
+  F --> G["Transform train / validation / test"]
+  G --> H["Neural model forward"]
+  G --> I["Signal-derived feature extraction for RF / XGBoost / SVM"]
+  J["per-window z-score = false"] -.-> G
+  K["augmentation = false"] -.-> H
+  K -.-> I

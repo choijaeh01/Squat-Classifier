@@ -1,0 +1,12 @@
+flowchart TD
+  N0["Input 512x18"]
+  N1["Train-scaled IMU signal"]
+  N0 --> N1
+  N2["Signal-derived summary features"]
+  N1 --> N2
+  N3["Feature audit: no metadata/label/subject/boundary"]
+  N2 --> N3
+  N4["RF / XGBoost / Linear SVM"]
+  N3 --> N4
+  NOTE["Classical model parameters are not comparable to neural parameter counts."]
+  N4 -.-> NOTE

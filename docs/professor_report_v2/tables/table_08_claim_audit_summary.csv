@@ -1,0 +1,5 @@
+claim,status,rationale,safe_wording
+Residual branch가 shared encoder bottleneck을 완화했다.,safe,Shared 1D 0.2806 -> Residual Channel-Shared 0.8004.,잔차 branch는 naive shared encoder의 성능 저하를 크게 완화했다.
+제안 모델이 모든 baseline보다 통계적으로 유의하게 우수하다.,avoid,Statistical Summary MLP가 가장 높고 CI overlap이 존재한다.,강한 neural/practical baseline과 경쟁 가능한 성능을 보였다.
+feature importance가 생체역학적 원인을 증명한다.,avoid,importance는 모델 내부 기준이다.,s1_ax/s1_gx 관련 feature가 반복적으로 중요하게 관찰되었다.
+transfer learning이 검증되었다.,avoid,이번 범위에는 external/SSL 실험이 없다.,후속 연구로 남긴다.

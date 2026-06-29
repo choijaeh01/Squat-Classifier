@@ -1,0 +1,9 @@
+item,value,note
+Sensors,3 MPU-6050 IMUs,"lower back/waist, right thigh, right calf"
+Channels,18,3-axis accelerometer + 3-axis gyroscope per IMU
+Window length,512,phase-normalized linear interpolation during conversion
+Subjects,6,subject-independent LOSO
+Classes,5,"Correct, Knee Valgus, Butt Wink, Excessive Lean, Partial Squat"
+Windows,600,20 windows per subject-class combination
+Validation policy,within-train stratified LOSO,train 400 / val 100 / test 100 per fold
+Scaler,train-only StandardScaler,"fit on train indices only, then transform train/val/test"

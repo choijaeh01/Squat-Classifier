@@ -1,0 +1,11 @@
+rank,random_forest_feature,rf_importance,xgboost_feature,xgb_importance,note
+1,s1_ax_std,0.0612,s1_ax_std,0.0674,s1_ax/s1_gx 관련 feature가 반복 관찰되지만 인과 단정은 금지
+2,s1_ax_energy,0.0505,s1_gx_mean,0.0656,model-specific importance
+3,s1_ax_rms,0.0479,s1_ax_energy,0.0601,model-specific importance
+4,s1_ax_max,0.0432,s0_ax_mean,0.0321,model-specific importance
+5,s1_gx_mean,0.0409,s0_az_std,0.0303,model-specific importance
+6,s1_ax_mean,0.0374,s0_ax_median,0.0225,model-specific importance
+7,s1_ax_ptp,0.0347,s2_gy_max,0.0197,model-specific importance
+8,s1_gy_mean,0.0248,s2_az_median,0.0195,model-specific importance
+9,s2_gy_mean,0.0221,s0_ay_median,0.0182,model-specific importance
+10,s0_ax_mean,0.0220,s1_az_mean,0.0170,model-specific importance

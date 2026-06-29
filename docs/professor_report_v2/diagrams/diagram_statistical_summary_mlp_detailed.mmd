@@ -1,0 +1,12 @@
+flowchart TD
+  N0["Input 512x18"]
+  N1["Signal-derived mean/std/min/max"]
+  N0 --> N1
+  N2["72 summary features"]
+  N1 --> N2
+  N3["Projection to 64-dim"]
+  N2 --> N3
+  N4["Common head"]
+  N3 --> N4
+  NOTE["Params: total=9157, extractor=4672, head=4485."]
+  N4 -.-> NOTE

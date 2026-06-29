@@ -1,0 +1,6 @@
+item,include_in_kiee,reason,future_work
+Supervised IMU-only target dataset,yes,논문 핵심 범위,
+Clean-room conversion and LOSO protocol,yes,재현성과 누수 통제 근거,
+Controlled feature extractor comparison,yes,교수님 피드백 핵심,
+RF/XGBoost/Stats MLP baselines,yes,강한 practical baselines 투명 보고,
+SSL/external transfer,no,이번 supervised paper 범위 밖,후속 논문

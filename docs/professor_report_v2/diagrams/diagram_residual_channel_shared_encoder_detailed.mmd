@@ -1,0 +1,14 @@
+flowchart TD
+  N0["Input 512x18"]
+  N1["Branch A: shared single-channel encoder"]
+  N0 --> N1
+  N2["Branch B: mean/std/min/max statistics"]
+  N1 --> N2
+  N3["Fusion projection"]
+  N2 --> N3
+  N4["64-dim representation"]
+  N3 --> N4
+  N5["Common head"]
+  N4 --> N5
+  NOTE["Params: total=20021, extractor=15536, head=4485. Residual branch preserves channel-specific summary cues."]
+  N5 -.-> NOTE

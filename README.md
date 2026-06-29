@@ -12,6 +12,7 @@ Current scope:
 - Controlled feature extractor comparison with a shared classifier head
 - XGBoost, Random Forest, SVM, literature temporal baseline comparisons
 - v3 component ablation and professor-facing report assets
+- Professor report v2 with architecture, normalization/scaler, parameter count, and confusion matrix refinements
 - Curated, GitHub-friendly result artifacts under `docs/results_artifacts/`
 
 Documentation entry points:
@@ -21,12 +22,13 @@ Documentation entry points:
 - `docs/results_tracking.md`: run history and metric summaries
 - `docs/results_artifacts/README.md`: selected CSV/MD/PNG artifacts copied from generated `results/`
 - `docs/professor_report_v1/Professor Report - Residual Channel-Shared Encoder.md`: professor-facing report mirror with tables, figures, and diagrams
+- `docs/professor_report_v2/Professor Report v2 - Architecture and Protocol.md`: refined professor report mirror focused on architecture and protocol evidence
 
 Generated outputs policy:
 
 - Full `results/`, processed target arrays, checkpoints, and dependency caches are not committed.
 - Selected lightweight result tables and figures are mirrored under `docs/results_artifacts/` for review.
-- Professor-facing Obsidian report assets are mirrored under `docs/professor_report_v1/`; the personal Obsidian vault copy remains outside this repository.
+- Professor-facing Obsidian report assets are mirrored under `docs/professor_report_v1/` and `docs/professor_report_v2/`; the personal Obsidian vault copy remains outside this repository.
 
 Run the smoke test:
 

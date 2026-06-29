@@ -1,0 +1,31 @@
+model_display_name,class_id,class_name,true_count,correct_count,recall,major_confusion_1,major_confusion_2,note
+Statistical Summary MLP,0,Correct,360,293,0.8139,Butt Wink (35),Knee Valgus (20),
+Statistical Summary MLP,1,Knee Valgus,360,347,0.9639,Excessive Lean (8),Correct (4),
+Statistical Summary MLP,2,Butt Wink,360,252,0.7000,Correct (67),Excessive Lean (31),
+Statistical Summary MLP,3,Excessive Lean,360,249,0.6917,Butt Wink (48),Correct (41),Excessive Lean 주요 관심 class.
+Statistical Summary MLP,4,Partial Squat,360,344,0.9556,Correct (12),Excessive Lean (3),
+Residual Channel-Shared Encoder,0,Correct,360,275,0.7639,Knee Valgus (63),Butt Wink (11),
+Residual Channel-Shared Encoder,1,Knee Valgus,360,337,0.9361,Excessive Lean (14),Correct (7),
+Residual Channel-Shared Encoder,2,Butt Wink,360,252,0.7000,Correct (62),Knee Valgus (28),
+Residual Channel-Shared Encoder,3,Excessive Lean,360,260,0.7222,Correct (55),Knee Valgus (25),Excessive Lean 주요 관심 class.
+Residual Channel-Shared Encoder,4,Partial Squat,360,333,0.9250,Correct (12),Knee Valgus (11),
+All-Channel 1D CNN,0,Correct,360,243,0.6750,Knee Valgus (51),Excessive Lean (38),
+All-Channel 1D CNN,1,Knee Valgus,360,343,0.9528,Correct (11),Excessive Lean (6),
+All-Channel 1D CNN,2,Butt Wink,360,311,0.8639,Excessive Lean (24),Correct (23),
+All-Channel 1D CNN,3,Excessive Lean,360,245,0.6806,Butt Wink (60),Correct (30),Excessive Lean 주요 관심 class.
+All-Channel 1D CNN,4,Partial Squat,360,343,0.9528,Excessive Lean (11),Correct (4),
+XGBoost,0,Correct,360,253,0.7028,Excessive Lean (57),Knee Valgus (26),
+XGBoost,1,Knee Valgus,360,344,0.9556,Correct (10),Butt Wink (5),
+XGBoost,2,Butt Wink,360,284,0.7889,Correct (39),Excessive Lean (27),
+XGBoost,3,Excessive Lean,360,232,0.6444,Correct (63),Butt Wink (34),Excessive Lean 주요 관심 class.
+XGBoost,4,Partial Squat,360,355,0.9861,Correct (4),Knee Valgus (1),
+Random Forest,0,Correct,360,243,0.6750,Knee Valgus (58),Butt Wink (27),
+Random Forest,1,Knee Valgus,360,346,0.9611,Correct (12),Butt Wink (2),
+Random Forest,2,Butt Wink,360,283,0.7861,Correct (44),Knee Valgus (20),
+Random Forest,3,Excessive Lean,360,234,0.6500,Correct (50),Knee Valgus (33),Excessive Lean 주요 관심 class.
+Random Forest,4,Partial Squat,360,344,0.9556,Excessive Lean (9),Correct (4),
+Shared 1D Encoder,0,Correct,360,50,0.1389,Partial Squat (93),Knee Valgus (85),Shared-only failure pattern 확인 필요.
+Shared 1D Encoder,1,Knee Valgus,360,104,0.2889,Butt Wink (136),Correct (66),
+Shared 1D Encoder,2,Butt Wink,360,237,0.6583,Correct (53),Knee Valgus (43),
+Shared 1D Encoder,3,Excessive Lean,360,56,0.1556,Butt Wink (113),Knee Valgus (107),Shared-only failure pattern 확인 필요.
+Shared 1D Encoder,4,Partial Squat,360,183,0.5083,Correct (75),Knee Valgus (67),

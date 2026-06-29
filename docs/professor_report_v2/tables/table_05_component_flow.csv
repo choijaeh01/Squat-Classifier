@@ -1,0 +1,5 @@
+model_display_name,macro_f1,delta_from_shared_1d,meaning
+Shared 1D Encoder,0.2806,+0.0000,공유 encoder만 사용하면 채널 위치와 통계 단서가 약해진다.
+Shared 1D + Identity,0.5182,+0.2376,identity embedding만으로는 병목 완화가 제한적이다.
+Residual Channel-Shared Encoder,0.8004,+0.5198,signal-derived residual branch가 병목을 크게 완화한다.
+Residual Channel-Shared + Identity,0.7973,+0.5167,residual 위에 identity를 추가해도 추가 이득은 작았다.

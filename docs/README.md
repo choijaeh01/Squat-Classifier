@@ -10,7 +10,8 @@
 - 논문 결과 초안: `paper_results_draft_v2.md`
 - 논문 claim audit: `paper_claim_audit_v2.md`
 - 논문 discussion 초안: `paper_discussion_draft_v2.md`
-- 교수님 보고서 mirror: `professor_report_v1/Professor Report - Residual Channel-Shared Encoder.md`
+- 교수님 보고서 mirror v1: `professor_report_v1/Professor Report - Residual Channel-Shared Encoder.md`
+- 교수님 보고서 mirror v2: `professor_report_v2/Professor Report v2 - Architecture and Protocol.md`
 
 ## 주요 주제별 문서
 
@@ -55,6 +56,11 @@
 - `professor_report_v1/Professor Report - Residual Channel-Shared Encoder.md`
 - `professor_report_v1/Figure and Table Index.md`
 - `professor_report_v1/figures/captions.md`
+- `professor_report_v2/Professor Report v2 - Architecture and Protocol.md`
+- `professor_report_v2/Figure and Table Index v2.md`
+- `professor_report_v2/figures/captions.md`
+
+`professor_report_v2/`는 architecture audit, normalization/scaler 순서, parameter count, confusion matrix, residual feature audit을 보강한 교수님 보고용 mirror다.
 
 ## 결과 산출물 관리 원칙
 

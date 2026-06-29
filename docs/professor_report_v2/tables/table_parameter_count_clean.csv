@@ -1,0 +1,11 @@
+model_internal_name,model_display_name,total_params,extractor_params,common_head_params,residual_branch_params,identity_embedding_params,representation_dim,notes
+controlled_stats_mlp,Statistical Summary MLP,9157,4672,4485,4672,0,64,controlled common-head model
+controlled_all_channel_1d_cnn,All-Channel 1D CNN,20197,15712,4485,0,0,64,controlled common-head model
+controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,11317,6832,4485,0,0,64,controlled common-head model
+controlled_shared_1d,Shared 1D Encoder,7093,2608,4485,0,0,64,controlled common-head model
+controlled_shared_1d_identity,Shared 1D + Identity,8885,4400,4485,0,1664,64,controlled common-head model
+controlled_shared_1d_residual,Residual Channel-Shared Encoder,20021,15536,4485,12928,0,64,controlled common-head model
+controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,21813,17328,4485,12928,1664,64,controlled common-head model
+controlled_2d_cnn,2D CNN,14853,10368,4485,0,0,64,controlled common-head model
+rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,38934,36689,0,0,0,,literature/reference model; no controlled common head
+lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,62637,60392,0,0,0,,literature/reference model; no controlled common head

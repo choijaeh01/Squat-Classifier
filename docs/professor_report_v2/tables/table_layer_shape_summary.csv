@@ -1,0 +1,149 @@
+module_path,module_type,input_shape,output_shape,param_count,model_internal_name,model_display_name,layer_index
+extractor.residual_projection.0,Linear,"(2, 72)","(2, 64)",4672,controlled_stats_mlp,Statistical Summary MLP,1
+extractor.residual_projection.1,ReLU,"(2, 64)","(2, 64)",0,controlled_stats_mlp,Statistical Summary MLP,2
+classifier.net.0,Linear,"(2, 64)","(2, 64)",4160,controlled_stats_mlp,Statistical Summary MLP,3
+classifier.net.1,ReLU,"(2, 64)","(2, 64)",0,controlled_stats_mlp,Statistical Summary MLP,4
+classifier.net.2,Dropout,"(2, 64)","(2, 64)",0,controlled_stats_mlp,Statistical Summary MLP,5
+classifier.net.3,Linear,"(2, 64)","(2, 5)",325,controlled_stats_mlp,Statistical Summary MLP,6
+extractor.encoder.0,Conv1d,"(2, 18, 512)","(2, 32, 512)",5216,controlled_all_channel_1d_cnn,All-Channel 1D CNN,1
+extractor.encoder.1,BatchNorm1d,"(2, 32, 512)","(2, 32, 512)",64,controlled_all_channel_1d_cnn,All-Channel 1D CNN,2
+extractor.encoder.2,ReLU,"(2, 32, 512)","(2, 32, 512)",0,controlled_all_channel_1d_cnn,All-Channel 1D CNN,3
+extractor.encoder.3,Conv1d,"(2, 32, 512)","(2, 64, 512)",10304,controlled_all_channel_1d_cnn,All-Channel 1D CNN,4
+extractor.encoder.4,BatchNorm1d,"(2, 64, 512)","(2, 64, 512)",128,controlled_all_channel_1d_cnn,All-Channel 1D CNN,5
+extractor.encoder.5,ReLU,"(2, 64, 512)","(2, 64, 512)",0,controlled_all_channel_1d_cnn,All-Channel 1D CNN,6
+extractor.encoder.6,AdaptiveAvgPool1d,"(2, 64, 512)","(2, 64, 1)",0,controlled_all_channel_1d_cnn,All-Channel 1D CNN,7
+extractor.projection,Identity,"(2, 64)","(2, 64)",0,controlled_all_channel_1d_cnn,All-Channel 1D CNN,8
+classifier.net.0,Linear,"(2, 64)","(2, 64)",4160,controlled_all_channel_1d_cnn,All-Channel 1D CNN,9
+classifier.net.1,ReLU,"(2, 64)","(2, 64)",0,controlled_all_channel_1d_cnn,All-Channel 1D CNN,10
+classifier.net.2,Dropout,"(2, 64)","(2, 64)",0,controlled_all_channel_1d_cnn,All-Channel 1D CNN,11
+classifier.net.3,Linear,"(2, 64)","(2, 5)",325,controlled_all_channel_1d_cnn,All-Channel 1D CNN,12
+extractor.encoder.0,Conv1d,"(2, 18, 512)","(2, 16, 512)",2032,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,1
+extractor.encoder.1,BatchNorm1d,"(2, 16, 512)","(2, 16, 512)",32,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,2
+extractor.encoder.2,ReLU,"(2, 16, 512)","(2, 16, 512)",0,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,3
+extractor.encoder.3,Conv1d,"(2, 16, 512)","(2, 32, 512)",2592,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,4
+extractor.encoder.4,BatchNorm1d,"(2, 32, 512)","(2, 32, 512)",64,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,5
+extractor.encoder.5,ReLU,"(2, 32, 512)","(2, 32, 512)",0,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,6
+extractor.encoder.6,AdaptiveAvgPool1d,"(2, 32, 512)","(2, 32, 1)",0,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,7
+extractor.projection,Linear,"(2, 32)","(2, 64)",2112,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,8
+classifier.net.0,Linear,"(2, 64)","(2, 64)",4160,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,9
+classifier.net.1,ReLU,"(2, 64)","(2, 64)",0,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,10
+classifier.net.2,Dropout,"(2, 64)","(2, 64)",0,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,11
+classifier.net.3,Linear,"(2, 64)","(2, 5)",325,controlled_all_channel_1d_cnn_small,Compact All-Channel 1D CNN,12
+extractor.shared_encoder.net.0,Conv1d,"(36, 1, 512)","(36, 16, 512)",160,controlled_shared_1d,Shared 1D Encoder,1
+extractor.shared_encoder.net.1,BatchNorm1d,"(36, 16, 512)","(36, 16, 512)",32,controlled_shared_1d,Shared 1D Encoder,2
+extractor.shared_encoder.net.2,ReLU,"(36, 16, 512)","(36, 16, 512)",0,controlled_shared_1d,Shared 1D Encoder,3
+extractor.shared_encoder.net.3,Conv1d,"(36, 16, 512)","(36, 16, 512)",1296,controlled_shared_1d,Shared 1D Encoder,4
+extractor.shared_encoder.net.4,BatchNorm1d,"(36, 16, 512)","(36, 16, 512)",32,controlled_shared_1d,Shared 1D Encoder,5
+extractor.shared_encoder.net.5,ReLU,"(36, 16, 512)","(36, 16, 512)",0,controlled_shared_1d,Shared 1D Encoder,6
+extractor.shared_encoder.net.6,AdaptiveAvgPool1d,"(36, 16, 512)","(36, 16, 1)",0,controlled_shared_1d,Shared 1D Encoder,7
+extractor.shared_encoder.projection,Linear,"(36, 16)","(36, 64)",1088,controlled_shared_1d,Shared 1D Encoder,8
+classifier.net.0,Linear,"(2, 64)","(2, 64)",4160,controlled_shared_1d,Shared 1D Encoder,9
+classifier.net.1,ReLU,"(2, 64)","(2, 64)",0,controlled_shared_1d,Shared 1D Encoder,10
+classifier.net.2,Dropout,"(2, 64)","(2, 64)",0,controlled_shared_1d,Shared 1D Encoder,11
+classifier.net.3,Linear,"(2, 64)","(2, 5)",325,controlled_shared_1d,Shared 1D Encoder,12
+extractor.shared_encoder.net.0,Conv1d,"(36, 1, 512)","(36, 16, 512)",160,controlled_shared_1d_identity,Shared 1D + Identity,1
+extractor.shared_encoder.net.1,BatchNorm1d,"(36, 16, 512)","(36, 16, 512)",32,controlled_shared_1d_identity,Shared 1D + Identity,2
+extractor.shared_encoder.net.2,ReLU,"(36, 16, 512)","(36, 16, 512)",0,controlled_shared_1d_identity,Shared 1D + Identity,3
+extractor.shared_encoder.net.3,Conv1d,"(36, 16, 512)","(36, 16, 512)",1296,controlled_shared_1d_identity,Shared 1D + Identity,4
+extractor.shared_encoder.net.4,BatchNorm1d,"(36, 16, 512)","(36, 16, 512)",32,controlled_shared_1d_identity,Shared 1D + Identity,5
+extractor.shared_encoder.net.5,ReLU,"(36, 16, 512)","(36, 16, 512)",0,controlled_shared_1d_identity,Shared 1D + Identity,6
+extractor.shared_encoder.net.6,AdaptiveAvgPool1d,"(36, 16, 512)","(36, 16, 1)",0,controlled_shared_1d_identity,Shared 1D + Identity,7
+extractor.shared_encoder.projection,Linear,"(36, 16)","(36, 64)",1088,controlled_shared_1d_identity,Shared 1D + Identity,8
+extractor.identity_embeddings.channel,Embedding,"(18,)","(18, 64)",1152,controlled_shared_1d_identity,Shared 1D + Identity,9
+extractor.identity_embeddings.sensor,Embedding,"(18,)","(18, 64)",192,controlled_shared_1d_identity,Shared 1D + Identity,10
+extractor.identity_embeddings.modality,Embedding,"(18,)","(18, 64)",128,controlled_shared_1d_identity,Shared 1D + Identity,11
+extractor.identity_embeddings.axis,Embedding,"(18,)","(18, 64)",192,controlled_shared_1d_identity,Shared 1D + Identity,12
+extractor.token_norm,LayerNorm,"(2, 18, 64)","(2, 18, 64)",128,controlled_shared_1d_identity,Shared 1D + Identity,13
+classifier.net.0,Linear,"(2, 64)","(2, 64)",4160,controlled_shared_1d_identity,Shared 1D + Identity,14
+classifier.net.1,ReLU,"(2, 64)","(2, 64)",0,controlled_shared_1d_identity,Shared 1D + Identity,15
+classifier.net.2,Dropout,"(2, 64)","(2, 64)",0,controlled_shared_1d_identity,Shared 1D + Identity,16
+classifier.net.3,Linear,"(2, 64)","(2, 5)",325,controlled_shared_1d_identity,Shared 1D + Identity,17
+extractor.shared_encoder.net.0,Conv1d,"(36, 1, 512)","(36, 16, 512)",160,controlled_shared_1d_residual,Residual Channel-Shared Encoder,1
+extractor.shared_encoder.net.1,BatchNorm1d,"(36, 16, 512)","(36, 16, 512)",32,controlled_shared_1d_residual,Residual Channel-Shared Encoder,2
+extractor.shared_encoder.net.2,ReLU,"(36, 16, 512)","(36, 16, 512)",0,controlled_shared_1d_residual,Residual Channel-Shared Encoder,3
+extractor.shared_encoder.net.3,Conv1d,"(36, 16, 512)","(36, 16, 512)",1296,controlled_shared_1d_residual,Residual Channel-Shared Encoder,4
+extractor.shared_encoder.net.4,BatchNorm1d,"(36, 16, 512)","(36, 16, 512)",32,controlled_shared_1d_residual,Residual Channel-Shared Encoder,5
+extractor.shared_encoder.net.5,ReLU,"(36, 16, 512)","(36, 16, 512)",0,controlled_shared_1d_residual,Residual Channel-Shared Encoder,6
+extractor.shared_encoder.net.6,AdaptiveAvgPool1d,"(36, 16, 512)","(36, 16, 1)",0,controlled_shared_1d_residual,Residual Channel-Shared Encoder,7
+extractor.shared_encoder.projection,Linear,"(36, 16)","(36, 64)",1088,controlled_shared_1d_residual,Residual Channel-Shared Encoder,8
+extractor.residual_projection.0,Linear,"(2, 72)","(2, 64)",4672,controlled_shared_1d_residual,Residual Channel-Shared Encoder,9
+extractor.residual_projection.1,ReLU,"(2, 64)","(2, 64)",0,controlled_shared_1d_residual,Residual Channel-Shared Encoder,10
+extractor.fusion_projection.0,Linear,"(2, 128)","(2, 64)",8256,controlled_shared_1d_residual,Residual Channel-Shared Encoder,11
+extractor.fusion_projection.1,ReLU,"(2, 64)","(2, 64)",0,controlled_shared_1d_residual,Residual Channel-Shared Encoder,12
+classifier.net.0,Linear,"(2, 64)","(2, 64)",4160,controlled_shared_1d_residual,Residual Channel-Shared Encoder,13
+classifier.net.1,ReLU,"(2, 64)","(2, 64)",0,controlled_shared_1d_residual,Residual Channel-Shared Encoder,14
+classifier.net.2,Dropout,"(2, 64)","(2, 64)",0,controlled_shared_1d_residual,Residual Channel-Shared Encoder,15
+classifier.net.3,Linear,"(2, 64)","(2, 5)",325,controlled_shared_1d_residual,Residual Channel-Shared Encoder,16
+extractor.shared_encoder.net.0,Conv1d,"(36, 1, 512)","(36, 16, 512)",160,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,1
+extractor.shared_encoder.net.1,BatchNorm1d,"(36, 16, 512)","(36, 16, 512)",32,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,2
+extractor.shared_encoder.net.2,ReLU,"(36, 16, 512)","(36, 16, 512)",0,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,3
+extractor.shared_encoder.net.3,Conv1d,"(36, 16, 512)","(36, 16, 512)",1296,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,4
+extractor.shared_encoder.net.4,BatchNorm1d,"(36, 16, 512)","(36, 16, 512)",32,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,5
+extractor.shared_encoder.net.5,ReLU,"(36, 16, 512)","(36, 16, 512)",0,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,6
+extractor.shared_encoder.net.6,AdaptiveAvgPool1d,"(36, 16, 512)","(36, 16, 1)",0,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,7
+extractor.shared_encoder.projection,Linear,"(36, 16)","(36, 64)",1088,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,8
+extractor.identity_embeddings.channel,Embedding,"(18,)","(18, 64)",1152,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,9
+extractor.identity_embeddings.sensor,Embedding,"(18,)","(18, 64)",192,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,10
+extractor.identity_embeddings.modality,Embedding,"(18,)","(18, 64)",128,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,11
+extractor.identity_embeddings.axis,Embedding,"(18,)","(18, 64)",192,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,12
+extractor.token_norm,LayerNorm,"(2, 18, 64)","(2, 18, 64)",128,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,13
+extractor.residual_projection.0,Linear,"(2, 72)","(2, 64)",4672,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,14
+extractor.residual_projection.1,ReLU,"(2, 64)","(2, 64)",0,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,15
+extractor.fusion_projection.0,Linear,"(2, 128)","(2, 64)",8256,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,16
+extractor.fusion_projection.1,ReLU,"(2, 64)","(2, 64)",0,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,17
+classifier.net.0,Linear,"(2, 64)","(2, 64)",4160,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,18
+classifier.net.1,ReLU,"(2, 64)","(2, 64)",0,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,19
+classifier.net.2,Dropout,"(2, 64)","(2, 64)",0,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,20
+classifier.net.3,Linear,"(2, 64)","(2, 5)",325,controlled_shared_1d_residual_identity,Residual Channel-Shared + Identity,21
+extractor.encoder.0,Conv2d,"(2, 1, 512, 18)","(2, 16, 512, 18)",448,controlled_2d_cnn,2D CNN,1
+extractor.encoder.1,BatchNorm2d,"(2, 16, 512, 18)","(2, 16, 512, 18)",32,controlled_2d_cnn,2D CNN,2
+extractor.encoder.2,ReLU,"(2, 16, 512, 18)","(2, 16, 512, 18)",0,controlled_2d_cnn,2D CNN,3
+extractor.encoder.3,Conv2d,"(2, 16, 512, 18)","(2, 32, 512, 18)",7712,controlled_2d_cnn,2D CNN,4
+extractor.encoder.4,BatchNorm2d,"(2, 32, 512, 18)","(2, 32, 512, 18)",64,controlled_2d_cnn,2D CNN,5
+extractor.encoder.5,ReLU,"(2, 32, 512, 18)","(2, 32, 512, 18)",0,controlled_2d_cnn,2D CNN,6
+extractor.encoder.6,AdaptiveAvgPool2d,"(2, 32, 512, 18)","(2, 32, 1, 1)",0,controlled_2d_cnn,2D CNN,7
+extractor.projection.0,Linear,"(2, 32)","(2, 64)",2112,controlled_2d_cnn,2D CNN,8
+extractor.projection.1,ReLU,"(2, 64)","(2, 64)",0,controlled_2d_cnn,2D CNN,9
+classifier.net.0,Linear,"(2, 64)","(2, 64)",4160,controlled_2d_cnn,2D CNN,10
+classifier.net.1,ReLU,"(2, 64)","(2, 64)",0,controlled_2d_cnn,2D CNN,11
+classifier.net.2,Dropout,"(2, 64)","(2, 64)",0,controlled_2d_cnn,2D CNN,12
+classifier.net.3,Linear,"(2, 64)","(2, 5)",325,controlled_2d_cnn,2D CNN,13
+encoder.0.main.0,Conv1d,"(2, 18, 512)","(2, 32, 512)",4064,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,1
+encoder.0.main.1,BatchNorm1d,"(2, 32, 512)","(2, 32, 512)",64,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,2
+encoder.0.main.2,ReLU,"(2, 32, 512)","(2, 32, 512)",0,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,3
+encoder.0.main.3,Conv1d,"(2, 32, 512)","(2, 32, 512)",7200,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,4
+encoder.0.main.4,BatchNorm1d,"(2, 32, 512)","(2, 32, 512)",64,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,5
+encoder.0.shortcut,Conv1d,"(2, 18, 512)","(2, 32, 512)",608,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,6
+encoder.0.activation,ReLU,"(2, 32, 512)","(2, 32, 512)",0,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,7
+encoder.1.main.0,Conv1d,"(2, 32, 512)","(2, 32, 512)",5152,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,8
+encoder.1.main.1,BatchNorm1d,"(2, 32, 512)","(2, 32, 512)",64,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,9
+encoder.1.main.2,ReLU,"(2, 32, 512)","(2, 32, 512)",0,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,10
+encoder.1.main.3,Conv1d,"(2, 32, 512)","(2, 32, 512)",5152,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,11
+encoder.1.main.4,BatchNorm1d,"(2, 32, 512)","(2, 32, 512)",64,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,12
+encoder.1.shortcut,Identity,"(2, 32, 512)","(2, 32, 512)",0,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,13
+encoder.1.activation,ReLU,"(2, 32, 512)","(2, 32, 512)",0,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,14
+encoder.2,MaxPool1d,"(2, 32, 512)","(2, 32, 256)",0,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,15
+recurrent,GRU,"(2, 256, 32)","[(2, 256, 64), (2, 2, 32)]",12672,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,16
+aggregation.scorer.0,Linear,"(2, 256, 64)","(2, 256, 24)",1560,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,17
+aggregation.scorer.1,Tanh,"(2, 256, 24)","(2, 256, 24)",0,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,18
+aggregation.scorer.2,Linear,"(2, 256, 24)","(2, 256, 1)",25,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,19
+classifier.0,Linear,"(2, 64)","(2, 32)",2080,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,20
+classifier.1,ReLU,"(2, 32)","(2, 32)",0,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,21
+classifier.2,Linear,"(2, 32)","(2, 5)",165,rescnn_bigru_attention_lite_v1,ResCNN-BiGRU-Attention,22
+encoder.0.net.0,Conv2d,"(2, 1, 40, 18)","(2, 16, 40, 18)",160,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,1
+encoder.0.net.1,BatchNorm2d,"(2, 16, 40, 18)","(2, 16, 40, 18)",32,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,2
+encoder.0.net.2,ReLU,"(2, 16, 40, 18)","(2, 16, 40, 18)",0,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,3
+encoder.0.net.3,Dropout2d,"(2, 16, 40, 18)","(2, 16, 40, 18)",0,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,4
+encoder.1.net.0,Conv2d,"(2, 16, 40, 18)","(2, 24, 40, 18)",3480,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,5
+encoder.1.net.1,BatchNorm2d,"(2, 24, 40, 18)","(2, 24, 40, 18)",48,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,6
+encoder.1.net.2,ReLU,"(2, 24, 40, 18)","(2, 24, 40, 18)",0,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,7
+encoder.1.net.3,Dropout2d,"(2, 24, 40, 18)","(2, 24, 40, 18)",0,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,8
+encoder.2.net.0,Conv2d,"(2, 24, 40, 18)","(2, 32, 40, 18)",6944,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,9
+encoder.2.net.1,BatchNorm2d,"(2, 32, 40, 18)","(2, 32, 40, 18)",64,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,10
+encoder.2.net.2,ReLU,"(2, 32, 40, 18)","(2, 32, 40, 18)",0,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,11
+encoder.2.net.3,Dropout2d,"(2, 32, 40, 18)","(2, 32, 40, 18)",0,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,12
+channel_pool,AdaptiveAvgPool2d,"(2, 32, 40, 18)","(2, 32, 40, 4)",0,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,13
+recurrent,LSTM,"(2, 40, 128)","[(2, 40, 64), [(1, 2, 64), (1, 2, 64)]]",49664,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,14
+classifier.0,Linear,"(2, 64)","(2, 32)",2080,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,15
+classifier.1,ReLU,"(2, 32)","(2, 32)",0,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,16
+classifier.2,Linear,"(2, 32)","(2, 5)",165,lee_style_cnn_lstm_2d_v1,Lee-style CNN-LSTM,17

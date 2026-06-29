@@ -1,0 +1,16 @@
+flowchart TD
+  N0["Input 512x18"]
+  N1["Split into 18 single-channel streams"]
+  N0 --> N1
+  N2["Same Temporal Encoder f_theta reused"]
+  N1 --> N2
+  N3["18 tokens"]
+  N2 --> N3
+  N4["Mean pooling"]
+  N3 --> N4
+  N5["64-dim representation"]
+  N4 --> N5
+  N6["Common head"]
+  N5 --> N6
+  NOTE["Params: total=7093, extractor=2608, head=4485. No residual branch."]
+  N6 -.-> NOTE

@@ -1,0 +1,7 @@
+feedback_item,status,evidence,note
+XGBoost comparison,done,XGBoost completion results,No tuning or rerun in v2.
+RF/XGBoost feature importance,done,top-10 feature importance table,Signal-derived features only.
+normalization/scaler clarification,done,normalization protocol audit,Feature extraction happens after train-only scaler transform.
+same classifier head comparison,done,common head verification table,"64-dim representation and 4,485-param head."
+1D / residual / 2D / MLP comparison,done,feature extractor comparison table,Display names used for report.
+confusion matrix analysis,done,row-normalized and count confusion figures,Interpretation limited to visible patterns.

@@ -1,0 +1,14 @@
+model_display_name,group,accuracy,macro_f1,weighted_f1,macro_f1_ci,role,interpretation
+Statistical Summary MLP,Practical Baseline,0.8250,0.8174,0.8174,"[0.7744, 0.8584]",summary-statistics practical baseline,현재 데이터에서 signal summary가 매우 강함.
+Residual Channel-Shared Encoder,Proposed Core,0.8094,0.8004,0.8004,"[0.7423, 0.8540]",proposed core extractor,residual branch가 shared encoder 병목을 완화.
+All-Channel 1D CNN,Neural Baseline,0.8250,0.7994,0.7994,"[0.7404, 0.8564]",all-channel neural baseline,채널 정보를 직접 학습하는 강한 neural baseline.
+Residual Channel-Shared + Identity,Neural Baseline,0.8072,0.7973,0.7973,"[0.7397, 0.8493]",comparison model,residual-only와 비슷해 identity 추가 이득은 제한적.
+Random Forest,Practical Baseline,0.8056,0.7845,0.7845,"[0.7318, 0.8376]",tree-based practical baseline,비교용 모델.
+ResCNN-BiGRU-Attention,Literature Reference,0.7944,0.7691,0.7691,"[0.7076, 0.8270]",comparison model,비교용 모델.
+Compact All-Channel 1D CNN,Neural Baseline,0.7806,0.7562,0.7562,"[0.6786, 0.8242]",comparison model,비교용 모델.
+Linear SVM,Practical Baseline,0.7461,0.7213,0.7213,"[0.6612, 0.7828]",linear feature baseline,비교용 모델.
+Raw Flatten MLP,Neural Baseline,0.7344,0.7046,0.7046,"[0.5953, 0.8074]",comparison model,parameter가 크지만 최고 성능은 아님.
+Lee-style CNN-LSTM,Literature Reference,0.6622,0.6269,0.6269,"[0.5237, 0.7165]",comparison model,비교용 모델.
+Shared 1D + Identity,Neural Baseline,0.5617,0.5182,0.5182,"[0.4335, 0.5968]",comparison model,identity만으로는 병목 해결이 부족.
+2D CNN,Neural Baseline,0.5056,0.4452,0.4452,"[0.3472, 0.5413]",comparison model,time-channel 2D baseline은 낮게 관찰.
+Shared 1D Encoder,Neural Baseline,0.3500,0.2806,0.2806,"[0.2233, 0.3385]",comparison model,단독 shared pooling은 underfit.

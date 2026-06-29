@@ -1,0 +1,12 @@
+flowchart TD
+  N0["Input time x channel matrix 512x18"]
+  N1["2D convolution"]
+  N0 --> N1
+  N2["Pooling/projection"]
+  N1 --> N2
+  N3["64-dim representation"]
+  N2 --> N3
+  N4["Common head"]
+  N3 --> N4
+  NOTE["Params: total=14853, extractor=10368, head=4485."]
+  N4 -.-> NOTE

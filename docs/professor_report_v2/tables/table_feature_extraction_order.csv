@@ -1,0 +1,5 @@
+pipeline,order,feature_source,feature_count,metadata_used,note
+Neural temporal extractors,processed X.npy -> LOSO split -> train-only StandardScaler fit -> transform train/val/test -> neural forward,scaled IMU tensor,not_applicable,False,All controlled neural models receive scaled tensors.
+Statistical Summary MLP,processed X.npy -> scaler transform -> model internal mean/std/min/max -> common head,scaled IMU tensor,72,False,"Uses mean, std, min, max for each of 18 channels."
+Residual branch inside Residual Channel-Shared Encoder,processed X.npy -> scaler transform -> shared encoder branch plus internal mean/std/min/max residual branch -> fusion -> common head,scaled IMU tensor,72,False,Residual branch uses the same raw_summary_features function as Statistical Summary MLP.
+Random Forest / Linear SVM / XGBoost,processed X.npy -> scaler transform -> extract_window_features -> estimator.fit(train features only),scaled IMU tensor,162,False,"Feature set: mean, std, min, max, median, energy, RMS, peak-to-peak, dominant FFT bin."
