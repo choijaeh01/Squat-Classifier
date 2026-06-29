@@ -1,0 +1,3 @@
+reference_model,comparison_model,metric,mean_difference,std_difference,ci_low,ci_high,n_pairs
+all_channel_conv1d_v1,channel_shared_posres_attention_v3,macro_f1,0.057685415173650584,0.1932238403280783,-0.025067051840146303,0.1511186458605595,18
+all_channel_conv1d_small,channel_shared_posres_attention_v3,macro_f1,0.036784419746011814,0.15261734650097786,-0.031942088911489176,0.10972734928149058,18

@@ -1,0 +1,2 @@
+reference_model,comparison_model,metric,mean_difference,std_difference,ci_low,ci_high,n_pairs
+controlled_stats_mlp,feature_xgboost_v1,macro_f1,-0.021240085764863265,0.08273207157509553,-0.059398476264448496,0.01708112242491516,18

@@ -1,0 +1,8 @@
+model_name,total_params,encoder_params,aggregation_params,head_params,other_params,input_shape,output_shape
+all_channel_conv1d_v1,16037,15712,0,325,0,"(batch, 512, 18)","(2, 5)"
+all_channel_conv1d_small,4181,4056,0,125,0,"(batch, 512, 18)","(2, 5)"
+cnn2d_baseline_v1,8421,8256,0,165,0,"(batch, 512, 18)","(2, 5)"
+channel_shared_meanpool_v2,2677,2064,0,613,0,"(batch, 512, 18)","(2, 5)"
+channel_shared_attentionpool_v2,2950,2064,273,613,0,"(batch, 512, 18)","(2, 5)"
+channel_shared_posres_attention_v3,14742,2064,8193,4485,0,"(batch, 512, 18)","(2, 5)"
+modality_shared_sensorattn_v3,16103,4128,9730,2245,0,"(batch, 512, 18)","(2, 5)"

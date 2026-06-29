@@ -1,0 +1,8 @@
+field,value
+run_dir,/home/jae/Projects/aiot/New_Squat/squat_imu_experiments/results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1
+total_runs,126
+success_runs,126
+failed_runs,0
+all_checks_passed,True
+best_model_by_macro_f1,channel_shared_posres_attention_v3
+best_macro_f1,0.81082481387536

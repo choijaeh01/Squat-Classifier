@@ -1,0 +1,11 @@
+{
+  "cuda_available": true,
+  "device": "cuda",
+  "device_name": "NVIDIA RTX 6000 Ada Generation",
+  "hostname": "4d244d15d634",
+  "platform": "Linux-5.15.0-152-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12 (main, Aug 15 2025, 14:32:43) [GCC 11.4.0]",
+  "sklearn": "1.7.2",
+  "sklearn_available": true,
+  "torch": "2.8.0+cu129"
+}

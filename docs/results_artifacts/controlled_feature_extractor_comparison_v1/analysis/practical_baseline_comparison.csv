@@ -1,0 +1,3 @@
+model_name,total_params,encoder_params,aggregation_params,head_params,mean_accuracy,std_accuracy,mean_macro_f1,std_macro_f1,mean_weighted_f1,std_weighted_f1,macro_f1_ci_low,macro_f1_ci_high,mean_best_epoch,n_success_runs,n_failed_runs,model_group
+feature_linear_svm_v1,0,0,0,0,0.746111111111111,0.11562097507175421,0.721326918228006,0.13056563920600575,0.721326918228006,0.13056563920600578,0.6612486782916431,0.7828279485470191,0.0,18,0,classical_practical
+feature_random_forest_v1,0,0,0,0,0.8055555555555555,0.09563949801335699,0.7845249924781911,0.1127832048348814,0.7845249924781912,0.11278320483488143,0.7317878001513041,0.8376471239011969,0.0,18,0,classical_practical

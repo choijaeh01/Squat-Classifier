@@ -1,0 +1,8 @@
+reference_model,comparison_model,reference_macro_f1,comparison_macro_f1,delta_comparison_minus_reference,paired_delta,paired_ci_low,paired_ci_high,n_pairs
+controlled_shared_1d,controlled_shared_1d_residual,0.28058877693616635,0.8004316129351925,0.5198428359990261,,,,
+controlled_shared_1d_residual,controlled_shared_1d_residual_identity,0.8004316129351925,0.7973192046953161,-0.003112408239876352,-0.003112408239876247,-0.02832816765762723,0.020234732325744423,18
+controlled_shared_1d_identity,controlled_shared_1d_residual_identity,0.5182055376311773,0.7973192046953161,0.27911366706413887,,,,
+controlled_all_channel_1d_cnn,controlled_shared_1d_residual_identity,0.7993945208514475,0.7973192046953161,-0.002075316156131324,-0.002075316156131305,-0.06711845602217979,0.06709892752986613,18
+controlled_all_channel_1d_cnn_small,controlled_shared_1d_residual_identity,0.7561545162134669,0.7973192046953161,0.04116468848184929,0.041164688481849426,-0.03259997868205888,0.1320181146386741,18
+controlled_stats_mlp,controlled_shared_1d_residual_identity,0.817383971028595,0.7973192046953161,-0.020064766333278805,,,,
+controlled_2d_cnn,controlled_all_channel_1d_cnn,0.4451748097281286,0.7993945208514475,0.35421971112331885,,,,

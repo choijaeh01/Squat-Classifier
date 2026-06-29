@@ -1,0 +1,2 @@
+reference_model,comparison_model,metric,mean_difference,std_difference,ci_low,ci_high,n_pairs
+feature_random_forest_v1,feature_xgboost_v1,macro_f1,0.011618892785540525,0.05845872829304232,-0.014546471186839204,0.039839656253243615,18

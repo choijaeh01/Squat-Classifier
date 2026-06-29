@@ -1,0 +1,5 @@
+model_name,total_params,encoder_params,aggregation_params,identity_params,attention_params,residual_params,head_params,other_params,input_shape,output_shape
+channel_shared_posres_attention_v3_no_residual,5942,2064,1441,832,545,0,2437,64,"(batch, 512, 18)","(2, 5)"
+channel_shared_posres_attention_v3_residual_only_mlp,9189,0,0,0,0,6752,2437,0,"(batch, 512, 18)","(2, 5)"
+channel_shared_posres_attention_v3_no_identity,13910,2064,7361,0,545,6752,4485,64,"(batch, 512, 18)","(2, 5)"
+channel_shared_posres_meanpool_v3_no_attention,14197,2064,7648,832,0,6752,4485,64,"(batch, 512, 18)","(2, 5)"

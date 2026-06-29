@@ -1,0 +1,11 @@
+{
+  "cuda_available": true,
+  "hostname": "e8acec3a6d36",
+  "platform": "Linux-5.15.0-152-generic-x86_64-with-glibc2.35",
+  "python": "3.10.12 (main, Aug 15 2025, 14:32:43) [GCC 11.4.0]",
+  "sklearn": "1.7.2",
+  "sklearn_available": true,
+  "torch": "2.8.0+cu129",
+  "xgboost_available": true,
+  "xgboost_version": "3.2.0"
+}

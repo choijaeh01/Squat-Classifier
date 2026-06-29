@@ -1,0 +1,2 @@
+model_name,total_params,encoder_params,aggregation_params,head_params,mean_accuracy,std_accuracy,mean_macro_f1,std_macro_f1,mean_weighted_f1,std_weighted_f1,macro_f1_ci_low,macro_f1_ci_high,mean_best_epoch,n_success_runs,n_failed_runs
+feature_xgboost_v1,0,0,0,0,0.8155555555555556,0.058330687770696395,0.7961438852637317,0.0814051491842852,0.7961438852637318,0.08140514918428522,0.7566545769591014,0.8327607758816781,0.0,18,0

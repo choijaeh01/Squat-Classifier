@@ -1,0 +1,10 @@
+model_name,representation_dim,common_head_params,common_head_signature,common_head_param_count_shared,common_head_signature_shared
+controlled_flatten_mlp,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True
+controlled_stats_mlp,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True
+controlled_all_channel_1d_cnn,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True
+controlled_all_channel_1d_cnn_small,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True
+controlled_shared_1d,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True
+controlled_shared_1d_identity,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True
+controlled_shared_1d_residual,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True
+controlled_shared_1d_residual_identity,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True
+controlled_2d_cnn,64,4485,linear:64->64|relu|dropout:0.1|linear:64->5,True,True

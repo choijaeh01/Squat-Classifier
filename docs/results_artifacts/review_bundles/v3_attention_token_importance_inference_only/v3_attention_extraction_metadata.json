@@ -1,0 +1,19 @@
+{
+  "config": "configs/full_supervised_matrix_v1.yaml",
+  "dataset_dir": "data/target/processed/v1_manual_windows_resample512",
+  "folds": 6,
+  "method": "CPU inference only. Refit the final protocol train-only StandardScaler for each seed/fold, load best checkpoint, compute softmax over ChannelAttentionPooling.scorer outputs for position-aware channel tokens on held-out test windows.",
+  "model_name": "channel_shared_posres_attention_v3",
+  "n_checkpoints": 18,
+  "n_sample_channel_rows": 32400,
+  "n_test_windows_per_checkpoint": 100,
+  "no_backward": true,
+  "no_optimizer": true,
+  "no_training": true,
+  "seeds": [
+    42,
+    123,
+    2025
+  ],
+  "source_result_dir": "results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1"
+}

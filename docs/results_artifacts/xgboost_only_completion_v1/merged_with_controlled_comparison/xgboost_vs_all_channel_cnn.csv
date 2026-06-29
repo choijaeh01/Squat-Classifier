@@ -1,0 +1,2 @@
+reference_model,comparison_model,metric,mean_difference,std_difference,ci_low,ci_high,n_pairs
+controlled_all_channel_1d_cnn,feature_xgboost_v1,macro_f1,-0.00325063558771589,0.12016456297552425,-0.05707363066002744,0.05334039576134643,18

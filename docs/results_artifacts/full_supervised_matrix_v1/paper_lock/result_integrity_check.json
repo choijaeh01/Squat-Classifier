@@ -1,0 +1,23 @@
+{
+  "aggregate_metrics_match_fold_metrics": true,
+  "all_checks_passed": true,
+  "all_leakage_checks_passed": true,
+  "all_model_seed_fold_combinations_present": true,
+  "all_scaler_leakage_checks_passed": true,
+  "failed_run_count": 0,
+  "failed_runs_empty": true,
+  "fold_metric_success_runs": 126,
+  "fold_metric_success_runs_ok": true,
+  "missing_combinations": [],
+  "required_files": {
+    "aggregate_metrics_by_model.csv": true,
+    "config_hash.txt": true,
+    "config_snapshot.yaml": true,
+    "git_commit": true,
+    "model_parameter_counts.csv": true
+  },
+  "required_files_ok": true,
+  "run_plan_total": 126,
+  "run_plan_total_ok": true,
+  "split_sizes_ok": true
+}

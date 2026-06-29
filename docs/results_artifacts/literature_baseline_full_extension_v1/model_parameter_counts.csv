@@ -1,0 +1,9 @@
+model_name,total_params,encoder_params,aggregation_params,head_params,other_params,input_shape,output_shape,notes
+feature_random_forest_v1,,,,,,"(batch, 512, 18)",not_applicable,classical sklearn baseline; parameters not comparable
+feature_linear_svm_v1,,,,,,"(batch, 512, 18)",not_applicable,classical sklearn baseline; parameters not comparable
+rescnn_bigru_attention_lite_v1,38934,22432,1585,2245,12672,"(batch, 512, 18)","(2, 5)",literature full extension model
+tcn_literature_v1,32069,31904,0,165,0,"(batch, 512, 18)","(2, 5)",literature full extension model
+transformer_encoder_lite_v1,39173,38832,0,341,0,"(batch, 512, 18)","(2, 5)",literature full extension model
+cnn_lstm_literature_v1,15645,7032,0,165,8448,"(batch, 512, 18)","(2, 5)",literature full extension model
+cnn_gru_literature_v1,13533,7032,0,165,6336,"(batch, 512, 18)","(2, 5)",literature full extension model
+lee_style_cnn_lstm_2d_v1,62637,10728,0,2245,49664,"(batch, 512, 18)","(2, 5)",literature full extension model
