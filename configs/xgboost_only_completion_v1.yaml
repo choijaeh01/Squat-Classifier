@@ -1,0 +1,84 @@
+experiment_name: xgboost_only_completion_v1
+dataset_dir: data/target/processed/v1_manual_windows_resample512
+output_root: results/xgboost_only_completion
+seeds: [42, 123, 2025]
+
+split:
+  type: loso_with_within_train_subject_stratified_validation
+  subjects: [1, 2, 3, 4, 5, 6]
+  val_windows_per_subject_class: 4
+  train_windows_per_subject_class: 16
+  strict_subject_isolation_for_test: true
+  strict_index_disjoint_train_val: true
+
+models:
+  - feature_xgboost_v1
+
+feature_policy:
+  signal_derived_only: true
+  forbid_metadata_features: true
+  forbid_label_features: true
+  forbid_subject_id_features: true
+  forbid_window_boundary_features: true
+  forbid_original_length_feature: true
+  use_same_feature_set_as_random_forest: true
+
+xgboost:
+  use_sklearn_api: true
+  fixed_params:
+    objective: multi:softprob
+    num_class: 5
+    eval_metric: mlogloss
+    tree_method: hist
+    random_state: use_seed
+  no_hyperparameter_search: true
+  no_early_stopping: true
+
+normalization:
+  global_standard_scaler: true
+  fit_scaler_on: train_indices_only
+  per_window_zscore: false
+  save_scaler_stats: true
+
+metrics:
+  accuracy: true
+  macro_f1: true
+  weighted_f1: true
+  class_wise_precision_recall_f1: true
+  confusion_matrix: true
+  subject_wise_metrics: true
+
+statistics:
+  compute_mean_std_across_folds: true
+  compute_mean_std_across_seeds: true
+  compute_bootstrap_ci: true
+  bootstrap_n: 10000
+  compute_paired_model_differences: true
+  primary_metric: macro_f1
+  paired_reference_models:
+    - feature_random_forest_v1
+    - controlled_stats_mlp
+    - controlled_shared_1d_residual
+    - controlled_shared_1d_residual_identity
+    - controlled_all_channel_1d_cnn
+
+reproducibility:
+  deterministic: true
+  save_config_snapshot: true
+  save_git_status: true
+  save_git_commit: true
+  save_manifest_checksum: true
+  save_environment_info: true
+  save_xgboost_version: true
+
+safety:
+  require_confirm_xgboost_completion: true
+  require_clean_git_before_run: true
+  forbid_ssl: true
+  forbid_augmentation: true
+  forbid_focal_loss: true
+  forbid_balanced_sampling: true
+  forbid_external_dataset: true
+  forbid_hyperparameter_search: true
+  forbid_modifying_controlled_results: true
+  forbid_modifying_locked_matrix: true

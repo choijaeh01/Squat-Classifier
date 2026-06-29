@@ -82,6 +82,7 @@ def build_classical_estimator(model_name: str, seed: int) -> Any:
             objective="multi:softprob",
             num_class=5,
             eval_metric="mlogloss",
+            tree_method="hist",
             random_state=int(seed),
             n_jobs=1,
             verbosity=0,
