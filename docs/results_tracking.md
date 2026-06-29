@@ -258,6 +258,43 @@ Class 3 Excessive Lean:
 
 - 목적: Lee-style adapted CNN-LSTM과 선택된 literature/classical baselines의 3 seed full extension
 - locked matrix 상태: `results/full_supervised_matrix/20260617_144309_full_supervised_matrix_v1/` 수정 금지
+
+## controlled_feature_extractor_comparison_v1
+
+- 목적: classifier head를 64-dim common MLP로 고정하고 feature extractor 차이를 통제 비교
+- 실행 위치: CAU
+- commit: `e6128a5cc1f0b62cc300ac78e4adc102cd57b4e2`
+- 결과 경로: `results/controlled_feature_extractor_comparison/20260629_041712_controlled_feature_extractor_comparison_v1/`
+- run 수: 252 configured
+- 성공/실패/skipped: 234 성공, 0 실패, 18 skipped
+- skipped: `feature_xgboost_v1`, reason `xgboost is not installed`
+- leakage/scaler/test isolation/train-val disjoint: 모두 통과
+- common head: 64 -> 64 -> 5 MLP, 4,485 params
+
+| model | accuracy | macro F1 | weighted F1 | macro F1 CI |
+|---|---:|---:|---:|---|
+| controlled_stats_mlp | 0.8250 | 0.8174 | 0.8174 | [0.7744, 0.8584] |
+| controlled_shared_1d_residual | 0.8094 | 0.8004 | 0.8004 | [0.7423, 0.8540] |
+| controlled_all_channel_1d_cnn | 0.8250 | 0.7994 | 0.7994 | [0.7404, 0.8564] |
+| controlled_shared_1d_residual_identity | 0.8072 | 0.7973 | 0.7973 | [0.7397, 0.8493] |
+| feature_random_forest_v1 | 0.8056 | 0.7845 | 0.7845 | [0.7318, 0.8376] |
+| rescnn_bigru_attention_lite_v1 | 0.7944 | 0.7691 | 0.7691 | [0.7076, 0.8270] |
+| controlled_all_channel_1d_cnn_small | 0.7806 | 0.7562 | 0.7562 | [0.6786, 0.8242] |
+| feature_linear_svm_v1 | 0.7461 | 0.7213 | 0.7213 | [0.6612, 0.7828] |
+| controlled_flatten_mlp | 0.7344 | 0.7046 | 0.7046 | [0.5953, 0.8074] |
+| lee_style_cnn_lstm_2d_v1 | 0.6622 | 0.6269 | 0.6269 | [0.5237, 0.7165] |
+| controlled_shared_1d_identity | 0.5617 | 0.5182 | 0.5182 | [0.4335, 0.5968] |
+| controlled_2d_cnn | 0.5056 | 0.4452 | 0.4452 | [0.3472, 0.5413] |
+| controlled_shared_1d | 0.3500 | 0.2806 | 0.2806 | [0.2233, 0.3385] |
+
+Component 관찰:
+
+- naive shared 1D: 0.2806
+- shared 1D + identity: 0.5182
+- shared 1D + residual: 0.8004
+- shared 1D + residual + identity: 0.7973
+
+이 결과는 residual branch가 shared encoder bottleneck 완화에 크게 기여할 가능성을 보여준다. 단, 최종 학술 해석은 사용자가 판단한다.
 - config: `configs/literature_baseline_full_extension_v1.yaml`
 - capacity config: `configs/literature_baseline_capacity_v2.yaml`
 - 실행 위치: CAU

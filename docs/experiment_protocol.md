@@ -205,6 +205,46 @@ Pilot output은 `results/pilot_loso/<timestamp>_pilot_loso_v1/`에 저장한다.
 
 Pilot metric은 pipeline 검증용이다. 1 seed 결과이므로 논문 결론이나 모델 우열의 최종 근거로 사용하지 않는다.
 
+## Controlled Feature Extractor Comparison v1
+
+`controlled_feature_extractor_comparison_v1`은 기존 locked full matrix를 수정하지 않고, feature extractor의 기여를 통제 비교하기 위한 추가 full run이다.
+
+고정 조건:
+
+- final LOSO validation policy 유지
+- seeds: 42, 123, 2025
+- train 400, validation 100, test 100 per fold
+- StandardScaler fit: train indices only
+- per-window z-score: false
+- augmentation, focal loss, balanced sampling, SSL, external dataset: disabled
+- common representation dim: 64
+- common classifier head: Linear 64 to 64, ReLU, Dropout 0.1, Linear 64 to 5
+
+Controlled neural models:
+
+- `controlled_flatten_mlp`
+- `controlled_stats_mlp`
+- `controlled_all_channel_1d_cnn`
+- `controlled_all_channel_1d_cnn_small`
+- `controlled_shared_1d`
+- `controlled_shared_1d_identity`
+- `controlled_shared_1d_residual`
+- `controlled_shared_1d_residual_identity`
+- `controlled_2d_cnn`
+
+Classical/practical baselines:
+
+- `feature_random_forest_v1`
+- `feature_xgboost_v1`, dependency가 없으면 skipped
+- `feature_linear_svm_v1`
+
+Literature references:
+
+- `rescnn_bigru_attention_lite_v1`
+- `lee_style_cnn_lstm_2d_v1`
+
+Classical feature baseline은 IMU signal-derived feature만 사용한다. subject ID, label, metadata boundary, filename, original length, split 정보는 feature에 포함하지 않는다.
+
 ## Pilot Diagnostics And Overfit Sanity Check
 
 `pilot_loso_diagnostics_v1`은 기존 pilot 결과 CSV만 분석한다. 새 학습, hyperparameter tuning, split 변경, model 변경은 수행하지 않는다.
