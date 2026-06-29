@@ -245,6 +245,32 @@ Literature references:
 
 Classical feature baseline은 IMU signal-derived feature만 사용한다. subject ID, label, metadata boundary, filename, original length, split 정보는 feature에 포함하지 않는다.
 
+## XGBoost Only Completion v1
+
+`xgboost_only_completion_v1`은 `controlled_feature_extractor_comparison_v1`에서 dependency 부재로 skipped된 `feature_xgboost_v1`만 동일 protocol로 별도 실행한 단계다. 기존 controlled result directory는 수정하지 않고 read-only reference로만 사용한다.
+
+Dependency policy:
+
+- 시스템 Python에 설치하지 않는다.
+- `sudo`와 `pip install --user`를 사용하지 않는다.
+- CAU project-local `.deps/xgboost`에만 설치한다.
+- 실행 시 `PYTHONPATH=.deps/xgboost:$PYTHONPATH`를 사용한다.
+
+Protocol:
+
+- model: `feature_xgboost_v1`
+- seeds: 42, 123, 2025
+- folds: final validation policy의 6 LOSO folds
+- total runs: 18
+- train/validation/test per fold: 400/100/100
+- scaler fit: train indices only
+- feature set: RandomForest와 동일한 IMU signal-derived hand-crafted feature
+- feature audit: metadata, label, subject ID, boundary, original length feature 금지
+- hyperparameter search: disabled
+- early stopping: disabled
+
+실행 결과는 `results/xgboost_only_completion/20260629_053235_xgboost_only_completion_v1/`에 저장됐다. 모든 run이 성공했고 leakage/scaler/feature audit은 통과했다. 결과 해석과 논문 표 포함 여부는 사용자가 최종 판단한다.
+
 ## Pilot Diagnostics And Overfit Sanity Check
 
 `pilot_loso_diagnostics_v1`은 기존 pilot 결과 CSV만 분석한다. 새 학습, hyperparameter tuning, split 변경, model 변경은 수행하지 않는다.

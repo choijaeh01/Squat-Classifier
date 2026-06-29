@@ -409,3 +409,51 @@ Attention-RF alignment:
 - RF top feature는 `s1_ax` 관련 summary feature에 집중됐다.
 
 해석 주의: 이 ablation은 성능 개선 목적의 새 모델 개발이 아니며, 결과를 보고 model width, learning rate, split, preprocessing을 변경하지 않았다. 최종 학술 해석은 사용자가 판단한다.
+
+## xgboost_only_completion_v1
+
+- 목적: `controlled_feature_extractor_comparison_v1`에서 dependency 문제로 skipped된 `feature_xgboost_v1`만 별도 completion으로 실행
+- 기존 controlled result: `results/controlled_feature_extractor_comparison/20260629_041712_controlled_feature_extractor_comparison_v1/` 수정 금지, read-only reference
+- config: `configs/xgboost_only_completion_v1.yaml`
+- 실행 위치: CAU
+- CAU 경로: `/home/user3/workspace/Jae/squat_imu_experiments`
+- 실행 commit: `68905645b50e7178669e74e3a4e70e8b3d523da3`
+- XGBoost 설치: project-local `.deps/xgboost`, `PYTHONPATH=.deps/xgboost:$PYTHONPATH`
+- XGBoost version: `3.2.0`
+- 결과 경로: `results/xgboost_only_completion/20260629_053235_xgboost_only_completion_v1/`
+- 성공/실패/skipped: 18 성공, 0 실패, 0 skipped
+- leakage/scaler check: 모두 통과
+- feature audit: 162개 feature 모두 allowed, metadata/label/subject/boundary/original length feature 없음
+
+3 seed XGBoost completion 결과:
+
+| model | accuracy | macro F1 | weighted F1 | macro F1 CI |
+|---|---:|---:|---:|---|
+| feature_xgboost_v1 | 0.8156 | 0.7961 | 0.7961 | [0.7567, 0.8328] |
+
+Class 3 Excessive Lean:
+
+| precision | recall | F1 | support |
+|---:|---:|---:|---:|
+| 0.8288 | 0.6444 | 0.6614 | 360 |
+
+Top XGBoost features:
+
+| rank | feature | mean importance |
+|---:|---|---:|
+| 1 | `s1_ax_std` | 0.0674 |
+| 2 | `s1_gx_mean` | 0.0656 |
+| 3 | `s1_ax_energy` | 0.0601 |
+| 4 | `s0_ax_mean` | 0.0321 |
+| 5 | `s0_az_std` | 0.0303 |
+
+Paired Macro F1 difference, XGBoost minus reference:
+
+| reference | delta | CI |
+|---|---:|---|
+| feature_random_forest_v1 | +0.0116 | [-0.0145, 0.0398] |
+| controlled_stats_mlp | -0.0212 | [-0.0594, 0.0171] |
+| controlled_shared_1d_residual | -0.0043 | [-0.0385, 0.0304] |
+| controlled_all_channel_1d_cnn | -0.0033 | [-0.0571, 0.0533] |
+
+모든 listed paired CI가 0을 포함하므로 XGBoost와 각 reference 간 명확한 우열을 주장하지 않는다. 논문 결과 표 포함 여부와 최종 해석은 사용자가 판단한다.

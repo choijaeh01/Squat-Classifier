@@ -34,6 +34,18 @@ Controlled feature extractor comparison은 classifier head를 고정하여 extra
 
 이 결과에서 summary statistics MLP가 가장 높았고, residual shared 1D가 all-channel controlled CNN과 유사한 수준을 보였다. Naive shared 1D는 낮았으며, residual branch 추가 후 큰 폭으로 회복되었다.
 
+## XGBoost Completion
+
+`feature_xgboost_v1`은 원래 controlled comparison에서 dependency 부재로 skipped되었기 때문에, 동일 split/scaler/feature audit 조건에서 별도 completion run으로 실행했다. 기존 controlled result directory는 수정하지 않았다.
+
+| model | accuracy | macro F1 | weighted F1 | macro F1 CI |
+|---|---:|---:|---:|---|
+| feature_xgboost_v1 | 0.8156 | 0.7961 | 0.7961 | [0.7567, 0.8328] |
+
+Paired Macro F1 difference는 XGBoost minus reference 기준으로 RF 대비 +0.0116, controlled stats MLP 대비 -0.0212, controlled shared residual 대비 -0.0043, controlled all-channel CNN 대비 -0.0033이었다. 모든 CI는 0을 포함했다. 따라서 XGBoost를 포함하더라도 특정 baseline 대비 명확한 우월성 주장은 하지 않는다.
+
+XGBoost 상위 feature는 `s1_ax_std`, `s1_gx_mean`, `s1_ax_energy`였다. 이는 RandomForest의 `s1_ax` 중심 feature importance와 방향이 유사하지만, feature importance는 모델 내부 기준이므로 생체역학적 인과 설명으로 직접 사용하지 않는다.
+
 ## Component Analysis
 
 Naive shared 1D encoder는 Macro F1 0.2806으로 낮았다. Identity embedding만 추가하면 0.5182로 상승했지만, residual branch를 추가하면 0.8004로 크게 상승했다. Residual+identity는 0.7973으로 residual-only와 거의 같은 수준이었다.
@@ -58,6 +70,8 @@ Class 3 Excessive Lean은 초기 pilot에서 어려운 class로 관찰되었다.
 ## Feature Importance Observation
 
 RandomForest의 상위 feature는 오른쪽 허벅지 `s1_ax`의 std, energy, RMS, max, mean, peak-to-peak에 집중되었다. 이는 현재 dataset에서 thigh acceleration summary가 class 구분에 강한 정보를 담고 있음을 보여준다. 단, feature importance는 인과적 설명이 아니며 생체역학적 결론으로 바로 확장하지 않는다.
+
+XGBoost completion에서도 오른쪽 허벅지 `s1` 관련 feature가 상위에 나타났다. 이는 hand-crafted signal summary baseline이 현재 데이터에서 강하다는 관찰을 보강한다.
 
 ## Results Statement Draft
 

@@ -11,7 +11,7 @@
 3. naive channel-shared 구조는 낮은 성능을 보였고, residual 또는 position-aware 정보를 추가한 shared 구조는 큰 폭으로 개선되었다.
 4. controlled comparison에서 common 64-dim MLP head를 고정했을 때도 residual shared 1D extractor는 all-channel controlled CNN과 유사한 Macro F1을 보였다.
 5. controlled comparison에서 residual branch 추가는 naive shared 1D 대비 가장 큰 성능 회복과 관련되어 관찰되었다.
-6. handcrafted feature 기반 RandomForest와 stats MLP는 현재 dataset에서 강한 baseline으로 나타났다.
+6. handcrafted feature 기반 RandomForest, XGBoost, stats MLP는 현재 dataset에서 강한 baseline으로 나타났다.
 7. Class 3 Excessive Lean에서는 residual shared 계열이 높은 recall/F1을 보였다.
 
 ## 통계적으로 조심해야 하는 내용
@@ -26,7 +26,7 @@
 
 1. proposed v3가 all baseline보다 통계적으로 유의하게 우월하다는 주장.
 2. transfer learning 효과에 대한 주장. 이번 단계에서도 external dataset adapter와 SSL은 수행하지 않았다.
-3. XGBoost와의 성능 우열. XGBoost는 의존성 부재로 skipped되었다.
+3. XGBoost와의 명확한 성능 우열. 별도 completion에서 XGBoost는 실행되었지만, RF, stats MLP, residual shared, all-channel CNN과의 paired CI가 모두 0을 포함했다.
 4. preprocessing, split, scaler policy를 바꾸면 성능이 더 좋아진다는 주장.
 5. RandomForest feature importance를 인과적 설명으로 해석하는 주장.
 
@@ -35,6 +35,8 @@
 ### Q1. 왜 feature baseline이 이렇게 강한가?
 
 현재 데이터는 5-class squat posture이고 각 window가 512-step으로 정렬되어 있다. per-channel summary statistics, 특히 오른쪽 허벅지 `s1_ax` 관련 분산/에너지/RMS/최대값이 class 구분 정보를 많이 담는 것으로 관찰되었다. 따라서 강한 classical feature baseline을 포함해 neural model 성능을 과장하지 않도록 보고했다.
+
+XGBoost completion에서도 같은 feature set으로 Macro F1 0.7961을 기록했고, 상위 feature는 `s1_ax_std`, `s1_gx_mean`, `s1_ax_energy`였다. 이는 feature baseline이 특정 구현 하나에만 의존하지 않는다는 보조 관찰이지만, feature importance를 인과 설명으로 단정하지 않는다.
 
 ### Q2. proposed shared encoder가 정말 필요한가?
 
@@ -62,6 +64,7 @@ Class 3은 초기 pilot에서 어려운 class로 확인되었다. controlled com
 ## v3를 proposed model로 둘 때의 위험
 
 - controlled comparison에서는 `controlled_stats_mlp`가 더 높은 Macro F1을 보였다.
+- XGBoost completion까지 포함하면 feature 기반 baseline이 neural shared residual 계열과 매우 가까운 수준으로 관찰된다.
 - feature baseline이 강하므로 neural proposed model만으로 논문 novelty를 밀기 어렵다.
 - identity embedding의 독립 기여는 controlled comparison에서 명확하지 않았다.
 - v3가 all-channel Conv1D보다 통계적으로 유의하게 우월하다고 말하기 어렵다.
@@ -80,7 +83,7 @@ Class 3은 초기 pilot에서 어려운 class로 확인되었다. controlled com
 
 필요할 수 있는 최소 후속 실험 후보:
 
-- stats MLP와 RandomForest를 논문 main table에 포함할지 검토
+- stats MLP, RandomForest, XGBoost를 논문 main table에 포함할지 검토
 - residual branch without temporal encoder 해석 보강
 - feature importance의 sensor/channel별 집계 figure 정리
 
