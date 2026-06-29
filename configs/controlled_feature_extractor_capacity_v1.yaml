@@ -1,0 +1,37 @@
+experiment_name: controlled_feature_extractor_capacity_v1
+output_dir: results/controlled_feature_extractor_capacity_v1
+seed: 20260629
+input_shape:
+  batch: 2
+  window_length: 512
+  channels: 18
+num_classes: 5
+common_representation:
+  representation_dim: 64
+common_classifier_head:
+  hidden_dim: 64
+  dropout: 0.1
+  activation: relu
+  num_classes: 5
+model_groups:
+  controlled_neural:
+    - controlled_flatten_mlp
+    - controlled_stats_mlp
+    - controlled_all_channel_1d_cnn
+    - controlled_all_channel_1d_cnn_small
+    - controlled_shared_1d
+    - controlled_shared_1d_identity
+    - controlled_shared_1d_residual
+    - controlled_shared_1d_residual_identity
+    - controlled_2d_cnn
+  classical_practical:
+    - feature_random_forest_v1
+    - feature_xgboost_v1
+    - feature_linear_svm_v1
+  literature_reference:
+    - rescnn_bigru_attention_lite_v1
+    - lee_style_cnn_lstm_2d_v1
+locked_reference_models:
+  - channel_shared_posres_attention_v3
+  - all_channel_conv1d_v1
+  - all_channel_conv1d_small

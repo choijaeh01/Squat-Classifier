@@ -5,7 +5,7 @@ from typing import Any
 import numpy as np
 
 
-CLASSICAL_BASELINE_NAMES = {"feature_random_forest_v1", "feature_linear_svm_v1"}
+CLASSICAL_BASELINE_NAMES = {"feature_random_forest_v1", "feature_xgboost_v1", "feature_linear_svm_v1"}
 
 
 def sklearn_available() -> bool:
@@ -14,6 +14,22 @@ def sklearn_available() -> bool:
     except ModuleNotFoundError:
         return False
     return True
+
+
+def xgboost_available() -> bool:
+    try:
+        import xgboost  # noqa: F401
+    except ModuleNotFoundError:
+        return False
+    return True
+
+
+def classical_model_available(model_name: str) -> bool:
+    if model_name == "feature_xgboost_v1":
+        return xgboost_available()
+    if model_name in {"feature_random_forest_v1", "feature_linear_svm_v1"}:
+        return sklearn_available()
+    return False
 
 
 def is_classical_model(model_name: str) -> bool:
@@ -51,6 +67,25 @@ def build_classical_estimator(model_name: str, seed: int) -> Any:
         from sklearn.ensemble import RandomForestClassifier
 
         return RandomForestClassifier(n_estimators=200, max_depth=None, random_state=int(seed), n_jobs=1)
+    if model_name == "feature_xgboost_v1":
+        try:
+            from xgboost import XGBClassifier
+        except ModuleNotFoundError as exc:
+            raise ModuleNotFoundError("xgboost is not installed") from exc
+
+        return XGBClassifier(
+            n_estimators=200,
+            max_depth=3,
+            learning_rate=0.05,
+            subsample=1.0,
+            colsample_bytree=1.0,
+            objective="multi:softprob",
+            num_class=5,
+            eval_metric="mlogloss",
+            random_state=int(seed),
+            n_jobs=1,
+            verbosity=0,
+        )
     if model_name == "feature_linear_svm_v1":
         from sklearn.svm import LinearSVC
 

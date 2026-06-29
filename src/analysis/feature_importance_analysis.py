@@ -106,6 +106,25 @@ def random_forest_importance_rows(
     return rows
 
 
+def xgboost_importance_rows(
+    *,
+    estimator: Any,
+    model_name: str,
+    seed: int,
+    fold_id: int,
+    test_subject: int,
+    input_channels: int = 18,
+) -> list[dict[str, Any]]:
+    return random_forest_importance_rows(
+        estimator=estimator,
+        model_name=model_name,
+        seed=seed,
+        fold_id=fold_id,
+        test_subject=test_subject,
+        input_channels=input_channels,
+    )
+
+
 def linear_svm_coefficient_rows(
     *,
     estimator: Any,

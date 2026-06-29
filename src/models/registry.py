@@ -5,6 +5,7 @@ from collections.abc import Callable
 from torch import nn
 
 from models.baselines import AllChannelConv1D, AllChannelConv1DSmall, CNN2DBaseline, ClassicalFeatureBaseline
+from models.controlled_models import CONTROLLED_MODEL_FACTORIES
 from models.literature_temporal import (
     CNNGRULiteratureV1,
     CNNLSTMLiteratureV1,
@@ -60,8 +61,11 @@ MODEL_REGISTRY: dict[str, ModelFactory] = {
     "transformer_encoder_lite_v1": TransformerEncoderLiteV1,
     "lee_style_cnn_lstm_2d_v1": LeeStyleCNNLSTM2DV1,
     "feature_random_forest_v1": ClassicalFeatureBaseline,
+    "feature_xgboost_v1": ClassicalFeatureBaseline,
     "feature_linear_svm_v1": ClassicalFeatureBaseline,
 }
+
+MODEL_REGISTRY.update(CONTROLLED_MODEL_FACTORIES)
 
 
 def list_models() -> list[str]:
@@ -87,7 +91,7 @@ def count_parameters(model: nn.Module, trainable_only: bool = True) -> int:
 def count_parameter_groups(model: nn.Module) -> dict[str, int]:
     encoder_modules = [
         getattr(model, name)
-        for name in ("encoder", "shared_encoder", "acc_encoder", "gyro_encoder")
+        for name in ("encoder", "extractor", "shared_encoder", "acc_encoder", "gyro_encoder")
         if hasattr(model, name)
     ]
     aggregation_modules = [
